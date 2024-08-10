@@ -1,13 +1,9 @@
 import 'package:kiwi/kiwi.dart';
 import 'package:time_tracking_app/core/network/dio_client.dart';
-import 'package:time_tracking_app/data/datasources/remote/location_remote_datasource.dart';
-import 'package:time_tracking_app/data/datasources/remote/weather_remote_datasource.dart';
-import 'package:time_tracking_app/data/repositories/location_repo.dart';
-import 'package:time_tracking_app/data/repositories/weather_repo.dart';
-import 'package:time_tracking_app/domain/repo_abstract/location_abstract.dart';
-import 'package:time_tracking_app/domain/repo_abstract/weather_abstract.dart';
-import 'package:time_tracking_app/domain/usecases/location_usecases.dart';
-import 'package:time_tracking_app/domain/usecases/weather_usecases.dart';
+import 'package:time_tracking_app/data/datasources/remote/section_remote_datasource.dart';
+import 'package:time_tracking_app/data/repositories/section_repo.dart';
+import 'package:time_tracking_app/domain/repo_abstract/section_abstract.dart';
+import 'package:time_tracking_app/domain/usecases/section_usecase.dart';
 
 part 'injector_config.g.dart';
 
@@ -30,18 +26,15 @@ abstract class InjectorConfig {
   }
 
   // ============ USECASES ============
-  @Register.singleton(WeatherUseCase)
-  @Register.singleton(LocationUseCase)
+  @Register.singleton(SectionUseCase)
   void _configureUseCases();
 
   // ============ REPOSITORIES ============
-  @Register.singleton(WeatherAbstract, from: WeatherRepo)
-  @Register.singleton(LocationAbstract, from: LocationRepo)
+  @Register.singleton(SectionAbstract, from: SectionRepo)
   void _configureRepositories();
 
   // ============ REMOTE DATASOURCES ============
-  @Register.singleton(WeatherRemoteDataSource)
-  @Register.singleton(LocationRemoteDataSource)
+  @Register.singleton(SectionRemoteDataSource)
   void _configureRemoteDataSources();
 
   // ============ NETWORK ============
