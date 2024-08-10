@@ -1,0 +1,4 @@
+enum SelectionType {
+  country,
+  city
+}
