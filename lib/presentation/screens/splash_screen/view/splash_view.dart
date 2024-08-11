@@ -17,11 +17,6 @@ class SplashView extends StatelessWidget {
     return AppScaffold(hideAppBar: true, scaffoldBody: splashScreen);
   }
 
-  Widget get splashImage => const AssetImageWidget(
-        assetPath: ImageConstants.splashBackgroundJpg,
-        boxFit: BoxFit.cover,
-      );
-
   Widget get appLogo => const AssetImageWidget(
         assetPath: ImageConstants.appIconPng,
         boxFit: BoxFit.cover,
@@ -31,13 +26,12 @@ class SplashView extends StatelessWidget {
 
   Widget get splashScreen => Stack(
         children: [
-          splashImage,
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 appLogo,
-                AppName(),
+                const AppName(),
               ],
             ),
           ),
@@ -48,6 +42,6 @@ class SplashView extends StatelessWidget {
     Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.of(context)
-            .pushReplacementNamed(RouteConstants.locationSelectionPath));
+            .pushReplacementNamed(RouteConstants.dashboardPath));
   }
 }
