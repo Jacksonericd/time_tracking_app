@@ -12,7 +12,8 @@ class _$InjectorConfig extends InjectorConfig {
     final KiwiContainer container = KiwiContainer();
     container
       ..registerSingleton((c) => SectionUseCase(c<SectionAbstract>()))
-      ..registerSingleton((c) => TaskUseCase(c<TaskAbstract>()));
+      ..registerSingleton((c) => TaskUseCase(c<TaskAbstract>()))
+      ..registerSingleton((c) => CommentUseCase(c<CommentAbstract>()));
   }
 
   @override
@@ -22,7 +23,9 @@ class _$InjectorConfig extends InjectorConfig {
       ..registerSingleton<SectionAbstract>((c) =>
           SectionRepo(sectionRemoteDataSource: c<SectionRemoteDataSource>()))
       ..registerSingleton<TaskAbstract>(
-          (c) => TaskRepo(c<TaskRemoteDataSource>()));
+          (c) => TaskRepo(c<TaskRemoteDataSource>()))
+      ..registerSingleton<CommentAbstract>(
+          (c) => CommentsRepo(c<CommentRemoteDatasource>()));
   }
 
   @override
@@ -30,7 +33,8 @@ class _$InjectorConfig extends InjectorConfig {
     final KiwiContainer container = KiwiContainer();
     container
       ..registerSingleton((c) => SectionRemoteDataSource())
-      ..registerSingleton((c) => TaskRemoteDataSource());
+      ..registerSingleton((c) => TaskRemoteDataSource())
+      ..registerSingleton((c) => CommentRemoteDatasource());
   }
 
   @override

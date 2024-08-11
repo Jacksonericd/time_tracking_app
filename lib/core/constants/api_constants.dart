@@ -5,4 +5,5 @@ class ApiConstants {
   //Task and Section API Path
   static const sectionsUrl = '$baseUrl/sections';
   static const tasksUrl = '$baseUrl/tasks';
+  static const commentsUrl = '$baseUrl/comments';
 }
