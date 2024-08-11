@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_tracking_app/core/enums/bloc_states.dart';
@@ -24,10 +26,12 @@ class SectionBloc extends Bloc<SectionEvent, SectionState> {
           projectId: event.projectId,
         );
 
-        final sections = Sections.fromJson(response);
+        final sections = (response as List)
+            .map((section) => Sections.fromJson(section))
+            .toList();
 
         emit(SectionsLoadedState(
-          sectionsList: [sections],
+          sectionsList: sections,
         ));
       } catch (e) {
         if (e is DioException) {

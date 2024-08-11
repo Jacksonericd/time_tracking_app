@@ -10,20 +10,27 @@ class _$InjectorConfig extends InjectorConfig {
   @override
   void _configureUseCases() {
     final KiwiContainer container = KiwiContainer();
-    container.registerSingleton((c) => SectionUseCase(c<SectionAbstract>()));
+    container
+      ..registerSingleton((c) => SectionUseCase(c<SectionAbstract>()))
+      ..registerSingleton((c) => TaskUseCase(c<TaskAbstract>()));
   }
 
   @override
   void _configureRepositories() {
     final KiwiContainer container = KiwiContainer();
-    container.registerSingleton<SectionAbstract>((c) =>
-        SectionRepo(sectionRemoteDataSource: c<SectionRemoteDataSource>()));
+    container
+      ..registerSingleton<SectionAbstract>((c) =>
+          SectionRepo(sectionRemoteDataSource: c<SectionRemoteDataSource>()))
+      ..registerSingleton<TaskAbstract>(
+          (c) => TaskRepo(c<TaskRemoteDataSource>()));
   }
 
   @override
   void _configureRemoteDataSources() {
     final KiwiContainer container = KiwiContainer();
-    container.registerSingleton((c) => SectionRemoteDataSource());
+    container
+      ..registerSingleton((c) => SectionRemoteDataSource())
+      ..registerSingleton((c) => TaskRemoteDataSource());
   }
 
   @override

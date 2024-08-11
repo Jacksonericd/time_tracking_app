@@ -7,8 +7,7 @@ class TaskRemoteDataSource {
 
   Future getTasksByProjectAndSection(
       {required String projectId, required String sectionId}) async {
-    final url =
-        '${ApiConstants.tasksUrl}tasks?$projectId&section_id=$sectionId';
+    final url = '${ApiConstants.tasksUrl}?$projectId&section_id=$sectionId';
 
     final resp = await dioClient.get(
       url,

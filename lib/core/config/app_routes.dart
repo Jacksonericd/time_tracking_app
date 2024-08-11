@@ -4,6 +4,7 @@ import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/view/dashboard_view.dart';
 import 'package:time_tracking_app/presentation/screens/offline/view/offline_view.dart';
 import 'package:time_tracking_app/presentation/screens/splash_screen/view/splash_view.dart';
+import 'package:time_tracking_app/presentation/screens/tasks/view/task_list.dart';
 
 class AppRoutes {
   Route generateRoute(RouteSettings routeSettings) {
@@ -31,6 +32,8 @@ class AppRoutes {
         return const SplashView();
       case RouteConstants.dashboardPath:
         return const DashboardView();
+      case RouteConstants.taskListPath:
+        return TaskList(sectionId: args.toString());
 
       default:
         return const SplashView();

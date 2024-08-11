@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_tracking_app/core/enums/bloc_states.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/data/model/task.dart';
-import 'package:time_tracking_app/domain/usecases/section_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 
 part 'task_event.dart';
@@ -21,15 +20,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     if (event is GetTasksByProjectAndSectionEvent) {
       try {
         dynamic response =
-            await Injector.resolve<TaskUsecase>().getTasksByProjectAndSection(
+            await Injector.resolve<TaskUseCase>().getTasksByProjectAndSection(
           projectId: event.projectId,
           sectionId: event.sectionId,
         );
 
-        final tasks = Task.fromJson(response);
+        final tasks =
+            (response as List).map((task) => Task.fromJson(task)).toList();
 
         emit(TasksLoadedState(
-          taskList: [tasks],
+          taskList: tasks,
         ));
       } catch (e) {
         if (e is DioException) {

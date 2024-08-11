@@ -1,9 +1,9 @@
 import 'package:time_tracking_app/domain/repo_abstract/task_abstract.dart';
 
-class TaskUsecase {
+class TaskUseCase {
   final TaskAbstract taskAbstract;
 
-  TaskUsecase(this.taskAbstract);
+  TaskUseCase(this.taskAbstract);
 
   Future<dynamic> getTasksByProjectAndSection({
     required String projectId,
