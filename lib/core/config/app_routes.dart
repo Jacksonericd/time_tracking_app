@@ -4,6 +4,7 @@ import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/view/dashboard_view.dart';
 import 'package:time_tracking_app/presentation/screens/offline/view/offline_view.dart';
 import 'package:time_tracking_app/presentation/screens/splash_screen/view/splash_view.dart';
+import 'package:time_tracking_app/presentation/screens/tasks/view/add_edit_task.dart';
 import 'package:time_tracking_app/presentation/screens/tasks/view/task_list.dart';
 
 class AppRoutes {
@@ -33,7 +34,21 @@ class AppRoutes {
       case RouteConstants.dashboardPath:
         return const DashboardView();
       case RouteConstants.taskListPath:
-        return TaskList(sectionId: args.toString());
+        return TaskList(
+          sectionId: args.toString(),
+        );
+      case RouteConstants.addTaskPath:
+        final props = args as Map;
+        return AddEditTask(
+          sectionId: props['section-id'],
+        );
+      case RouteConstants.editTaskPath:
+        final props = args as Map;
+        return AddEditTask(
+          isEditMode: true,
+          sectionId: props['section-id'],
+          taskId: props['task-id'],
+        );
 
       default:
         return const SplashView();

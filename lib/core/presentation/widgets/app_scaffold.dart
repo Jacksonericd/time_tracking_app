@@ -8,12 +8,16 @@ class AppScaffold extends StatelessWidget {
     this.appBarTitle,
     this.hideAppBar = true,
     this.appBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   });
 
   final Widget scaffoldBody;
   final String? appBarTitle;
   final bool hideAppBar;
   final AppBar? appBar;
+  final FloatingActionButton? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,9 @@ class AppScaffold extends StatelessWidget {
                 elevation: 0,
                 title: StyledText.titleSmall(appBarTitle ?? ''),
               ),
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation ??
+          FloatingActionButtonLocation.centerDocked,
       body: scaffoldBody,
     );
   }

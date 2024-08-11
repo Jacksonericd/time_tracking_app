@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_tracking_app/core/constants/route_constants.dart';
+import 'package:time_tracking_app/core/constants/string_constants.dart';
+import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/data/model/task.dart';
@@ -26,6 +29,12 @@ class TaskList extends StatelessWidget {
         appBar: AppBar(
           title: Text('Tasks under section'),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () => Navigator.of(context).pushNamed(
+              RouteConstants.addTaskPath,
+              arguments: {'section-id': sectionId}),
+        ),
         scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             return BlocStateToWidget(
@@ -44,7 +53,7 @@ class TaskList extends StatelessWidget {
 
   displaySectionsData(List<Task>? tasks, BuildContext context) {
     if ((tasks ?? []).isEmpty) {
-      return const Text('No sections found');
+      return const Text('No tasks found');
     }
 
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -59,7 +68,22 @@ class TaskList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-            child: Text(task.content!),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(task.content!),
+                AppButton(
+                  buttonText: StringConstants.edit,
+                  onButtonClicked: () => Navigator.of(context).pushNamed(
+                    RouteConstants.editTaskPath,
+                    arguments: {
+                      'section-id': sectionId,
+                      'task-id': task.id,
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }

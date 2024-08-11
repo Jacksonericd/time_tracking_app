@@ -5,11 +5,11 @@ import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 
 class BlocStateToWidget extends StatelessWidget {
   const BlocStateToWidget({
-    Key? key,
+    super.key,
     required this.blocStates,
     required this.child,
     required this.message,
-  }) : super(key: key);
+  });
   final BlocStates blocStates;
   final Widget child;
   final String message;
