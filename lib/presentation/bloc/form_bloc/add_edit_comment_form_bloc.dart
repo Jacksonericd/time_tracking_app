@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:time_tracking_app/core/config/navigator_key.dart';
 import 'package:time_tracking_app/core/functions/custom_bloc_validators.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
+import 'package:time_tracking_app/core/presentation/widgets/loading_dialog.dart';
 import 'package:time_tracking_app/data/model/comment.dart';
 import 'package:time_tracking_app/domain/usecases/comment_usecase.dart';
 
@@ -29,6 +31,8 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
         return;
       }
 
+      LoadingDialog.show(appNavigatorKey.currentContext!);
+
       final response = await Injector.resolve<CommentUseCase>().getCommentById(
         commentId: tfCommentId.value,
       );
@@ -40,6 +44,8 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
       emitLoaded();
     } catch (e) {
       emitLoadFailed(failureResponse: '$e');
+    } finally {
+      LoadingDialog.hide(appNavigatorKey.currentContext!);
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/presentation/theme/app_theme.dart';
 
 import 'core/config/app_routes.dart';
+import 'core/config/navigator_key.dart';
 import 'core/constants/string_constants.dart';
 import 'core/injector/injector_config.dart';
 
@@ -24,6 +25,7 @@ class TimeTrackingApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       darkTheme: CustomThemeData.darkTheme,
       theme: CustomThemeData.lightTheme,
+      navigatorKey: appNavigatorKey,
     );
   }
 }
