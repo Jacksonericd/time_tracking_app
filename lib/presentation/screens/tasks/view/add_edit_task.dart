@@ -13,12 +13,10 @@ class AddEditTask extends StatelessWidget {
   const AddEditTask({
     super.key,
     this.isEditMode = false,
-    required this.sectionId,
     this.taskId,
   });
 
   final bool isEditMode;
-  final String sectionId;
   final String? taskId;
 
   @override
@@ -28,7 +26,6 @@ class AddEditTask extends StatelessWidget {
       child: Builder(builder: (context) {
         final formBloc = BlocProvider.of<AddEditTaskFormBloc>(context);
         formBloc.boolIsEditMode.updateValue(isEditMode);
-        formBloc.tfTSectionId.updateValue(sectionId);
         if (taskId != null) {
           formBloc.tfTaskId.updateValue(taskId!);
         }

@@ -185,7 +185,7 @@ class DashboardView extends StatelessWidget {
                         buttonText: StringConstants.viewComments,
                         onButtonClicked: () => Navigator.of(context).pushNamed(
                             RouteConstants.viewTaskCommentPath,
-                            arguments: {'task-id': task.id!}))
+                            arguments: {'task-id': task.id!})),
                   ],
                 ),
               ),
@@ -227,7 +227,16 @@ class DashboardView extends StatelessWidget {
                     AppButton(
                         buttonText: StringConstants.completeTask,
                         onButtonClicked: () =>
-                            _completeTask(taskId: task.id!, context: context))
+                            _completeTask(taskId: task.id!, context: context)),
+                    AppButton(
+                      buttonText: StringConstants.edit,
+                      onButtonClicked: () => Navigator.of(context).pushNamed(
+                        RouteConstants.editTaskPath,
+                        arguments: {
+                          'task-id': task.id,
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

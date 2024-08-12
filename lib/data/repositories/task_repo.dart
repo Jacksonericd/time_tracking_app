@@ -17,6 +17,10 @@ class TaskRepo extends TaskAbstract {
       );
 
   @override
+  Future getTasksById({required String taskId}) =>
+      taskRemoteDataSource.getTasksById(taskId: taskId);
+
+  @override
   Future createTask({required Map inputData}) =>
       taskRemoteDataSource.createTask(
         inputData: inputData,

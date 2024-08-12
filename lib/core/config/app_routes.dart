@@ -40,15 +40,11 @@ class AppRoutes {
           sectionId: args.toString(),
         );
       case RouteConstants.addTaskPath:
-        final props = args as Map;
-        return AddEditTask(
-          sectionId: props['section-id'],
-        );
+        return const AddEditTask();
       case RouteConstants.editTaskPath:
         final props = args as Map;
         return AddEditTask(
           isEditMode: true,
-          sectionId: props['section-id'],
           taskId: props['task-id'],
         );
       case RouteConstants.addCommentPath:

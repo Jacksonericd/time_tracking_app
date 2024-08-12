@@ -14,6 +14,13 @@ class TaskUseCase {
         sectionId: sectionId,
       );
 
+  Future<dynamic> getTasksById({
+    required String taskId,
+  }) =>
+      taskAbstract.getTasksById(
+        taskId: taskId,
+      );
+
   Future<dynamic> getCompletedTasksByProject({required String projectId}) =>
       taskAbstract.getCompletedTasksByProject(projectId: projectId);
 

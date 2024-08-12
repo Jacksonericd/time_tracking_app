@@ -17,6 +17,18 @@ class TaskRemoteDataSource {
     return resp.data;
   }
 
+  Future getTasksById({
+    required String taskId,
+  }) async {
+    final url = '${ApiConstants.tasksUrl}/$taskId';
+
+    final resp = await dioClient.get(
+      url,
+    );
+
+    return resp.data;
+  }
+
   Future getCompletedTasksByProject({required String projectId}) async {
     final url = '${ApiConstants.tasksCompletedUrl}?$projectId';
 

@@ -4,6 +4,10 @@ abstract class TaskAbstract {
     String? sectionId,
   });
 
+  Future<dynamic> getTasksById({
+    required String taskId,
+  });
+
   Future getCompletedTasksByProject({required String projectId});
 
   Future<dynamic> createTask({
