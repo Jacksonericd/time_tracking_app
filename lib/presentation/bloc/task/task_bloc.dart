@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_tracking_app/core/enums/bloc_states.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
+import 'package:time_tracking_app/data/model/completed_items.dart';
 import 'package:time_tracking_app/data/model/task.dart';
 import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 
@@ -29,7 +30,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
             (response as List).map((task) => Task.fromJson(task)).toList();
 
         emit(TasksLoadedState(
-          taskList: tasks,
+          taskTodoList: tasks,
         ));
       } catch (e) {
         if (e is DioException) {

@@ -3,12 +3,16 @@ part of 'task_bloc.dart';
 class TaskState {
   final BlocStates blocStates;
   final String? message;
-  final List<Task>? tasks;
+  final List<Task>? taskTodoList;
+  final List<Task>? taskOngoingList;
+  final List<CompletedItem>? taskCompletedList;
 
   TaskState({
     required this.blocStates,
     this.message,
-    this.tasks,
+    this.taskTodoList,
+    this.taskOngoingList,
+    this.taskCompletedList,
   });
 }
 
@@ -17,12 +21,19 @@ class TasksLoadingState extends TaskState {
 }
 
 class TasksLoadedState extends TaskState {
-  final List<Task>? taskList;
+  final List<Task>? taskTodoList;
+  final List<Task>? taskOngoingList;
+  final List<CompletedItem>? taskCompletedList;
 
-  TasksLoadedState({required this.taskList})
-      : super(
+  TasksLoadedState({
+    required this.taskTodoList,
+    this.taskOngoingList,
+    this.taskCompletedList,
+  }) : super(
           blocStates: BlocStates.loaded,
-          tasks: taskList,
+          taskTodoList: taskTodoList,
+          taskOngoingList: taskOngoingList,
+          taskCompletedList: taskCompletedList,
         );
 }
 

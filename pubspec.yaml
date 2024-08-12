@@ -16,6 +16,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_form_bloc: ^0.31.0
   flutter_offline: ^3.0.1
+  sqflite: ^2.3.3+1
 
 dev_dependencies:
   flutter_test:

@@ -41,7 +41,7 @@ class TaskList extends StatelessWidget {
               message: state.message ?? '',
               blocStates: state.blocStates,
               child: displaySectionsData(
-                state.tasks,
+                state.taskOngoingList,
                 context,
               ),
             );

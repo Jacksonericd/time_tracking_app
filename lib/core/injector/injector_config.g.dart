@@ -13,7 +13,8 @@ class _$InjectorConfig extends InjectorConfig {
     container
       ..registerSingleton((c) => SectionUseCase(c<SectionAbstract>()))
       ..registerSingleton((c) => TaskUseCase(c<TaskAbstract>()))
-      ..registerSingleton((c) => CommentUseCase(c<CommentAbstract>()));
+      ..registerSingleton((c) => CommentUseCase(c<CommentAbstract>()))
+      ..registerSingleton((c) => LocalDataUseCase(c<LocalDataAbstract>()));
   }
 
   @override
@@ -25,7 +26,9 @@ class _$InjectorConfig extends InjectorConfig {
       ..registerSingleton<TaskAbstract>(
           (c) => TaskRepo(c<TaskRemoteDataSource>()))
       ..registerSingleton<CommentAbstract>(
-          (c) => CommentsRepo(c<CommentRemoteDatasource>()));
+          (c) => CommentsRepo(c<CommentRemoteDatasource>()))
+      ..registerSingleton<LocalDataAbstract>(
+          (c) => LocalDataRepo(c<AppLocalDatasource>()));
   }
 
   @override
@@ -34,7 +37,15 @@ class _$InjectorConfig extends InjectorConfig {
     container
       ..registerSingleton((c) => SectionRemoteDataSource())
       ..registerSingleton((c) => TaskRemoteDataSource())
-      ..registerSingleton((c) => CommentRemoteDatasource());
+      ..registerSingleton((c) => CommentRemoteDatasource())
+      ..registerSingleton((c) => AppLocalDatasource(c<LocalStorageService>()));
+  }
+
+  @override
+  void _configureServices() {
+    final KiwiContainer container = KiwiContainer();
+    container.registerSingleton<LocalStorageService>(
+        (c) => AppLocalStorageService());
   }
 
   @override
