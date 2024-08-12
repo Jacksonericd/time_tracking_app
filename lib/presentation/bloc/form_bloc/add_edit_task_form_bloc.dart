@@ -8,7 +8,7 @@ import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 
 class AddEditTaskFormBloc extends FormBloc<String, String> {
   final tfTaskContent =
-      TextFieldBloc(validators: [CustomBlocValidators.requiredTaskContext]);
+      TextFieldBloc(validators: [CustomBlocValidators.requiredTaskContent]);
   final tfTaskDescription =
       TextFieldBloc(validators: [CustomBlocValidators.requiredTaskDescription]);
   final tfTProjectId = TextFieldBloc(initialValue: '2337659677');
@@ -48,8 +48,8 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
 
       if (!boolIsEditMode.value) {
         inputData.addAll({
-          'project_id': tfTProjectId.value,
-          'section_id': tfTSectionId.value,
+          'project_id': tfTProjectId.value
+          // 'section_id': tfTSectionId.value,
         });
       }
 

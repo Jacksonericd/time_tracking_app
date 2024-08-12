@@ -38,8 +38,8 @@ class SplashView extends StatelessWidget {
         ],
       );
 
-  void navigateAfterDelay(BuildContext context) {
-    Future.delayed(
+  void navigateAfterDelay(BuildContext context) async {
+    await Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.of(context)
             .pushReplacementNamed(RouteConstants.dashboardPath));

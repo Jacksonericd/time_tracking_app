@@ -8,6 +8,8 @@ class LocalDataUseCase {
   Future<dynamic> getTaskTimerById(String taskId) =>
       localDataAbstract.getTaskTimerById(taskId);
 
+  Future<dynamic> getAllTaskTimer() => localDataAbstract.getAllTaskTimer();
+
   Future<void> insertTaskTime(
           {required String taskId, required String startTime}) =>
       localDataAbstract.insertTaskTime(taskId: taskId, startTime: startTime);

@@ -1,8 +1,10 @@
 abstract class TaskAbstract {
   Future<dynamic> getTasksByProjectAndSection({
     required String projectId,
-    required String sectionId,
+    String? sectionId,
   });
+
+  Future getCompletedTasksByProject({required String projectId});
 
   Future<dynamic> createTask({
     required Map inputData,
@@ -13,7 +15,5 @@ abstract class TaskAbstract {
     required Map inputData,
   });
 
-  Future<dynamic> closeTask({
-    required String taskId,
-  });
+  Future<dynamic> completeTask();
 }

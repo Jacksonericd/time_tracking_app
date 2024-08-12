@@ -1,6 +1,8 @@
 abstract class LocalDataAbstract {
   Future<dynamic> getTaskTimerById(String taskId);
 
+  Future<dynamic> getAllTaskTimer();
+
   Future<void> insertTaskTime(
       {required String taskId, required String startTime});
 

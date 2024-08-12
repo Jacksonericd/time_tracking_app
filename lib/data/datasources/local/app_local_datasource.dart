@@ -11,6 +11,8 @@ class AppLocalDatasource {
   Future getTaskTimerById(String taskId) =>
       localStorageService.getTaskTimerById(taskId);
 
+  Future getAllTaskTimer() => localStorageService.getAllTaskTimer();
+
   Future<void> insertTaskTime(
           {required String taskId, required String startTime}) =>
       localStorageService.insertTaskTime(taskId: taskId, startTime: startTime);

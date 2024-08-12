@@ -7,12 +7,15 @@ class TaskUseCase {
 
   Future<dynamic> getTasksByProjectAndSection({
     required String projectId,
-    required String sectionId,
+    String? sectionId,
   }) =>
       taskAbstract.getTasksByProjectAndSection(
         projectId: projectId,
         sectionId: sectionId,
       );
+
+  Future<dynamic> getCompletedTasksByProject({required String projectId}) =>
+      taskAbstract.getCompletedTasksByProject(projectId: projectId);
 
   Future<dynamic> createTask({
     required Map inputData,
@@ -30,10 +33,8 @@ class TaskUseCase {
         inputData: inputData,
       );
 
-  Future<dynamic> closeTask({
+  Future<dynamic> completeTask({
     required String taskId,
   }) =>
-      taskAbstract.closeTask(
-        taskId: taskId,
-      );
+      taskAbstract.completeTask();
 }

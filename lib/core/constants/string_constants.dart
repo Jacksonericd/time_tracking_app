@@ -11,11 +11,17 @@ class StringConstants {
   static const String edit = 'Edit';
   static const String submit = 'Submit';
   static const String taskContent = 'Task content';
+  static const String commentContent = 'Comment content';
   static const String taskDescription = 'Task description';
   static const String priority = 'Priority';
   static const String dueDateTime = 'Due Date and Time';
   static const String durationInHours = 'duration in hours';
   static const String taskContentRequired = 'Task content is required';
   static const String taskDescriptionRequired = 'Task description is required';
+  static const String commentContentRequired = 'Comment is required';
   static const String selectPriority = 'Select priority';
+  static const String beginTask = 'Begin Task';
+  static const String completeTask = 'Complete Task';
+  static const String addComment = 'Add a comment';
+  static const String viewComments = 'View comments';
 }

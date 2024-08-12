@@ -4,10 +4,10 @@ abstract class TaskEvent {}
 
 class GetTasksByProjectAndSectionEvent extends TaskEvent {
   final String projectId;
-  final String sectionId;
+  final String? sectionId;
 
   GetTasksByProjectAndSectionEvent({
     required this.projectId,
-    required this.sectionId,
+    this.sectionId,
   });
 }

@@ -6,8 +6,19 @@ class TaskRemoteDataSource {
   final dioClient = Injector.resolve<DioClient>().dioNetwork;
 
   Future getTasksByProjectAndSection(
-      {required String projectId, required String sectionId}) async {
-    final url = '${ApiConstants.tasksUrl}?$projectId&section_id=$sectionId';
+      {required String projectId, String? sectionId}) async {
+    // final url = '${ApiConstants.tasksUrl}?$projectId&section_id=$sectionId';
+    final url = '${ApiConstants.tasksUrl}?$projectId';
+
+    final resp = await dioClient.get(
+      url,
+    );
+
+    return resp.data;
+  }
+
+  Future getCompletedTasksByProject({required String projectId}) async {
+    final url = '${ApiConstants.tasksCompletedUrl}?$projectId';
 
     final resp = await dioClient.get(
       url,
@@ -39,8 +50,8 @@ class TaskRemoteDataSource {
     return resp.data;
   }
 
-  Future<dynamic> closeTask({required String taskId}) async {
-    final url = '${ApiConstants.tasksUrl}/$taskId';
+  Future<dynamic> completeTask() async {
+    const url = ApiConstants.tasksCompleteUrl;
 
     final resp = await dioClient.post(
       url,

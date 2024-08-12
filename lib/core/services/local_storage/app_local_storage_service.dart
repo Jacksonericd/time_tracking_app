@@ -7,19 +7,31 @@ class AppLocalStorageService implements LocalStorageService {
   late final Database? _database;
 
   Future<Database> get database async {
-    if (_database != null) {
-      return _database;
+    try {
+      if (_database != null) {
+        return _database;
+      }
+
+      await _initDatabase();
+      return _database!;
+    } catch (e) {
+      print('${e.runtimeType} $e');
+
+      if (e.runtimeType.toString() == 'LateError') {
+        await _initDatabase();
+        return _database!;
+      }
     }
 
-    _database = await _initDatabase();
+    await _initDatabase();
     return _database!;
   }
 
-  Future<Database> _initDatabase() async {
+  Future<void> _initDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = '$databasePath/notes.db';
+    final path = '$databasePath/timer.db';
 
-    return await openDatabase(
+    _database = await openDatabase(
       path,
       version: 1,
       onCreate: _createDatabase,
@@ -38,7 +50,7 @@ class AppLocalStorageService implements LocalStorageService {
         CREATE TABLE task_timer (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           task_id TEXT NOT NULL,
-          start_time TEXT NOT NULL,
+          start_time TEXT NOT NULL
         )
       ''');
   }
@@ -69,7 +81,7 @@ class AppLocalStorageService implements LocalStorageService {
       'task_timer',
       {
         'task_id': taskId,
-        'task_timer': startTime,
+        'start_time': startTime,
       },
     );
   }

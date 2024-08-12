@@ -9,7 +9,7 @@ class TaskRepo extends TaskAbstract {
   @override
   Future getTasksByProjectAndSection({
     required String projectId,
-    required String sectionId,
+    String? sectionId,
   }) async =>
       taskRemoteDataSource.getTasksByProjectAndSection(
         projectId: projectId,
@@ -33,8 +33,9 @@ class TaskRepo extends TaskAbstract {
       );
 
   @override
-  Future closeTask({required String taskId}) async =>
-      taskRemoteDataSource.closeTask(
-        taskId: taskId,
-      );
+  Future completeTask() async => taskRemoteDataSource.completeTask();
+
+  @override
+  Future getCompletedTasksByProject({required String projectId}) =>
+      taskRemoteDataSource.getCompletedTasksByProject(projectId: projectId);
 }
