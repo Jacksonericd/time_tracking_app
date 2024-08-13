@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
-import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
-import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
-import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
-import 'package:time_tracking_app/data/model/task.dart';
+import 'package:time_tracking_app/data/model/completed_items.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_heading.dart';
 
-class ScrollableTasks extends StatelessWidget {
-  const ScrollableTasks({
+class CompletedTasks extends StatelessWidget {
+  const CompletedTasks({
     super.key,
     this.tasks,
-    required this.taskType,
   });
 
-  final List<Task>? tasks;
-  final TaskType taskType;
+  final List<CompletedItem>? tasks;
 
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    final cardColor = taskType == TaskType.todo
-        ? ColorConstants.todoCard
-        : ColorConstants.ongoingCard;
+    const cardColor = ColorConstants.completedCard;
 
     Widget dataWidget = noTasksAvailable;
 
@@ -56,57 +49,23 @@ class ScrollableTasks extends StatelessWidget {
                     ],
                   ),
                   const Divider(),
-                  if (task.due?.date != null) ...{
+                  if (task.completedAt != null) ...{
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         const Icon(Icons.date_range),
-                        StyledText.labelLarge(' ${task.due?.datetime}'),
+                        StyledText.labelLarge(' ${task.completedAt}'),
                       ],
                     )
                   },
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.comment),
-                          StyledText.labelSmall(
-                              ' ${task.commentCount} comments'),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          WidgetTap(
-                              widget: const Icon(Icons.remove_red_eye_rounded),
-                              onWidgetTap: () => Navigator.of(context)
-                                  .pushNamed(RouteConstants.viewTaskCommentPath,
-                                      arguments: {'task-id': task.id!})),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          WidgetTap(
-                              widget: const Icon(Icons.add),
-                              onWidgetTap: () => Navigator.of(context)
-                                  .pushNamed(RouteConstants.addCommentPath,
-                                      arguments: {'task-id': task.id!})),
-                        ],
-                      ),
-                    ],
-                  ),
                 ],
               ),
             );
           });
     }
 
-    final headingText = taskType == TaskType.ongoing
-        ? StringConstants.ongoing
-        : StringConstants.todo;
-
     return Container(
-      height: 200,
+      height: 150,
       width: deviceWidth,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
@@ -116,8 +75,8 @@ class ScrollableTasks extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          TaskHeading(
-            headingText: headingText,
+          const TaskHeading(
+            headingText: StringConstants.completed,
             cardColor: cardColor,
           ),
           const SizedBox(

@@ -18,6 +18,7 @@ import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/presentation/bloc/section/section_bloc.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 
+import '../widgets/completed_tasks.dart';
 import '../widgets/scrollable_tasks.dart';
 import '../widgets/task_summary_card.dart';
 
@@ -157,15 +158,8 @@ class DashboardView extends StatelessWidget {
       const SizedBox(
         height: 10,
       ),
-      Container(
-        width: deviceWidth,
-        height: 100,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          // color: Colors.yellow,
-        ),
-        child: displayCompletedTasksDataList(completedTasks, context),
+      CompletedTasks(
+        tasks: completedTasks,
       ),
     ];
 

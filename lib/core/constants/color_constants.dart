@@ -30,6 +30,6 @@ class ColorConstants {
   static const Color mediumGrey = Color(0XFFA2A2A2); // set to indicatorColor
   static const Color successGreen = Color(0XFF00BD35); // set to highlightColor
   static const Color todoCard = Color(0XFFF0D8AF);
-  static const Color ongoingCard = Color(0XFFF7DAE7);
+  static const Color ongoingCard = Color(0XFFC6EDF5);
   static const Color completedCard = Color(0XFFD5FCD2);
 }
