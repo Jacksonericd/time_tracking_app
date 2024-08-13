@@ -52,13 +52,8 @@ class DashboardView extends StatelessWidget {
         )),
       child: AppScaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          child: Row(
-            children: [
-              const Icon(Icons.add),
-              // StyledText.labelMedium('Add Task')
-            ],
-          ),
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Icon(Icons.add),
           onPressed: () =>
               Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
         ),

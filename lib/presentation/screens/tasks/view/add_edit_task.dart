@@ -114,8 +114,6 @@ class AddEditTask extends StatelessWidget {
                               .textTheme
                               .titleMedium
                               ?.copyWith(color: Theme.of(context).hintColor),
-
-                          // labelStyle:
                         ),
                       ),
                       FormBlocSelectList(
@@ -129,7 +127,7 @@ class AddEditTask extends StatelessWidget {
                         inputType: const TextInputType.numberWithOptions(
                             signed: false, decimal: false),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       AppButton(
