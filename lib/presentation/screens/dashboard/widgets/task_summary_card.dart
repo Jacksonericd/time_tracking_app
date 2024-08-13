@@ -24,7 +24,7 @@ class TaskSummaryCard extends StatelessWidget {
           Container(
             height: 30,
             alignment: Alignment.center,
-            child: StyledText.titleMedium(headingText),
+            child: StyledText.titleSmall(headingText),
             // child: Text(
             //   headingText,
             //   style: TextStyle(
@@ -33,10 +33,10 @@ class TaskSummaryCard extends StatelessWidget {
             //   ),
             // ),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 5,),
           CircleAvatar(
             backgroundColor: Theme.of(context).primaryColorLight,
-            radius: deviceWidth * 0.075,
+            radius: deviceWidth * 0.060,
             child: StyledText.titleLarge(valueText),
           ),
           const SizedBox(height: 10,)

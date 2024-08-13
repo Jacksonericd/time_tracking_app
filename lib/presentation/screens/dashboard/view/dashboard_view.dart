@@ -95,16 +95,16 @@ class DashboardView extends StatelessWidget {
         height: 20,
       ),
       Container(
-        height: 50,
+        height: 35,
         width: deviceWidth,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             color: Theme.of(context).cardColor),
         alignment: Alignment.center,
-        child: StyledText.titleLarge(StringConstants.taskSummary),
+        child: StyledText.titleMedium(StringConstants.taskSummary),
       ),
       const SizedBox(
-        height: 10,
+        height: 5,
       ),
       Row(
         children: [
@@ -135,7 +135,7 @@ class DashboardView extends StatelessWidget {
         ],
       ),
       const SizedBox(
-        height: 20,
+        height: 10,
       ),
     ];
 

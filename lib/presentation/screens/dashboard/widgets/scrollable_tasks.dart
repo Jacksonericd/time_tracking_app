@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 import 'package:time_tracking_app/data/model/task.dart';
+import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_heading.dart';
 
 class ScrollableTasks extends StatelessWidget {
   const ScrollableTasks({
@@ -19,6 +21,10 @@ class ScrollableTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+
+    final cardColor = taskType == TaskType.todo
+        ? ColorConstants.todoCard
+        : ColorConstants.ongoingCard;
 
     Widget dataWidget = noTasksAvailable;
 
@@ -36,7 +42,7 @@ class ScrollableTasks extends StatelessWidget {
               margin: const EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                color: Theme.of(context).secondaryHeaderColor,
+                color: cardColor,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -91,6 +97,10 @@ class ScrollableTasks extends StatelessWidget {
           });
     }
 
+    final headingText = taskType == TaskType.ongoing
+        ? StringConstants.ongoing
+        : StringConstants.todo;
+
     return Container(
       height: 200,
       width: deviceWidth,
@@ -102,17 +112,9 @@ class ScrollableTasks extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            height: 40,
-            width: deviceWidth,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Theme.of(context).secondaryHeaderColor),
-            alignment: Alignment.center,
-            child: StyledText.titleMedium(taskType == TaskType.ongoing
-                ? StringConstants.ongoing
-                : StringConstants.todo),
+          TaskHeading(
+            headingText: headingText,
+            cardColor: cardColor,
           ),
           const SizedBox(
             height: 5,
