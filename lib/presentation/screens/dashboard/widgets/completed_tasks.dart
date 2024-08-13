@@ -41,46 +41,23 @@ class CompletedTasks extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      StyledText.titleMedium(task.content!),
-                      const Icon(Icons.info),
-                    ],
-                  ),
-                  const Divider(),
-                  if (task.completedAt != null) ...{
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.date_range),
-                        StyledText.labelLarge(' ${task.completedAt}'),
-                      ],
-                    )
-                  },
+                  StyledText.titleMedium(task.content!),
+                  StyledText.labelSmall(' ${task.completedAt}')
                 ],
               ),
             );
           });
     }
 
-    return Container(
-      height: 150,
+    return SizedBox(
+      height: 120,
       width: deviceWidth,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Theme.of(context).cardColor,
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const TaskHeading(
             headingText: StringConstants.completed,
             cardColor: cardColor,
-          ),
-          const SizedBox(
-            height: 5,
           ),
           Expanded(child: dataWidget),
         ],

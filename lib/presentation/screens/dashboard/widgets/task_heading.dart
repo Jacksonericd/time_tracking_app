@@ -17,11 +17,8 @@ class TaskHeading extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      height: 40,
       width: deviceWidth,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0), color: cardColor),
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: StyledText.titleMedium(headingText),
     );
   }

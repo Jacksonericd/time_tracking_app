@@ -1,6 +1,6 @@
 class StringConstants {
   static const String appName = 'Task Management App';
-  static const String fontFamily = 'PlayfairDisplay';
+  static const String fontFamily = 'Roboto';
   static const connectInternet = 'You are Offline. Please connect to internet';
   static const somethingWentWrongError =
       'Something went wrong, please try again later.';

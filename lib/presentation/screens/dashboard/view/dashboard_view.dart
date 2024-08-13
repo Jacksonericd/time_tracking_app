@@ -12,10 +12,8 @@ import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/data/model/completed_items.dart';
-import 'package:time_tracking_app/data/model/sections.dart';
 import 'package:time_tracking_app/data/model/task.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
-import 'package:time_tracking_app/presentation/bloc/section/section_bloc.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 
 import '../widgets/completed_tasks.dart';
@@ -41,7 +39,7 @@ class DashboardView extends StatelessWidget {
 
   Widget get introWidget => Column(
         children: [
-          StyledText.displayMedium(StringConstants.welcomeComma),
+          StyledText.displaySmall(StringConstants.welcomeComma),
         ],
       );
 
@@ -55,11 +53,16 @@ class DashboardView extends StatelessWidget {
       child: AppScaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          child: const Icon(Icons.add),
+          child: Row(
+            children: [
+              const Icon(Icons.add),
+              // StyledText.labelMedium('Add Task')
+            ],
+          ),
           onPressed: () =>
               Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             return BlocStateToWidget(
@@ -86,7 +89,7 @@ class DashboardView extends StatelessWidget {
       topSpacing,
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           introWidget,
           appLogo,
@@ -96,13 +99,9 @@ class DashboardView extends StatelessWidget {
         height: 20,
       ),
       Container(
-        height: 35,
         width: deviceWidth,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: Theme.of(context).cardColor),
-        alignment: Alignment.center,
-        child: StyledText.titleMedium(StringConstants.taskSummary),
+        alignment: Alignment.centerLeft,
+        child: StyledText.titleLarge(StringConstants.taskSummary),
       ),
       const SizedBox(
         height: 5,
@@ -114,6 +113,7 @@ class DashboardView extends StatelessWidget {
               child: TaskSummaryCard(
                 headingText: StringConstants.todo,
                 valueText: '${todoTasks?.length}',
+                taskType: TaskType.todo,
               )),
           const SizedBox(
             width: 5,
@@ -123,6 +123,7 @@ class DashboardView extends StatelessWidget {
               child: TaskSummaryCard(
                 headingText: StringConstants.ongoing,
                 valueText: '${ongoingTasks?.length}',
+                taskType: TaskType.ongoing,
               )),
           const SizedBox(
             width: 5,
@@ -132,6 +133,7 @@ class DashboardView extends StatelessWidget {
               child: TaskSummaryCard(
                 headingText: StringConstants.completed,
                 valueText: '${completedTasks?.length}',
+                taskType: TaskType.completed,
               )),
         ],
       ),
@@ -141,25 +143,25 @@ class DashboardView extends StatelessWidget {
     ];
 
     final bottomContent = [
-      const SizedBox(
-        height: 10,
-      ),
       ScrollableTasks(
         taskType: TaskType.todo,
         tasks: todoTasks,
       ),
       const SizedBox(
-        height: 10,
+        height: 20,
       ),
       ScrollableTasks(
         taskType: TaskType.ongoing,
         tasks: ongoingTasks,
       ),
       const SizedBox(
-        height: 10,
+        height: 20,
       ),
       CompletedTasks(
         tasks: completedTasks,
+      ),
+      const SizedBox(
+        height: 70,
       ),
     ];
 
@@ -175,6 +177,9 @@ class DashboardView extends StatelessWidget {
               children: topContent,
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -183,8 +188,10 @@ class DashboardView extends StatelessWidget {
               ),
               child: Container(
                 color: Theme.of(context).primaryColorLight,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 24,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: bottomContent,

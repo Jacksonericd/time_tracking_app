@@ -18,8 +18,8 @@ class AppButton extends StatelessWidget {
       style: ButtonStyle(
           shape: WidgetStateProperty.all(RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0))),
-        backgroundColor: WidgetStateProperty.all(ColorConstants.primaryColor)
-      ),
+          backgroundColor:
+              WidgetStateProperty.all(ColorConstants.primaryColor)),
       onPressed: onButtonClicked,
       child: StyledText.labelLarge(buttonText),
     );

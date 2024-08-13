@@ -25,6 +25,9 @@ class ScrollableTasks extends StatelessWidget {
     final cardColor = taskType == TaskType.todo
         ? ColorConstants.todoCard
         : ColorConstants.ongoingCard;
+    final dividerColor = taskType == TaskType.todo
+        ? ColorConstants.todoCount
+        : ColorConstants.ongoingCount;
 
     Widget dataWidget = noTasksAvailable;
 
@@ -48,51 +51,29 @@ class ScrollableTasks extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      StyledText.titleMedium(task.content!),
-                      const Icon(Icons.info),
-                    ],
+                  StyledText.titleMedium(task.content!),
+                  // if (task.due?.date != null) ...{
+                  StyledText.labelSmall('Due date : ${task.due?.datetime}'),
+                  // },
+                  Divider(
+                    color: dividerColor,
+                    height: 1,
                   ),
-                  const Divider(),
-                  if (task.due?.date != null) ...{
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.date_range),
-                        StyledText.labelLarge(' ${task.due?.datetime}'),
-                      ],
-                    )
-                  },
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.comment),
-                          StyledText.labelSmall(
-                              ' ${task.commentCount} comments'),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          WidgetTap(
-                              widget: const Icon(Icons.remove_red_eye_rounded),
-                              onWidgetTap: () => Navigator.of(context)
-                                  .pushNamed(RouteConstants.viewTaskCommentPath,
-                                      arguments: {'task-id': task.id!})),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          WidgetTap(
-                              widget: const Icon(Icons.add),
-                              onWidgetTap: () => Navigator.of(context)
-                                  .pushNamed(RouteConstants.addCommentPath,
-                                      arguments: {'task-id': task.id!})),
-                        ],
-                      ),
+                      WidgetTap(
+                          widget: StyledText.labelSmall('Add comment'),
+                          onWidgetTap: () => Navigator.of(context).pushNamed(
+                              RouteConstants.addCommentPath,
+                              arguments: {'task-id': task.id!})),
+                      WidgetTap(
+                          widget: StyledText.labelSmall(
+                              ' View ${task.commentCount} comments'),
+                          onWidgetTap: () => Navigator.of(context).pushNamed(
+                              RouteConstants.viewTaskCommentPath,
+                              arguments: {'task-id': task.id!})),
                     ],
                   ),
                 ],
@@ -105,23 +86,15 @@ class ScrollableTasks extends StatelessWidget {
         ? StringConstants.ongoing
         : StringConstants.todo;
 
-    return Container(
+    return SizedBox(
       height: 200,
       width: deviceWidth,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: Theme.of(context).cardColor,
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           TaskHeading(
             headingText: headingText,
             cardColor: cardColor,
-          ),
-          const SizedBox(
-            height: 5,
           ),
           Expanded(child: dataWidget),
         ],

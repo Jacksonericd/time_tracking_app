@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
+import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 
 class TaskSummaryCard extends StatelessWidget {
@@ -6,40 +8,41 @@ class TaskSummaryCard extends StatelessWidget {
     super.key,
     required this.headingText,
     required this.valueText,
+    required this.taskType,
   });
 
   final String headingText;
   final String valueText;
+  final TaskType taskType;
 
   @override
   Widget build(BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
+    final valueColorMap = {
+      TaskType.todo: ColorConstants.todoCount,
+      TaskType.ongoing: ColorConstants.ongoingCount,
+      TaskType.completed: ColorConstants.completedCount,
+    };
 
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          color: Theme.of(context).cardColor),
+          color: Theme.of(context).primaryColorLight),
       child: Column(
         children: [
-          Container(
-            height: 30,
-            alignment: Alignment.center,
-            child: StyledText.titleSmall(headingText),
-            // child: Text(
-            //   headingText,
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     color: Theme.of(context).primaryColorLight,
-            //   ),
-            // ),
+          const SizedBox(
+            height: 10,
           ),
-          const SizedBox(height: 5,),
-          CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColorLight,
-            radius: deviceWidth * 0.060,
-            child: StyledText.titleLarge(valueText),
+          Text(
+            valueText,
+            style: Theme.of(context)
+                .textTheme
+                .displaySmall
+                ?.copyWith(color: valueColorMap[taskType]),
           ),
-          const SizedBox(height: 10,)
+          StyledText.titleSmall(headingText),
+          const SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );

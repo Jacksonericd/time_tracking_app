@@ -23,29 +23,27 @@ class AddEditComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddEditCommentFormBloc(),
-      child: Builder(builder: (context) {
-        final formBloc = BlocProvider.of<AddEditCommentFormBloc>(context);
-        formBloc.boolIsEditMode.updateValue(isEditMode);
+    return AppScaffold(
+      hideAppBar: false,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        title: StyledText.titleLarge('${isEditMode ? 'Edit' : 'Add'} comment'),
+      ),
+      scaffoldBody: BlocProvider(
+        create: (context) => AddEditCommentFormBloc(),
+        child: Builder(builder: (context) {
+          final formBloc = BlocProvider.of<AddEditCommentFormBloc>(context);
+          formBloc.boolIsEditMode.updateValue(isEditMode);
 
-        if (taskId != null) {
-          formBloc.tfTaskId.updateValue(taskId!);
-        }
+          if (taskId != null) {
+            formBloc.tfTaskId.updateValue(taskId!);
+          }
 
-        if (commentId != null) {
-          formBloc.tfCommentId.updateValue(commentId!);
-        }
+          if (commentId != null) {
+            formBloc.tfCommentId.updateValue(commentId!);
+          }
 
-        return AppScaffold(
-          hideAppBar: false,
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).cardColor,
-            title:
-                StyledText.titleLarge('${isEditMode ? 'Edit' : 'Add'} comment'),
-          ),
-          scaffoldBody:
-              FormBlocListener<AddEditCommentFormBloc, String, String>(
+          return FormBlocListener<AddEditCommentFormBloc, String, String>(
             onSubmitting: (context, state) {
               LoadingDialog.show(context);
             },
@@ -91,9 +89,9 @@ class AddEditComment extends StatelessWidget {
                     ],
                   ),
                 )),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

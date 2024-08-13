@@ -22,7 +22,7 @@ class TimeTrackingApp extends StatelessWidget {
       title: StringConstants.appName,
       initialRoute: RouteConstants.splashPath,
       onGenerateRoute: AppRoutes().generateRoute,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       darkTheme: CustomThemeData.darkTheme,
       theme: CustomThemeData.lightTheme,
       navigatorKey: appNavigatorKey,

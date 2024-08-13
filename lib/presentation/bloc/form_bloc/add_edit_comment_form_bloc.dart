@@ -15,11 +15,7 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
       TextFieldBloc(validators: [CustomBlocValidators.requiredCommentContent]);
   final boolIsEditMode = BooleanFieldBloc(initialValue: false);
 
-  AddEditCommentFormBloc()
-      : super(
-          isLoading: true,
-          autoValidate: false,
-        ) {
+  AddEditCommentFormBloc() : super(isLoading: true, autoValidate: true) {
     addFieldBlocs(fieldBlocs: [
       tfTaskId,
       tfCommentContent,
@@ -57,6 +53,7 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
 
   @override
   FutureOr<void> onSubmitting() async {
+    print('onSubmitting');
     try {
       final Map inputData = {
         'content': tfCommentContent.value,

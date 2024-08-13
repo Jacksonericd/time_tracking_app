@@ -12,7 +12,7 @@ class StyledText extends StatelessWidget {
 
       return Theme.of(context).textTheme.displayLarge?.copyWith(
           color: isDarkMode
-              ? ColorConstants.fontTitleDarkColor
+              ? ColorConstants.fontTitleLightColor
               : ColorConstants.fontTitleLightColor);
     };
   }
@@ -24,14 +24,23 @@ class StyledText extends StatelessWidget {
 
       return Theme.of(context).textTheme.displayMedium?.copyWith(
           color: isDarkMode
-              ? ColorConstants.fontTitleDarkColor
+              ? ColorConstants.fontTitleLightColor
               : ColorConstants.fontTitleDarkColor);
     };
   }
 
-  StyledText.displaySmall(this.text, {super.key}) {
+  StyledText.displaySmall(
+    this.text, {
+    super.key,
+  }) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.displaySmall;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.displaySmall?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleLightColor
+              : ColorConstants.fontTitleDarkColor); //changed
     };
   }
 
@@ -79,19 +88,38 @@ class StyledText extends StatelessWidget {
 
   StyledText.titleLarge(this.text, {super.key}) {
     getStyle = (context) {
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleLightColor
+              : ColorConstants.fontTitleDarkColor);
       return Theme.of(context).textTheme.titleLarge;
     };
   }
 
   StyledText.titleMedium(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.titleMedium;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.titleMedium?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleLightColor
+              : ColorConstants.fontTitleLightColor);
     };
   }
 
   StyledText.titleSmall(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.titleSmall;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleLightColor
+              : ColorConstants.darkGrey);  // changed
     };
   }
 

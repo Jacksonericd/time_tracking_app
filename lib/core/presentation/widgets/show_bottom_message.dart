@@ -24,6 +24,7 @@ showBottomMessage(
           ),
         ),
         child: Container(
+          height: 100,
           color: success
               ? Theme.of(context).highlightColor
               : Theme.of(context).colorScheme.error,
@@ -37,7 +38,7 @@ showBottomMessage(
                     child: Text(
                       message,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).primaryColorLight),
                     )),
               ),

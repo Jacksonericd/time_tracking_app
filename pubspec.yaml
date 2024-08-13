@@ -36,15 +36,15 @@ flutter:
   fonts:
     - family: PlayfairDisplay
       fonts:
-        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Regular.ttf
+        - asset:  assets/fonts/Roboto/Roboto-Thin.ttf
           weight: 200
-        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Black.ttf
+        - asset:  assets/fonts/Roboto/Roboto-Light.ttf
           weight: 400
-        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-SemiBold.ttf
+        - asset:  assets/fonts/Roboto/Roboto-Black.ttf
           weight: 500
-        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Medium.ttf
+        - asset:  assets/fonts/Roboto/Roboto-Regular.ttf
           weight: 600
-        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Bold.ttf
+        - asset:  assets/fonts/Roboto/Roboto-Medium.ttf
           weight: 800
-        - asset: assets/fonts/PlayfairDisplay/PlayfairDisplay-ExtraBold.ttf
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
           weight: 900
