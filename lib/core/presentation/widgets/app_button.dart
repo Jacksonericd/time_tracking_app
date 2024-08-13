@@ -13,6 +13,9 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ButtonStyle(
+          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0)))),
       onPressed: onButtonClicked,
       child: Text(buttonText),
     );

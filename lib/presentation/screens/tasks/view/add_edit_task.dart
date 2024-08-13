@@ -92,9 +92,9 @@ class AddEditTask extends StatelessWidget {
                       defaultText: StringConstants.priority,
                     ),
                     CustomTextFieldBlocBuilder(
-                      textFieldBloc: formBloc.tfDurationInHours,
-                      maxLength: 2,
-                      labelText: StringConstants.durationInHours,
+                      textFieldBloc: formBloc.tfDurationInMinutes,
+                      maxLength: 4,
+                      labelText: StringConstants.durationInMinutes,
                       inputType: const TextInputType.numberWithOptions(
                           signed: false, decimal: false),
                     ),

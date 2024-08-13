@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_tracking_app/core/constants/image_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
+import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
+import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/data/model/completed_items.dart';
 import 'package:time_tracking_app/data/model/sections.dart';
 import 'package:time_tracking_app/data/model/task.dart';
@@ -16,6 +19,26 @@ import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
+  Widget get topSpacing => const SizedBox(
+        height: 50.0,
+      );
+
+  Widget get appLogo => ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: const AssetImageWidget(
+          assetPath: ImageConstants.appIconPng,
+          boxFit: BoxFit.cover,
+          height: 70,
+          width: 70,
+        ),
+      );
+
+  Widget get introWidget => Column(
+        children: [
+          StyledText.displayMedium(StringConstants.welcomeComma),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,24 +47,32 @@ class DashboardView extends StatelessWidget {
           projectId: '2337659677',
         )),
       child: AppScaffold(
-        hideAppBar: false,
-        appBar: AppBar(
-          title: Text('Sections'),
-        ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () => Navigator.of(context).pushNamed(
-              RouteConstants.addTaskPath,
-              arguments: {'section-id': 'sectionId'}),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
         ),
         scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             return BlocStateToWidget(
               message: state.message ?? '',
               blocStates: state.blocStates,
-              child: displayTasksData(
-                state,
-                context,
+              child: Column(
+                children: [
+                  topSpacing,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      introWidget,
+                      appLogo,
+                    ],
+                  ),
+                  displayTasksData(
+                    state,
+                    context,
+                  ),
+                ],
               ),
             );
           },
@@ -108,8 +139,16 @@ class DashboardView extends StatelessWidget {
     final ongoingTasks = state.taskOngoingList;
     final completedTasks = state.taskCompletedList;
 
+    Widget taskInfoWidget = SizedBox(
+      width: deviceWidth,
+      child: StyledText.headlineSmall(
+          'You have \n${todoTasks?.length} To-do tasks, \n${ongoingTasks?.length} ongoing tasks, \n${completedTasks?.length} completed tasks,  '),
+    );
+
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        taskInfoWidget,
         Container(
           width: deviceWidth,
           height: 200,
@@ -122,7 +161,7 @@ class DashboardView extends StatelessWidget {
         ),
         Container(
           width: deviceWidth,
-          height: 200,
+          height: 150,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),
@@ -132,7 +171,7 @@ class DashboardView extends StatelessWidget {
         ),
         Container(
           width: deviceWidth,
-          height: 200,
+          height: 100,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.0),

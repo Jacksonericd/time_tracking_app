@@ -17,12 +17,17 @@ class SplashView extends StatelessWidget {
     return AppScaffold(hideAppBar: true, scaffoldBody: splashScreen);
   }
 
-  Widget get appLogo => const AssetImageWidget(
-        assetPath: ImageConstants.appIconPng,
-        boxFit: BoxFit.cover,
-        height: 130,
-        width: 130,
+  Widget get appLogo => ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: const AssetImageWidget(
+          assetPath: ImageConstants.appIconPng,
+          boxFit: BoxFit.cover,
+          height: 130,
+          width: 130,
+        ),
       );
+
+  Widget get spacingBetween => const SizedBox(height: 20,);
 
   Widget get splashScreen => Stack(
         children: [
@@ -31,6 +36,7 @@ class SplashView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 appLogo,
+                spacingBetween,
                 const AppName(),
               ],
             ),

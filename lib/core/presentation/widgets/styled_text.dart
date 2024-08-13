@@ -1,94 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
 
 class StyledText extends StatelessWidget {
   final String text;
   late final TextStyle? Function(BuildContext context)? getStyle;
 
-  StyledText.displayLarge(this.text, {Key? key}) : super(key: key) {
+  StyledText.displayLarge(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.displayLarge;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.displayLarge?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleDarkColor
+              : ColorConstants.fontTitleLightColor);
     };
   }
 
-  StyledText.displayMedium(this.text, {Key? key}) : super(key: key) {
+  StyledText.displayMedium(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.displayMedium;
     };
   }
 
-  StyledText.displaySmall(this.text, {Key? key}) : super(key: key) {
+  StyledText.displaySmall(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.displaySmall;
     };
   }
 
-  StyledText.bodyLarge(this.text, {Key? key}) : super(key: key) {
+  StyledText.bodyLarge(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.bodyLarge;
     };
   }
 
-  StyledText.bodyMedium(this.text, {Key? key}) : super(key: key) {
+  StyledText.bodyMedium(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.bodyMedium;
     };
   }
 
-  StyledText.bodySmall(this.text, {Key? key}) : super(key: key) {
+  StyledText.bodySmall(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.bodySmall;
     };
   }
 
-  StyledText.headlineLarge(this.text, {Key? key}) : super(key: key) {
+  StyledText.headlineLarge(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.headlineLarge;
+      return Theme.of(context).textTheme.headlineLarge?.copyWith();
     };
   }
 
-  StyledText.headlineMedium(this.text, {Key? key}) : super(key: key) {
+  StyledText.headlineMedium(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.headlineMedium;
     };
   }
 
-  StyledText.headlineSmall(this.text, {Key? key}) : super(key: key) {
+  StyledText.headlineSmall(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.headlineSmall;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.headlineSmall?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleDarkColor
+              : ColorConstants.fontTitleLightColor);
     };
   }
 
-  StyledText.titleLarge(this.text, {Key? key}) : super(key: key) {
+  StyledText.titleLarge(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.titleLarge;
     };
   }
 
-  StyledText.titleMedium(this.text, {Key? key}) : super(key: key) {
+  StyledText.titleMedium(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.titleMedium;
     };
   }
 
-  StyledText.titleSmall(this.text, {Key? key}) : super(key: key) {
+  StyledText.titleSmall(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.titleSmall;
     };
   }
 
-  StyledText.labelLarge(this.text, {Key? key}) : super(key: key) {
+  StyledText.labelLarge(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.labelLarge;
     };
   }
 
-  StyledText.labelMedium(this.text, {Key? key}) : super(key: key) {
+  StyledText.labelMedium(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.labelMedium;
     };
   }
 
-  StyledText.labelSmall(this.text, {Key? key}) : super(key: key) {
+  StyledText.labelSmall(this.text, {super.key}) {
     getStyle = (context) {
       return Theme.of(context).textTheme.labelSmall;
     };

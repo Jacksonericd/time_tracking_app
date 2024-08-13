@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/config/navigator_key.dart';
@@ -29,7 +30,7 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
     MultiData(id: '4', description: 'Critical'),
   ]);
   final dueDateTime = InputFieldBloc<DateTime?, Object>(initialValue: null);
-  final tfDurationInHours = TextFieldBloc();
+  final tfDurationInMinutes = TextFieldBloc();
   final boolIsEditMode = BooleanFieldBloc(initialValue: false);
 
   AddEditTaskFormBloc() : super(isLoading: true) {
@@ -40,7 +41,7 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
       tfTaskId,
       selectPriority,
       dueDateTime,
-      tfDurationInHours,
+      tfDurationInMinutes,
     ]);
   }
 
@@ -68,7 +69,7 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
       }
 
       if (task.duration != null) {
-        tfDurationInHours.updateValue(task.duration!);
+        tfDurationInMinutes.updateValue(task.duration!);
       }
 
       if (task.priority != null) {
@@ -78,15 +79,22 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
       }
 
       if (task.due?.date != null) {
-        // dueDateTime.updateValue(task.due?.date);
+        dueDateTime.updateValue(DateTime.parse(task.due!.date!));
       }
 
       emitLoaded();
     } catch (e) {
       emitLoadFailed(failureResponse: '$e');
     } finally {
-      LoadingDialog.hide(appNavigatorKey.currentContext!);
+      if (boolIsEditMode.value) {
+        LoadingDialog.hide(appNavigatorKey.currentContext!);
+      }
     }
+  }
+
+  String formatToRFC3339NanoUtc(DateTime date) {
+    return DateFormat("yyyy-MM-ddTHH:mm:ss.SSSSSSSSS+00:00")
+        .format(DateTime.parse(date.toString()).toUtc());
   }
 
   @override
@@ -95,7 +103,6 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
       final Map inputData = {
         'content': tfTaskContent.value,
         'description': tfTaskDescription.value,
-        'duration_unit': 'Hours',
       };
 
       if (!boolIsEditMode.value) {
@@ -106,16 +113,20 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
         inputData.addAll({'priority': selectPriority.value?.id});
       }
 
-      if (tfDurationInHours.value.isNotEmpty) {
-        inputData.addAll({'duration': tfDurationInHours.value});
+      if (tfDurationInMinutes.value.isNotEmpty) {
+        inputData
+            .addAll({'amount': tfDurationInMinutes.value, 'unit': 'minute'});
       }
 
       if (dueDateTime.value != null) {
-        print(dueDateTime.value?.toIso8601String());
-        inputData.addAll(
-            {'dueDateTime': '${dueDateTime.value?.toIso8601String()}000Z'});
+        final dueDateParams = {
+          "datetime": formatToRFC3339NanoUtc(dueDateTime.value!),
+          "timezone": "UTC±05:30"
+        };
+        inputData.addAll({
+          'due': dueDateParams,
+        });
       }
-
       if (boolIsEditMode.value) {
         await Injector.resolve<TaskUseCase>().updateTask(
           inputData: inputData,

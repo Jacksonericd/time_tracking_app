@@ -26,12 +26,14 @@ class AppScaffold extends StatelessWidget {
           ? null
           : appBar ??
               AppBar(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 elevation: 0,
                 title: StyledText.titleSmall(appBarTitle ?? ''),
               ),
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation ??
           FloatingActionButtonLocation.centerDocked,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: scaffoldBody,
     );
   }

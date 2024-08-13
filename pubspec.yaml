@@ -34,15 +34,17 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: OpenSans
+    - family: PlayfairDisplay
       fonts:
-        - asset: assets/fonts/OpenSans-Light.ttf
+        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Regular.ttf
           weight: 200
-        - asset: assets/fonts/OpenSans-Regular.ttf
+        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Black.ttf
           weight: 400
-        - asset: assets/fonts/OpenSans-Semibold.ttf
+        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-SemiBold.ttf
           weight: 500
-        - asset: assets/fonts/OpenSans-Bold.ttf
+        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Medium.ttf
+          weight: 600
+        - asset:  assets/fonts/PlayfairDisplay/PlayfairDisplay-Bold.ttf
           weight: 800
-        - asset: assets/fonts/OpenSans-ExtraBold.ttf
+        - asset: assets/fonts/PlayfairDisplay/PlayfairDisplay-ExtraBold.ttf
           weight: 900
