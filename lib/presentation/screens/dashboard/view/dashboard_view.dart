@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/image_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
+import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
@@ -15,6 +17,9 @@ import 'package:time_tracking_app/data/model/task.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/presentation/bloc/section/section_bloc.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
+
+import '../widgets/scrollable_tasks.dart';
+import '../widgets/task_summary_card.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -48,54 +53,19 @@ class DashboardView extends StatelessWidget {
         )),
       child: AppScaffold(
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: const Icon(Icons.add),
           onPressed: () =>
               Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             return BlocStateToWidget(
               message: state.message ?? '',
               blocStates: state.blocStates,
-              child: Column(
-                children: [
-                  topSpacing,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      introWidget,
-                      appLogo,
-                    ],
-                  ),
-                  displayTasksData(
-                    state,
-                    context,
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-    return BlocProvider(
-      create: (context) => SectionBloc()
-        ..add(GetSectionsEvent(
-          projectId: '2337659677',
-        )),
-      child: AppScaffold(
-        hideAppBar: false,
-        appBar: AppBar(
-          title: Text('Sections'),
-        ),
-        scaffoldBody: BlocBuilder<SectionBloc, SectionState>(
-          builder: (context, state) {
-            return BlocStateToWidget(
-              message: state.message ?? '',
-              blocStates: state.blocStates,
-              child: displaySectionsData(
-                state.sections,
+              child: displayData(
+                state,
                 context,
               ),
             );
@@ -105,81 +75,132 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  displaySectionsData(List<Sections>? sections, BuildContext context) {
-    if ((sections ?? []).isEmpty) {
-      return const Text('No sections found');
-    }
-
-    final deviceWidth = MediaQuery.of(context).size.width;
-
-    return ListView.builder(
-        itemCount: sections!.length,
-        itemBuilder: (context, index) {
-          final section = sections[index];
-
-          return InkWell(
-            onTap: () {
-              Navigator.of(context).pushNamed(RouteConstants.taskListPath,
-                  arguments: section.id);
-            },
-            child: Container(
-              width: deviceWidth * 0.9,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-              child: Text(section.name!),
-            ),
-          );
-        });
-  }
-
-  Widget displayTasksData(TaskState state, BuildContext context) {
+  Widget displayData(TaskState state, BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final todoTasks = state.taskTodoList;
     final ongoingTasks = state.taskOngoingList;
     final completedTasks = state.taskCompletedList;
 
-    Widget taskInfoWidget = SizedBox(
-      width: deviceWidth,
-      child: StyledText.headlineSmall(
-          'You have \n${todoTasks?.length} To-do tasks, \n${ongoingTasks?.length} ongoing tasks, \n${completedTasks?.length} completed tasks,  '),
-    );
+    final topContent = [
+      topSpacing,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          introWidget,
+          appLogo,
+        ],
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      Container(
+        height: 50,
+        width: deviceWidth,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Theme.of(context).cardColor),
+        alignment: Alignment.center,
+        child: StyledText.titleLarge(StringConstants.taskSummary),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.todo,
+                valueText: '${todoTasks?.length}',
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.ongoing,
+                valueText: '${ongoingTasks?.length}',
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.completed,
+                valueText: '${completedTasks?.length}',
+              )),
+        ],
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+    ];
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        taskInfoWidget,
-        Container(
-          width: deviceWidth,
-          height: 200,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.yellow,
-          ),
-          child: displayTodoTasksDataList(todoTasks, context),
+    final bottomContent = [
+      const SizedBox(
+        height: 10,
+      ),
+      ScrollableTasks(
+        taskType: TaskType.todo,
+        tasks: todoTasks,
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      ScrollableTasks(
+        taskType: TaskType.ongoing,
+        tasks: ongoingTasks,
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Container(
+        width: deviceWidth,
+        height: 100,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          // color: Colors.yellow,
         ),
-        Container(
-          width: deviceWidth,
-          height: 150,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.yellow,
+        child: displayCompletedTasksDataList(completedTasks, context),
+      ),
+    ];
+
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            color: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: topContent,
+            ),
           ),
-          child: displayOngoingTasksDataList(ongoingTasks, context),
-        ),
-        Container(
-          width: deviceWidth,
-          height: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: Colors.yellow,
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(30),
+                topLeft: Radius.circular(30),
+              ),
+              child: Container(
+                color: Theme.of(context).primaryColorLight,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: bottomContent,
+                  ),
+                ),
+              ),
+            ),
           ),
-          child: displayCompletedTasksDataList(completedTasks, context),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -194,39 +215,32 @@ class DashboardView extends StatelessWidget {
           itemBuilder: (context, index) {
             final task = tasks[index];
 
-            return InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(RouteConstants.taskListPath, arguments: task.id);
-              },
-              child: Container(
-                width: deviceWidth * 0.9,
-                height: 200,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.yellow,
-                ),
-                child: Column(
-                  children: [
-                    Text(task.content!),
-                    AppButton(
-                        buttonText: StringConstants.beginTask,
-                        onButtonClicked: () =>
-                            _beginTask(taskId: task.id!, context: context)),
-                    AppButton(
-                        buttonText: StringConstants.addComment,
-                        onButtonClicked: () => Navigator.of(context).pushNamed(
-                            RouteConstants.addCommentPath,
-                            arguments: {'task-id': task.id!})),
-                    AppButton(
-                        buttonText: StringConstants.viewComments,
-                        onButtonClicked: () => Navigator.of(context).pushNamed(
-                            RouteConstants.viewTaskCommentPath,
-                            arguments: {'task-id': task.id!})),
-                  ],
-                ),
+            return Container(
+              width: deviceWidth * 0.9,
+              height: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.yellow,
+              ),
+              child: Column(
+                children: [
+                  Text(task.content!),
+                  AppButton(
+                      buttonText: StringConstants.beginTask,
+                      onButtonClicked: () =>
+                          _beginTask(taskId: task.id!, context: context)),
+                  AppButton(
+                      buttonText: StringConstants.addComment,
+                      onButtonClicked: () => Navigator.of(context).pushNamed(
+                          RouteConstants.addCommentPath,
+                          arguments: {'task-id': task.id!})),
+                  AppButton(
+                      buttonText: StringConstants.viewComments,
+                      onButtonClicked: () => Navigator.of(context).pushNamed(
+                          RouteConstants.viewTaskCommentPath,
+                          arguments: {'task-id': task.id!})),
+                ],
               ),
             );
           });

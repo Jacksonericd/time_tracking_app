@@ -100,7 +100,11 @@ class CustomTextFieldBlocBuilder extends StatelessWidget {
         enabledBorder: renderBorder(),
         errorBorder: errorBorder(),
         labelText: labelText,
-        labelStyle: labelStyling,
+        labelStyle: labelStyling ??
+            Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Theme.of(context).hintColor),
         hintText: hintText ?? '',
         filled: backgroundFilled ?? true,
         fillColor: backgroundColor ?? Theme.of(context).primaryColorLight,

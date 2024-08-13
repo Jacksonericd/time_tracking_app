@@ -10,6 +10,7 @@ class AppScaffold extends StatelessWidget {
     this.appBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.scaffoldBackgroundColor,
   });
 
   final Widget scaffoldBody;
@@ -18,6 +19,7 @@ class AppScaffold extends StatelessWidget {
   final AppBar? appBar;
   final FloatingActionButton? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Color? scaffoldBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,8 @@ class AppScaffold extends StatelessWidget {
           ? null
           : appBar ??
               AppBar(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                backgroundColor: scaffoldBackgroundColor ??
+                    Theme.of(context).scaffoldBackgroundColor,
                 elevation: 0,
                 title: StyledText.titleSmall(appBarTitle ?? ''),
               ),

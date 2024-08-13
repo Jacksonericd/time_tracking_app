@@ -6,6 +6,7 @@ class StringConstants {
       'Something went wrong, please try again later.';
   static const String firstCharacterSpaceError =
       'First character cannot be a space';
+  static const String noTasksAvailable = 'No tasks available';
   static const String noResultsFound = 'No results found';
   static const String noDataAvailable = 'No data available';
   static const String edit = 'Edit';
@@ -26,4 +27,8 @@ class StringConstants {
   static const String addComment = 'Add a comment';
   static const String viewComments = 'View comments';
   static const String welcomeComma = 'Welcome,';
+  static const String taskSummary = 'Task summary';
+  static const String todo = 'To Do';
+  static const String ongoing = 'Ongoing';
+  static const String completed = 'Completed';
 }

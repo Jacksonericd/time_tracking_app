@@ -19,7 +19,13 @@ class StyledText extends StatelessWidget {
 
   StyledText.displayMedium(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.displayMedium;
+      final brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+
+      return Theme.of(context).textTheme.displayMedium?.copyWith(
+          color: isDarkMode
+              ? ColorConstants.fontTitleDarkColor
+              : ColorConstants.fontTitleDarkColor);
     };
   }
 
@@ -91,19 +97,29 @@ class StyledText extends StatelessWidget {
 
   StyledText.labelLarge(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.labelLarge;
+      return Theme.of(context).textTheme.labelLarge?.copyWith(
+            overflow: TextOverflow.ellipsis,
+            color: ColorConstants.colorWhite,
+          );
+      ;
     };
   }
 
   StyledText.labelMedium(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.labelMedium;
+      return Theme.of(context).textTheme.labelMedium?.copyWith(
+            overflow: TextOverflow.ellipsis,
+            color: ColorConstants.colorWhite,
+          );
     };
   }
 
   StyledText.labelSmall(this.text, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.labelSmall;
+      return Theme.of(context)
+          .textTheme
+          .labelSmall
+          ?.copyWith(overflow: TextOverflow.ellipsis);
     };
   }
 

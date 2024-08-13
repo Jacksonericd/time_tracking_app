@@ -6,6 +6,7 @@ import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/custom_text_field_bloc_builder.dart';
 import 'package:time_tracking_app/core/presentation/widgets/loading_dialog.dart';
 import 'package:time_tracking_app/core/presentation/widgets/show_bottom_message.dart';
+import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/presentation/bloc/form_bloc/add_edit_comment_form_bloc.dart';
 
 class AddEditComment extends StatelessWidget {
@@ -39,7 +40,9 @@ class AddEditComment extends StatelessWidget {
         return AppScaffold(
           hideAppBar: false,
           appBar: AppBar(
-            title: Text('${isEditMode ? 'Edit' : 'Add'} comment'),
+            backgroundColor: Theme.of(context).cardColor,
+            title:
+                StyledText.titleLarge('${isEditMode ? 'Edit' : 'Add'} comment'),
           ),
           scaffoldBody:
               FormBlocListener<AddEditCommentFormBloc, String, String>(
@@ -71,20 +74,23 @@ class AddEditComment extends StatelessWidget {
             },
             child: ScrollableFormBlocManager(
                 formBloc: formBloc,
-                child: AppScaffold(
-                    scaffoldBody: Column(
-                  children: [
-                    CustomTextFieldBlocBuilder(
-                      textFieldBloc: formBloc.tfCommentContent,
-                      maxLength: 30,
-                      labelText: StringConstants.commentContent,
-                    ),
-                    AppButton(
-                      buttonText: StringConstants.submit,
-                      onButtonClicked: formBloc.submit,
-                    )
-                  ],
-                ))),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 24),
+                  child: Column(
+                    children: [
+                      CustomTextFieldBlocBuilder(
+                        textFieldBloc: formBloc.tfCommentContent,
+                        maxLength: 30,
+                        labelText: StringConstants.commentContent,
+                      ),
+                      AppButton(
+                        buttonText: StringConstants.submit,
+                        onButtonClicked: formBloc.submit,
+                      )
+                    ],
+                  ),
+                )),
           ),
         );
       }),

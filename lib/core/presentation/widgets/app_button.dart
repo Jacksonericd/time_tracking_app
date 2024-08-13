@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
+import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -15,9 +17,11 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       style: ButtonStyle(
           shape: WidgetStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0)))),
+              borderRadius: BorderRadius.circular(15.0))),
+        backgroundColor: WidgetStateProperty.all(ColorConstants.primaryColor)
+      ),
       onPressed: onButtonClicked,
-      child: Text(buttonText),
+      child: StyledText.labelLarge(buttonText),
     );
   }
 }

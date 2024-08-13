@@ -33,7 +33,10 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
   final tfDurationInMinutes = TextFieldBloc();
   final boolIsEditMode = BooleanFieldBloc(initialValue: false);
 
-  AddEditTaskFormBloc() : super(isLoading: true) {
+  AddEditTaskFormBloc()
+      : super(
+          isLoading: true,
+        ) {
     addFieldBlocs(fieldBlocs: [
       tfTaskContent,
       tfTaskDescription,

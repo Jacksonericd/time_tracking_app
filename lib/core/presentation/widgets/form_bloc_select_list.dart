@@ -28,7 +28,7 @@ class FormBlocSelectList extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).hoverColor,
+                      color: Theme.of(context).primaryColorLight,
                       border:
                           Border.all(color: Theme.of(context).disabledColor)),
                   child: Row(
@@ -39,7 +39,7 @@ class FormBlocSelectList extends StatelessWidget {
                           text,
                           style: Theme.of(context)
                               .textTheme
-                              .titleSmall
+                              .titleMedium
                               ?.copyWith(
                                   color: text == defaultText
                                       ? Theme.of(context).hintColor

@@ -15,7 +15,11 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
       TextFieldBloc(validators: [CustomBlocValidators.requiredCommentContent]);
   final boolIsEditMode = BooleanFieldBloc(initialValue: false);
 
-  AddEditCommentFormBloc() : super(isLoading: true) {
+  AddEditCommentFormBloc()
+      : super(
+          isLoading: true,
+          autoValidate: false,
+        ) {
     addFieldBlocs(fieldBlocs: [
       tfTaskId,
       tfCommentContent,
@@ -45,7 +49,9 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
     } catch (e) {
       emitLoadFailed(failureResponse: '$e');
     } finally {
-      LoadingDialog.hide(appNavigatorKey.currentContext!);
+      if (boolIsEditMode.value) {
+        LoadingDialog.hide(appNavigatorKey.currentContext!);
+      }
     }
   }
 
