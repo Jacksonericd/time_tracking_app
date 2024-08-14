@@ -11,6 +11,7 @@ class StringConstants {
   static const String noResultsFound = 'No results found';
   static const String noDataAvailable = 'No data available';
   static const String edit = 'Edit';
+  static const String delete = 'Delete';
   static const String submit = 'Submit';
   static const String taskContent = 'Task content';
   static const String commentContent = 'Comment content';

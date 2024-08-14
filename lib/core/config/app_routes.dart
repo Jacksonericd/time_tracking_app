@@ -34,7 +34,7 @@ class AppRoutes {
       case RouteConstants.splashPath:
         return const SplashView();
       case RouteConstants.dashboardPath:
-        return DashboardView();
+        return const DashboardView();
       case RouteConstants.taskListPath:
         return TaskList(
           sectionId: args.toString(),
@@ -58,9 +58,7 @@ class AppRoutes {
           isEditMode: true,
           commentId: props['comment-id'],
         );
-      case RouteConstants.viewTaskCommentPath:
-        final props = args as Map;
-        return ViewComments(taskId: props['task-id']);
+
       default:
         return const SplashView();
     }

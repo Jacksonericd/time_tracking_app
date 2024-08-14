@@ -11,9 +11,11 @@ import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 import 'package:time_tracking_app/data/model/task.dart';
 import 'package:time_tracking_app/data/model/task_start_time.dart';
+import 'package:time_tracking_app/domain/usecases/comment_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_comment.dart';
+import 'package:time_tracking_app/presentation/screens/comments/view/view_comments.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/link_text.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_heading.dart';
@@ -82,10 +84,14 @@ class ScrollableTasks extends StatelessWidget {
                     cardColor: cardColor,
                     dividerColor: dividerColor,
                     task: task,
-                    onAddCommentTap: () => _addCommentPopup(context, task.id!),
-                    onViewCommentTap: () => Navigator.of(context).pushNamed(
-                        RouteConstants.viewTaskCommentPath,
-                        arguments: {'task-id': task.id!}),
+                    onAddCommentTap: () => _addCommentPopup(
+                      context,
+                      task.id!,
+                    ),
+                    onViewCommentTap: () => _openBottomSheetForViewComments(
+                      context,
+                      task.id!,
+                    ),
                   ));
             });
       }
@@ -175,7 +181,10 @@ class ScrollableTasks extends StatelessWidget {
                       LinkText(
                         linkDisplayText: StringConstants.addComment,
                         color: ColorConstants.errorRed,
-                        onTap: () => _addCommentPopup(context, task.id!),
+                        onTap: () => _addCommentPopup(
+                          context,
+                          task.id!,
+                        ),
                         // onTap: () => Navigator.of(context).pushNamed(
                         //     RouteConstants.addCommentPath,
                         //     arguments: {'task-id': task.id!}),
@@ -184,9 +193,13 @@ class ScrollableTasks extends StatelessWidget {
                         LinkText(
                           linkDisplayText: 'View ${task.commentCount} comments',
                           color: ColorConstants.errorRed,
-                          onTap: () => Navigator.of(context).pushNamed(
-                              RouteConstants.viewTaskCommentPath,
-                              arguments: {'task-id': task.id!}),
+                          onTap: () => _openBottomSheetForViewComments(
+                            context,
+                            task.id!,
+                          ),
+                          // onTap: () => Navigator.of(context).pushNamed(
+                          //     RouteConstants.viewTaskCommentPath,
+                          //     arguments: {'task-id': task.id!}),
                         ),
                       },
                     ],
@@ -335,5 +348,81 @@ class ScrollableTasks extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _openBottomSheetForViewComments(BuildContext context, String taskId) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+
+    showModalBottomSheet(
+      context: context,
+      elevation: 10,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      builder: (_) => Container(
+        color: Theme.of(context).primaryColorDark.withOpacity(0.6),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColorLight,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 5,
+                width: 60,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: ColorConstants.greyColorC3),
+              ),
+              vSpacingFive,
+              vSpacingFive,
+              StyledText.headlineSmall(StringConstants.viewComments),
+              vSpacingFive,
+              vSpacingFive,
+              SizedBox(
+                height: deviceHeight * 0.4,
+                child: ViewComments(
+                  taskId: taskId,
+                  onDeleteClicked: (String commentId) async {
+                    await _deleteCommentPopup(context, commentId);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _deleteCommentPopup(BuildContext context, String commentId) async {
+    await showPopUp(
+        title: StringConstants.popupTitle,
+        subTitle: StringConstants.popupSubTitle,
+        leftButtonText: StringConstants.cancel,
+        rightButtonText: StringConstants.confirm,
+        onPressLeft: Navigator.of(context).pop,
+        onPressRight: () async {
+          if (context.mounted) {
+            try {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+
+              await Injector.resolve<CommentUseCase>().deleteComment(
+                commentId: commentId,
+              );
+
+              refreshBloc();
+            } catch (e) {
+              if (context.mounted) {
+                showBottomMessage(context, message: '$e');
+              }
+            }
+          }
+        });
   }
 }

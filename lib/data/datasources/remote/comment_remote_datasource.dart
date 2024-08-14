@@ -61,7 +61,7 @@ class CommentRemoteDatasource {
   }) async {
     final url = '${ApiConstants.commentsUrl}/$commentId';
 
-    final resp = await dioClient.post(
+    final resp = await dioClient.delete(
       url,
     );
 

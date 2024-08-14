@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
-import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
+import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 import 'package:time_tracking_app/data/model/comment.dart';
 import 'package:time_tracking_app/presentation/bloc/comment/comment_bloc.dart';
 
@@ -14,21 +15,18 @@ class ViewComments extends StatelessWidget {
   const ViewComments({
     required this.taskId,
     super.key,
+    required this.onDeleteClicked,
   });
 
   final String taskId;
+  final Function(String commentId) onDeleteClicked;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          CommentBloc()..add(GetCommentsByTask(taskId: taskId)),
-      child: AppScaffold(
-        hideAppBar: false,
-        appBar: AppBar(
-          title: Text('Comments under task'),
-        ),
-        scaffoldBody: BlocBuilder<CommentBloc, CommentState>(
+        create: (context) =>
+            CommentBloc()..add(GetCommentsByTask(taskId: taskId)),
+        child: BlocBuilder<CommentBloc, CommentState>(
           builder: (context, state) {
             return BlocStateToWidget(
               message: state.message ?? '',
@@ -39,9 +37,7 @@ class ViewComments extends StatelessWidget {
               ),
             );
           },
-        ),
-      ),
-    );
+        ));
   }
 
   displayCommentsData(List<Comment>? comments, BuildContext context) {
@@ -65,18 +61,27 @@ class ViewComments extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(comment.content!),
-                AppButton(
-                  buttonText: StringConstants.edit,
-                  onButtonClicked: () => _editCommentPopup(
-                    context,
-                    comment.id!,
-                  ),
-                  // onButtonClicked: () => Navigator.of(context).pushNamed(
-                  //   RouteConstants.editCommentPath,
-                  //   arguments: {
-                  //     'comment-id': comment.id,
-                  //   },
-                  // ),
+                Row(
+                  children: [
+                    WidgetTap(
+                        widget: const Icon(
+                          Icons.edit,
+                          color: ColorConstants.successGreen,
+                        ),
+                        onWidgetTap: () => _editCommentPopup(
+                              context,
+                              comment.id!,
+                            )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    WidgetTap(
+                        widget: const Icon(
+                          Icons.delete,
+                          color: ColorConstants.errorRed,
+                        ),
+                        onWidgetTap: () => onDeleteClicked(comment.id!)),
+                  ],
                 ),
               ],
             ),
