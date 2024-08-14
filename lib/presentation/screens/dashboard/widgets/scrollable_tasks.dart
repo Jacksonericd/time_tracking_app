@@ -62,12 +62,14 @@ class ScrollableTasks extends StatelessWidget {
               cardColor: cardColor,
               dividerColor: dividerColor,
               task: task!,
-              onAddCommentTap: () => Navigator.of(context).pushNamed(
-                  RouteConstants.addCommentPath,
-                  arguments: {'task-id': task.id!}),
-              onViewCommentTap: () => Navigator.of(context).pushNamed(
-                  RouteConstants.viewTaskCommentPath,
-                  arguments: {'task-id': task.id!}),
+              onAddCommentTap: () => _addCommentPopup(
+                context,
+                task.id!,
+              ),
+              onViewCommentTap: () => _openBottomSheetForViewComments(
+                context,
+                task.id!,
+              ),
             ));
       } else {
         dataWidget = ListView.builder(

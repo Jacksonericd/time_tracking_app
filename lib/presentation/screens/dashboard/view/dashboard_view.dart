@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_boardview/board_item.dart';
+import 'package:flutter_boardview/board_list.dart';
+import 'package:flutter_boardview/boardview.dart';
+import 'package:flutter_boardview/boardview_controller.dart';
 import 'package:time_tracking_app/core/config/navigator_key.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/image_constants.dart';
@@ -10,15 +14,20 @@ import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
+import 'package:time_tracking_app/data/model/board_model.dart';
+import 'package:time_tracking_app/data/model/task.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
+import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
 
 import '../widgets/scrollable_tasks.dart';
 import '../widgets/task_summary_card.dart';
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({super.key});
+  DashboardView({super.key});
 
   static const projectId = '2337659677';
+
+  List<BoardListModel> _listData = [];
 
   Widget get topSpacing => const SizedBox(
         height: 50.0,
@@ -58,7 +67,7 @@ class DashboardView extends StatelessWidget {
           return BlocStateToWidget(
             message: state.message ?? '',
             blocStates: state.blocStates,
-            child: displayData(
+            child: displayBoardData(
               state,
               context,
             ),
@@ -208,6 +217,213 @@ class DashboardView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget displayBoardData(TaskState state, BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final todoTasks = state.taskTodoList;
+    final ongoingTasks = state.taskOngoingList;
+    final completedTasks = state.taskCompList;
+
+    final topContent = [
+      topSpacing,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          introWidget,
+          appLogo,
+        ],
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      introSummaryWidget,
+      const SizedBox(
+        height: 5,
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      Container(
+        width: deviceWidth,
+        alignment: Alignment.centerLeft,
+        child: StyledText.titleLarge(StringConstants.taskSummary),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.todo,
+                valueText: '${todoTasks?.length}',
+                taskType: TaskType.todo,
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.ongoing,
+                valueText: '${ongoingTasks?.length}',
+                taskType: TaskType.ongoing,
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              flex: 1,
+              child: TaskSummaryCard(
+                headingText: StringConstants.completed,
+                valueText: '${completedTasks?.length}',
+                taskType: TaskType.completed,
+              )),
+        ],
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+    ];
+
+    final bottomContent = [
+      ScrollableTasks(
+        taskType: TaskType.todo,
+        tasks: todoTasks,
+        refreshBloc: () => refreshBloc(context),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      ScrollableTasks(
+        taskType: TaskType.ongoing,
+        tasks: ongoingTasks,
+        refreshBloc: () => refreshBloc(context),
+      ),
+      const SizedBox(
+        height: 20,
+      ),
+      ScrollableTasks(
+        taskType: TaskType.completed,
+        tasks: completedTasks,
+        refreshBloc: () => refreshBloc(context),
+      ),
+      const SizedBox(
+        height: 70,
+      ),
+    ];
+
+    BoardViewController boardViewController = BoardViewController();
+
+    _listData = [
+      BoardListModel(name: StringConstants.todo, items: todoTasks ?? []),
+      BoardListModel(name: StringConstants.ongoing, items: ongoingTasks ?? []),
+      BoardListModel(
+          name: StringConstants.completed, items: completedTasks ?? []),
+    ];
+
+    void _handleDropList(int? listIndex, int? oldListIndex) {
+      var list = _listData[oldListIndex!];
+      _listData.removeAt(oldListIndex);
+      _listData.insert(listIndex!, list);
+    }
+
+    List<BoardList> lists = [];
+
+    for (int i = 0; i < _listData.length; i++) {
+      lists.add(_createBoardList(_listData[i]) as BoardList);
+    }
+
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            color: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: topContent,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(30),
+                topLeft: Radius.circular(30),
+              ),
+              child: Container(
+                  color: Theme.of(context).primaryColorLight,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 24,
+                  ),
+                  child: BoardView(
+                    lists: lists,
+                    boardViewController: boardViewController,
+                  )),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildBoardItem(Task task) {
+    return BoardItem(
+        draggable: true,
+        onStartDragItem:
+            (int? listIndex, int? itemIndex, BoardItemState? state) {},
+        onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
+            int? oldItemIndex, BoardItemState? state) {
+          //Used to update our local item data
+          var item = _listData[oldListIndex!].items[oldItemIndex!];
+          _listData[oldListIndex].items.removeAt(oldItemIndex);
+          _listData[listIndex!].items.insert(itemIndex!, item);
+        },
+        onTapItem:
+            (int? listIndex, int? itemIndex, BoardItemState? state) async {},
+        item: TaskCard(
+          width: 100,
+          cardColor: ColorConstants.colorWhite,
+          dividerColor: ColorConstants.colorWhite.withOpacity(0.10),
+          task: task,
+          onAddCommentTap: () {},
+          onViewCommentTap: () {},
+        ));
+  }
+
+  void _handleDropList(int? listIndex, int? oldListIndex) {
+    //Update our local list data
+    var list = _listData[oldListIndex!];
+    _listData.removeAt(oldListIndex);
+    _listData.insert(listIndex!, list);
+  }
+
+  Widget _createBoardList(BoardListModel list) {
+    List<BoardItem> items = [];
+    for (int i = 0; i < list.items.length; i++) {
+      items.insert(i, buildBoardItem(list.items[i]) as BoardItem);
+    }
+
+    return BoardList(
+      draggable: true,
+      onDropList: _handleDropList,
+      header: [
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: Text(list.name,
+              style: const TextStyle(fontWeight: FontWeight.w800)),
+        ),
+      ],
+      items: items,
     );
   }
 }

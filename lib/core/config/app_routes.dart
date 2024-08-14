@@ -34,7 +34,7 @@ class AppRoutes {
       case RouteConstants.splashPath:
         return const SplashView();
       case RouteConstants.dashboardPath:
-        return const DashboardView();
+        return DashboardView();
       case RouteConstants.taskListPath:
         return TaskList(
           sectionId: args.toString(),
