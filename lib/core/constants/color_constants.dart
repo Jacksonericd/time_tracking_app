@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorConstants {
   static const Color primaryColor = Color(0XFF262525);
-  static const Color secondaryColor = Color(0XFFDC90F5);
+  static const Color secondaryColor = Color(0XFFf2eded);
   static const Color lightScaffoldBackgroundColor = Color(0XFFF3EbF7);
   static const Color darkScaffoldBackgroundColor = Color(0XFF2C292E);
   static const Color cardLightColor = Color(0XFFD9CCE0);
@@ -38,4 +38,5 @@ class ColorConstants {
   static const Color completedCount = Color(0XFF16fa05);
 
   static const Color greyColorC3 = Color(0xFFC3C3C3);
+  static const Color buttonGradient = Color(0xFF530470);
 }

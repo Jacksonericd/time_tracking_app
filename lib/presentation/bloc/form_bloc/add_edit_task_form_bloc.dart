@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/config/navigator_key.dart';
+import 'package:time_tracking_app/core/functions/common_functions.dart';
 import 'package:time_tracking_app/core/functions/custom_bloc_validators.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/loading_dialog.dart';
@@ -94,11 +95,6 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
     }
   }
 
-  String formatToRFC3339NanoUtc(DateTime date) {
-    return DateFormat("yyyy-MM-ddTHH:mm:ss.SSSSSSSSS+00:00")
-        .format(DateTime.parse(date.toString()).toUtc());
-  }
-
   @override
   FutureOr<void> onSubmitting() async {
     try {
@@ -122,7 +118,8 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
 
       if (dueDateTime.value != null) {
         final dueDateParams = {
-          "datetime": formatToRFC3339NanoUtc(dueDateTime.value!),
+          "datetime":
+              CommonFunctions.formatToRFC3339NanoUtc(dueDateTime.value!),
           "timezone": "UTC±05:30"
         };
         inputData.addAll({

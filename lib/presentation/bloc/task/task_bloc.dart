@@ -22,12 +22,11 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   void _init(TaskEvent event, Emitter<TaskState> emit) async {
     emit(TasksLoadingState());
 
-    if (event is GetTasksByProjectAndSectionEvent) {
+    if (event is GetTasksByProjectEvent) {
       try {
         dynamic response =
             await Injector.resolve<TaskUseCase>().getTasksByProjectAndSection(
           projectId: event.projectId,
-          sectionId: event.sectionId,
         );
 
         final tasks =
@@ -36,31 +35,152 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         dynamic localResponse =
             await Injector.resolve<LocalDataUseCase>().getAllTaskTimer();
 
-        final ongoingTasks = (localResponse as List)
+        final allLocalTasks = (localResponse as List)
             .map((task) => TasksStartTime.fromJson(task))
             .toList();
 
-        final ongoingTaskIds = ongoingTasks.map((item) => item.taskId).toList();
+        print('allLocalTasks : ${allLocalTasks.length}');
 
-        print(ongoingTasks);
+        final ongoingTaskIds = allLocalTasks.map((item) {
+          if (item.endTime == null) {
+            return item.taskId;
+          }
+        }).toList();
+
+        ongoingTaskIds.removeWhere((item) => item == null);
+        print('ongoingTaskIds : ${ongoingTaskIds.length}');
+
+        final completedTaskIds = allLocalTasks.map((item) {
+          if (item.endTime != null) {
+            return item.taskId;
+          }
+        }).toList();
+
+        completedTaskIds.removeWhere((item) => item == null);
+        print('completedTaskIds : ${completedTaskIds.length}');
+
+        final toDoListFiltered = tasks
+            .where((item) =>
+                !ongoingTaskIds.contains(item.id!) &&
+                !completedTaskIds.contains(item.id!))
+            .toList();
 
         final onGoingListFiltered =
             tasks.where((item) => ongoingTaskIds.contains(item.id!)).toList();
 
-        final toDoListFiltered =
-            tasks.where((item) => !ongoingTaskIds.contains(item.id!)).toList();
+        final completedListFiltered =
+            tasks.where((item) => completedTaskIds.contains(item.id!)).toList();
 
-        dynamic completedResponse =
-            await Injector.resolve<TaskUseCase>().getCompletedTasksByProject(
-          projectId: event.projectId,
-        );
-
-        final completed = CompletedItems.fromJson(completedResponse);
+        // dynamic completedResponse =
+        //     await Injector.resolve<TaskUseCase>().getCompletedTasksByProject(
+        //   projectId: event.projectId,
+        // );
+        //
+        // final completed = CompletedItems.fromJson(completedResponse);
 
         emit(TasksLoadedState(
           taskTodoList: toDoListFiltered,
           taskOngoingList: onGoingListFiltered,
-          taskCompletedList: completed.items,
+          taskCompList: completedListFiltered,
+          // taskCompletedList: completed.items,
+        ));
+      } catch (e) {
+        if (e is DioException) {
+          emit(TasksErrorState(error: '${e.error}'));
+          return;
+        }
+        emit(TasksErrorState(error: '$e'));
+      }
+    }
+
+    if (event is BeginTasksEvent) {
+      try {
+        await Injector.resolve<LocalDataUseCase>().insertTaskTime(
+            taskId: event.taskId, startTime: DateTime.now().toString());
+
+        emit(TasksLoadedState(
+          taskTodoList: [],
+          taskOngoingList: [],
+          taskCompList: [],
+        ));
+      } catch (e) {
+        if (e is DioException) {
+          emit(TasksErrorState(error: '${e.error}'));
+          return;
+        }
+        emit(TasksErrorState(error: '$e'));
+      }
+    }
+
+    if (event is CompleteTasksEvent) {
+      try {
+        final localResponse = await Injector.resolve<LocalDataUseCase>()
+            .getTaskTimerById(event.taskId);
+
+        print('startTime $localResponse');
+
+        final ongoingTasks = (localResponse as List)
+            .map((task) => TasksStartTime.fromJson(task))
+            .toList();
+
+        final startTime = DateTime.parse(ongoingTasks.last.startTime!);
+
+        print('startTime $startTime');
+
+        final durationInMinutes =
+            DateTime.now().difference(startTime).inMinutes;
+
+        print('durationInMinutes $durationInMinutes');
+
+        final durationMap = {
+          'duration': durationInMinutes,
+          'duration_unit': 'minute'
+        };
+
+        print({'duration': durationMap});
+        await Injector.resolve<TaskUseCase>().updateTask(
+          taskId: event.taskId,
+          inputData: durationMap,
+        );
+
+        print('Task updated ');
+
+        await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
+          taskId: event.taskId,
+          endTime: DateTime.now().toString(),
+        );
+
+        // await Injector.resolve<TaskUseCase>()
+        //     .completeTask(taskId: event.taskId);
+
+        print('Task completed');
+
+        // await Injector.resolve<LocalDataUseCase>().updateTaskStartTime(
+        //     taskId: event.taskId, startTime: DateTime.now().toString());
+
+        emit(TasksLoadedState(
+          taskTodoList: [],
+          taskOngoingList: [],
+          taskCompList: [],
+        ));
+      } catch (e) {
+        print('error - $e');
+        if (e is DioException) {
+          emit(TasksErrorState(error: '${e.error}'));
+          return;
+        }
+        emit(TasksErrorState(error: '$e'));
+      }
+    }
+
+    if (event is ReopenTasksEvent) {
+      try {
+        await Injector.resolve<LocalDataUseCase>().deleteTaskTime(event.taskId);
+
+        emit(TasksLoadedState(
+          taskTodoList: [],
+          taskOngoingList: [],
+          taskCompList: [],
         ));
       } catch (e) {
         if (e is DioException) {

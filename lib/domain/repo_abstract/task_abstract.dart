@@ -19,5 +19,5 @@ abstract class TaskAbstract {
     required Map inputData,
   });
 
-  Future<dynamic> completeTask();
+  Future<dynamic> completeTask({required String taskId});
 }

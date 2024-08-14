@@ -2,12 +2,34 @@ part of 'task_bloc.dart';
 
 abstract class TaskEvent {}
 
-class GetTasksByProjectAndSectionEvent extends TaskEvent {
+class GetTasksByProjectEvent extends TaskEvent {
   final String projectId;
-  final String? sectionId;
 
-  GetTasksByProjectAndSectionEvent({
+  GetTasksByProjectEvent({
     required this.projectId,
-    this.sectionId,
+  });
+}
+
+class BeginTasksEvent extends TaskEvent {
+  final String taskId;
+
+  BeginTasksEvent({
+    required this.taskId,
+  });
+}
+
+class CompleteTasksEvent extends TaskEvent {
+  final String taskId;
+
+  CompleteTasksEvent({
+    required this.taskId,
+  });
+}
+
+class ReopenTasksEvent extends TaskEvent {
+  final String taskId;
+
+  ReopenTasksEvent({
+    required this.taskId,
   });
 }

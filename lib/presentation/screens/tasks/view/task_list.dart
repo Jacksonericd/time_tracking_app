@@ -20,9 +20,8 @@ class TaskList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TaskBloc()
-        ..add(GetTasksByProjectAndSectionEvent(
+        ..add(GetTasksByProjectEvent(
           projectId: '2337659677',
-          sectionId: sectionId,
         )),
       child: AppScaffold(
         hideAppBar: false,

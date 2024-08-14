@@ -47,9 +47,9 @@ class TaskCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           StyledText.titleMedium(task.content!),
-          // if (task.due?.date != null) ...{
-          StyledText.labelSmall('Due date : ${task.due?.datetime}'),
-          // },
+          StyledText.labelSmall(task.due?.datetime == null
+              ? StringConstants.empty
+              : 'Due date : ${task.due?.datetime}'),
           Divider(
             color: dividerColor,
             height: 1,
@@ -62,10 +62,12 @@ class TaskCard extends StatelessWidget {
                 linkDisplayText: StringConstants.addComment,
                 onTap: onAddCommentTap,
               ),
-              LinkText(
-                linkDisplayText: 'View ${task.commentCount} comments',
-                onTap: onViewCommentTap,
-              ),
+              if ((task.commentCount ?? 0) > 0) ...{
+                LinkText(
+                  linkDisplayText: 'View ${task.commentCount} comments',
+                  onTap: onViewCommentTap,
+                ),
+              },
             ],
           ),
         ],

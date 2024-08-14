@@ -5,14 +5,17 @@ class TaskState {
   final String? message;
   final List<Task>? taskTodoList;
   final List<Task>? taskOngoingList;
-  final List<CompletedItem>? taskCompletedList;
+  final List<Task>? taskCompList;
+
+  // final List<CompletedItem>? taskCompletedList;
 
   TaskState({
     required this.blocStates,
     this.message,
     this.taskTodoList,
     this.taskOngoingList,
-    this.taskCompletedList,
+    this.taskCompList,
+    // this.taskCompletedList,
   });
 }
 
@@ -23,17 +26,21 @@ class TasksLoadingState extends TaskState {
 class TasksLoadedState extends TaskState {
   final List<Task>? taskTodoList;
   final List<Task>? taskOngoingList;
-  final List<CompletedItem>? taskCompletedList;
+  final List<Task>? taskCompList;
+
+  // final List<CompletedItem>? taskCompletedList;
 
   TasksLoadedState({
     required this.taskTodoList,
     this.taskOngoingList,
-    this.taskCompletedList,
+    this.taskCompList,
+    // this.taskCompletedList,
   }) : super(
           blocStates: BlocStates.loaded,
           taskTodoList: taskTodoList,
           taskOngoingList: taskOngoingList,
-          taskCompletedList: taskCompletedList,
+          taskCompList: taskCompList,
+          // taskCompletedList: taskCompletedList,
         );
 }
 

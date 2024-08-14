@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:time_tracking_app/core/constants/image_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
+import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_name.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
+import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
@@ -27,7 +29,9 @@ class SplashView extends StatelessWidget {
         ),
       );
 
-  Widget get spacingBetween => const SizedBox(height: 20,);
+  Widget get spacingBetween => const SizedBox(
+        height: 20,
+      );
 
   Widget get splashScreen => Stack(
         children: [
@@ -45,6 +49,8 @@ class SplashView extends StatelessWidget {
       );
 
   void navigateAfterDelay(BuildContext context) async {
+    await Injector.resolve<LocalDataUseCase>().initDatabase();
+
     await Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.of(context)

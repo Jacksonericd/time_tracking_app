@@ -37,7 +37,10 @@ class TaskRepo extends TaskAbstract {
       );
 
   @override
-  Future completeTask() async => taskRemoteDataSource.completeTask();
+  Future completeTask({required String taskId}) async =>
+      taskRemoteDataSource.completeTask(
+        taskId: taskId,
+      );
 
   @override
   Future getCompletedTasksByProject({required String projectId}) =>

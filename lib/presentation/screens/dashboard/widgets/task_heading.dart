@@ -17,6 +17,7 @@ class TaskHeading extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       width: deviceWidth,
       alignment: Alignment.centerLeft,
       child: StyledText.titleMedium(headingText),

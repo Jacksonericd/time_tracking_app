@@ -5,6 +5,8 @@ class LocalDataUseCase {
 
   LocalDataUseCase(this.localDataAbstract);
 
+  Future<dynamic> initDatabase() => localDataAbstract.initDatabase();
+
   Future<dynamic> getTaskTimerById(String taskId) =>
       localDataAbstract.getTaskTimerById(taskId);
 
@@ -14,9 +16,17 @@ class LocalDataUseCase {
           {required String taskId, required String startTime}) =>
       localDataAbstract.insertTaskTime(taskId: taskId, startTime: startTime);
 
-  Future<void> updateTaskTime(
+  Future<void> updateTaskStartTime(
           {required String taskId, required String startTime}) =>
-      localDataAbstract.updateTaskTime(taskId: taskId, startTime: startTime);
+      localDataAbstract.updateTaskStartTime(
+          taskId: taskId, startTime: startTime);
+
+  Future<void> updateTaskEndTime(
+          {required String taskId, required String endTime}) =>
+      localDataAbstract.updateTaskEndTime(
+        taskId: taskId,
+        endTime: endTime,
+      );
 
   Future<void> deleteTaskTime(String taskId) =>
       localDataAbstract.deleteTaskTime(taskId);

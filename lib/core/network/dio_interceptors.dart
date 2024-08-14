@@ -6,7 +6,7 @@ class DioInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers.addAll({
       // "Content-Type": "application/json",
-      "Authorization" : "Bearer fe9fa4967f25fe964654a624ace5dcf01fd8b4c0"
+      "Authorization": "Bearer fe9fa4967f25fe964654a624ace5dcf01fd8b4c0"
     });
 
     return super.onRequest(options, handler);
@@ -21,7 +21,7 @@ class DioInterceptor extends Interceptor {
         throw TimeoutException('Connection timed out');
       case DioExceptionType.connectionError:
       case DioExceptionType.badResponse:
-        final errorMessage = err.message;
+        final errorMessage = err.response?.data ?? err.message;
         super.onError(
             DioException(
                 error: errorMessage, requestOptions: err.requestOptions),

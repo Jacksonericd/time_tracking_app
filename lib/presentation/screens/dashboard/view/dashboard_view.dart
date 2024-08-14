@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_tracking_app/core/config/navigator_key.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/image_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
@@ -21,7 +22,9 @@ import '../widgets/scrollable_tasks.dart';
 import '../widgets/task_summary_card.dart';
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({super.key});
+  DashboardView({super.key});
+
+  static const projectId = '2337659677';
 
   Widget get topSpacing => const SizedBox(
         height: 50.0,
@@ -44,33 +47,40 @@ class DashboardView extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: StyledText.labelLarge(StringConstants.welcomeSummary));
 
+  final bloc = TaskBloc();
+
+  refreshBloc() {
+    bloc.add(GetTasksByProjectEvent(
+      projectId: projectId,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TaskBloc()
-        ..add(GetTasksByProjectAndSectionEvent(
-          projectId: '2337659677',
-        )),
-      child: AppScaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: const Icon(Icons.add),
-          onPressed: () =>
-              Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            return BlocStateToWidget(
-              message: state.message ?? '',
-              blocStates: state.blocStates,
-              child: displayData(
-                state,
-                context,
-              ),
-            );
-          },
-        ),
+    BlocProvider.of<TaskBloc>(context)
+        .add(GetTasksByProjectEvent(projectId: projectId));
+
+    // refreshBloc();
+
+    return AppScaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add),
+        onPressed: () =>
+            Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
+        builder: (context, state) {
+          return BlocStateToWidget(
+            message: state.message ?? '',
+            blocStates: state.blocStates,
+            child: displayData(
+              state,
+              context,
+            ),
+          );
+        },
       ),
     );
   }
@@ -79,7 +89,8 @@ class DashboardView extends StatelessWidget {
     final deviceWidth = MediaQuery.of(context).size.width;
     final todoTasks = state.taskTodoList;
     final ongoingTasks = state.taskOngoingList;
-    final completedTasks = state.taskCompletedList;
+    final completedTasks = state.taskCompList;
+    // final completedTasks = state.taskCompletedList;
 
     final topContent = [
       topSpacing,
@@ -149,6 +160,8 @@ class DashboardView extends StatelessWidget {
       ScrollableTasks(
         taskType: TaskType.todo,
         tasks: todoTasks,
+        refreshBloc: refreshBloc,
+        taskBloc: bloc,
       ),
       const SizedBox(
         height: 20,
@@ -156,12 +169,20 @@ class DashboardView extends StatelessWidget {
       ScrollableTasks(
         taskType: TaskType.ongoing,
         tasks: ongoingTasks,
+        refreshBloc: refreshBloc,
+        taskBloc: bloc,
       ),
       const SizedBox(
         height: 20,
       ),
-      CompletedTasks(
+      // CompletedTasks(
+      //   tasks: completedTasks,
+      // ),
+      ScrollableTasks(
+        taskType: TaskType.completed,
         tasks: completedTasks,
+        refreshBloc: refreshBloc,
+        taskBloc: bloc,
       ),
       const SizedBox(
         height: 70,
@@ -232,8 +253,9 @@ class DashboardView extends StatelessWidget {
                   Text(task.content!),
                   AppButton(
                       buttonText: StringConstants.beginTask,
-                      onButtonClicked: () =>
-                          _beginTask(taskId: task.id!, context: context)),
+                      onButtonClicked: () => _beginTask(
+                            taskId: task.id!,
+                          )),
                   AppButton(
                       buttonText: StringConstants.addComment,
                       onButtonClicked: () => Navigator.of(context).pushNamed(
@@ -339,10 +361,9 @@ class DashboardView extends StatelessWidget {
     return dataWidget;
   }
 
-  _beginTask({required String taskId, required BuildContext context}) async {
+  _beginTask({required String taskId}) async {
     try {
-      await Injector.resolve<LocalDataUseCase>()
-          .insertTaskTime(taskId: taskId, startTime: DateTime.now().toString());
+      bloc.add(BeginTasksEvent(taskId: taskId));
     } catch (e) {}
   }
 

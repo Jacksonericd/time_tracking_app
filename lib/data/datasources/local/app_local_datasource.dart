@@ -5,6 +5,8 @@ class AppLocalDatasource {
 
   AppLocalDatasource(this.localStorageService);
 
+  Future<void> initDatabase() => localStorageService.initDatabase();
+
   Future<void> deleteTaskTime(String taskId) =>
       localStorageService.deleteTaskTime(taskId);
 
@@ -17,7 +19,15 @@ class AppLocalDatasource {
           {required String taskId, required String startTime}) =>
       localStorageService.insertTaskTime(taskId: taskId, startTime: startTime);
 
-  Future<void> updateTaskTime(
+  Future<void> updateTaskStartTime(
           {required String taskId, required String startTime}) =>
-      localStorageService.updateTaskTime(taskId: taskId, startTime: startTime);
+      localStorageService.updateTaskStartTime(
+          taskId: taskId, startTime: startTime);
+
+  Future<void> updateTaskEndTime(
+          {required String taskId, required String endTime}) =>
+      localStorageService.updateTaskEndTime(
+        taskId: taskId,
+        endTime: endTime,
+      );
 }

@@ -7,12 +7,23 @@ class LocalDataRepo extends LocalDataAbstract {
   LocalDataRepo(this.appLocalDatasource);
 
   @override
+  Future<void> initDatabase() => appLocalDatasource.initDatabase();
+
+  @override
   Future<void> deleteTaskTime(String taskId) =>
       appLocalDatasource.deleteTaskTime(taskId);
 
   @override
   Future getTaskTimerById(String taskId) =>
       appLocalDatasource.getTaskTimerById(taskId);
+
+  @override
+  Future<void> updateTaskEndTime(
+          {required String taskId, required String endTime}) =>
+      appLocalDatasource.updateTaskEndTime(
+        taskId: taskId,
+        endTime: endTime,
+      );
 
   @override
   Future getAllTaskTimer() => appLocalDatasource.getAllTaskTimer();
@@ -23,7 +34,8 @@ class LocalDataRepo extends LocalDataAbstract {
       appLocalDatasource.insertTaskTime(taskId: taskId, startTime: startTime);
 
   @override
-  Future<void> updateTaskTime(
+  Future<void> updateTaskStartTime(
           {required String taskId, required String startTime}) =>
-      appLocalDatasource.updateTaskTime(taskId: taskId, startTime: startTime);
+      appLocalDatasource.updateTaskStartTime(
+          taskId: taskId, startTime: startTime);
 }

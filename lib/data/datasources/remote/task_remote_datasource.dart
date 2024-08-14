@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:time_tracking_app/core/constants/api_constants.dart';
+import 'package:time_tracking_app/core/functions/common_functions.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/network/dio_client.dart';
 
@@ -62,12 +65,31 @@ class TaskRemoteDataSource {
     return resp.data;
   }
 
-  Future<dynamic> completeTask() async {
+  Future<dynamic> completeTask({required String taskId}) async {
     const url = ApiConstants.tasksCompleteUrl;
 
-    final resp = await dioClient.post(
-      url,
-    );
+    final body = {
+      'commands': [
+        {
+          "type": "item_complete",
+          "uuid": "a74bfb5c-5f1d-4d14-baea-b7415446a871",
+          "args": {
+            "id": taskId,
+            "date_completed":
+                CommonFunctions.formatToRFC3339NanoUtc(DateTime.now())
+          }
+        }
+      ]
+    };
+
+    print(jsonEncode(body));
+
+    dioClient.options.headers.addAll({
+      "Content-Type": "application/x-www-form-urlencoded",
+    });
+
+
+    final resp = await dioClient.post(url, data: body);
 
     return resp.data;
   }

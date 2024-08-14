@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
+import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 import 'package:time_tracking_app/presentation/theme/app_theme.dart';
 
 import 'core/config/app_routes.dart';
@@ -18,14 +20,17 @@ class TimeTrackingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: StringConstants.appName,
-      initialRoute: RouteConstants.splashPath,
-      onGenerateRoute: AppRoutes().generateRoute,
-      themeMode: ThemeMode.light,
-      darkTheme: CustomThemeData.darkTheme,
-      theme: CustomThemeData.lightTheme,
-      navigatorKey: appNavigatorKey,
+    return MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => TaskBloc())],
+      child: MaterialApp(
+        title: StringConstants.appName,
+        initialRoute: RouteConstants.splashPath,
+        onGenerateRoute: AppRoutes().generateRoute,
+        themeMode: ThemeMode.light,
+        darkTheme: CustomThemeData.darkTheme,
+        theme: CustomThemeData.lightTheme,
+        navigatorKey: appNavigatorKey,
+      ),
     );
   }
 }

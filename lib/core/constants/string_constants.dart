@@ -6,6 +6,7 @@ class StringConstants {
       'Something went wrong, please try again later.';
   static const String firstCharacterSpaceError =
       'First character cannot be a space';
+  static const String empty = '';
   static const String noTasksAvailable = 'No tasks available';
   static const String noResultsFound = 'No results found';
   static const String noDataAvailable = 'No data available';
@@ -34,4 +35,8 @@ class StringConstants {
   static const String ongoing = 'Ongoing';
   static const String completed = 'Completed';
   static const String taskDetails = 'Task Details';
+  static const String popupTitle = 'Confirm your activity';
+  static const String popupSubTitle = 'Are you sure to proceed?';
+  static const String cancel = 'Cancel';
+  static const String confirm = 'Confirm';
 }

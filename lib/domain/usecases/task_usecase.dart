@@ -43,5 +43,7 @@ class TaskUseCase {
   Future<dynamic> completeTask({
     required String taskId,
   }) =>
-      taskAbstract.completeTask();
+      taskAbstract.completeTask(
+        taskId: taskId,
+      );
 }
