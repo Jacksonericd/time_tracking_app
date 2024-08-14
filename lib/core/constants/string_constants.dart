@@ -27,8 +27,11 @@ class StringConstants {
   static const String addComment = 'Add a comment';
   static const String viewComments = 'View comments';
   static const String welcomeComma = 'Welcome,';
+  static const String welcomeSummary =
+      'Track time and manage your tasks efficiently.';
   static const String taskSummary = 'Task summary';
   static const String todo = 'To Do';
   static const String ongoing = 'Ongoing';
   static const String completed = 'Completed';
+  static const String taskDetails = 'Task Details';
 }

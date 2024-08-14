@@ -17,7 +17,9 @@ class CompletedTasks extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    const cardColor = ColorConstants.completedCard;
+    // const cardColor = ColorConstants.completedCard;
+    final cardColor = Theme.of(context).primaryColorLight;
+    final dividerColor = Theme.of(context).primaryColorDark.withOpacity(0.10);
 
     Widget dataWidget = noTasksAvailable;
 
@@ -32,10 +34,18 @@ class CompletedTasks extends StatelessWidget {
               width:
                   tasks!.length == 1 ? deviceWidth * 0.9 : deviceWidth * 0.75,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              margin: const EdgeInsets.only(right: 5),
+              margin:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 color: cardColor,
+                boxShadow: const [
+                  BoxShadow(
+                    color: ColorConstants.greyColorC3,
+                    spreadRadius: 0.5,
+                    blurRadius: 5,
+                  ),
+                ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -55,7 +65,7 @@ class CompletedTasks extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const TaskHeading(
+          TaskHeading(
             headingText: StringConstants.completed,
             cardColor: cardColor,
           ),

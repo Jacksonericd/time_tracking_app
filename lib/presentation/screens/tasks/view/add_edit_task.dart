@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
+import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
@@ -66,6 +67,8 @@ class AddEditTask extends StatelessWidget {
                 message: state.successResponse!,
                 success: true,
               );
+
+              Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
             },
             onFailure: (context, state) {
               LoadingDialog.hide(context);
@@ -120,12 +123,15 @@ class AddEditTask extends StatelessWidget {
                         selectFieldBloc: formBloc.selectPriority,
                         defaultText: StringConstants.priority,
                       ),
-                      CustomTextFieldBlocBuilder(
-                        textFieldBloc: formBloc.tfDurationInMinutes,
-                        maxLength: 4,
-                        labelText: StringConstants.durationInMinutes,
-                        inputType: const TextInputType.numberWithOptions(
-                            signed: false, decimal: false),
+                      Visibility(
+                        visible: false,
+                        child: CustomTextFieldBlocBuilder(
+                          textFieldBloc: formBloc.tfDurationInMinutes,
+                          maxLength: 4,
+                          labelText: StringConstants.durationInMinutes,
+                          inputType: const TextInputType.numberWithOptions(
+                              signed: false, decimal: false),
+                        ),
                       ),
                       const SizedBox(
                         height: 30,

@@ -36,4 +36,6 @@ class ColorConstants {
   static const Color todoCount = Color(0XFFf58505);
   static const Color ongoingCount = Color(0XFF05a3f2);
   static const Color completedCount = Color(0XFF16fa05);
+
+  static const Color greyColorC3 = Color(0xFFC3C3C3);
 }

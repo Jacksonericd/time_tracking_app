@@ -37,11 +37,12 @@ class DashboardView extends StatelessWidget {
         ),
       );
 
-  Widget get introWidget => Column(
-        children: [
-          StyledText.displaySmall(StringConstants.welcomeComma),
-        ],
-      );
+  Widget get introWidget =>
+      StyledText.displaySmall(StringConstants.welcomeComma);
+
+  Widget get introSummaryWidget => Align(
+      alignment: Alignment.centerLeft,
+      child: StyledText.labelLarge(StringConstants.welcomeSummary));
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +90,13 @@ class DashboardView extends StatelessWidget {
           introWidget,
           appLogo,
         ],
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      introSummaryWidget,
+      const SizedBox(
+        height: 5,
       ),
       const SizedBox(
         height: 20,
