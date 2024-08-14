@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
@@ -55,6 +56,8 @@ class AddEditComment extends StatelessWidget {
               message: state.successResponse!,
               success: true,
             );
+
+            Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
           },
           onFailure: (context, state) {
             LoadingDialog.hide(context);
