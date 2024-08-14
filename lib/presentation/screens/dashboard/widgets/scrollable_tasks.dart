@@ -231,7 +231,16 @@ class ScrollableTasks extends StatelessWidget {
                       },
                     ),
                     menuText: StringConstants.editTask,
-                  )
+                  ),
+                  if (taskType == TaskType.completed) ...{
+                    vSpacingFive,
+                    MenuButton(
+                      onMenuTapped: () async {
+                        await _reopenTaskPopup(context, task.id!);
+                      },
+                      menuText: StringConstants.reopenTask,
+                    ),
+                  },
                 ],
               ),
             ],
@@ -323,6 +332,33 @@ class ScrollableTasks extends StatelessWidget {
               if (context.mounted) {
                 refreshBloc();
               }
+            } catch (e) {
+              if (context.mounted) {
+                showBottomMessage(context, message: '$e');
+              }
+            }
+          }
+        });
+  }
+
+  Future<void> _reopenTaskPopup(
+    BuildContext context,
+    String taskId,
+  ) async {
+    await showPopUp(
+        title: StringConstants.popupTitle,
+        subTitle: StringConstants.popupSubTitle,
+        leftButtonText: StringConstants.cancel,
+        rightButtonText: StringConstants.confirm,
+        onPressLeft: Navigator.of(context).pop,
+        onPressRight: () async {
+          if (context.mounted) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            try {
+              await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
+
+              refreshBloc();
             } catch (e) {
               if (context.mounted) {
                 showBottomMessage(context, message: '$e');

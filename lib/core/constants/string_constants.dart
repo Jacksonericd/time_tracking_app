@@ -27,6 +27,7 @@ class StringConstants {
   static const String editTask = 'Edit Task';
   static const String beginTask = 'Begin Task';
   static const String completeTask = 'Complete Task';
+  static const String reopenTask = 'Reopen Task';
   static const String addComment = 'Add a comment';
   static const String updateComment = 'Update comment';
   static const String viewComments = 'View comments';

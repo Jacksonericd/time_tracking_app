@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/config/navigator_key.dart';
@@ -126,6 +127,9 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
           'due': dueDateParams,
         });
       }
+
+      print( jsonEncode(inputData) );
+
       if (boolIsEditMode.value) {
         await Injector.resolve<TaskUseCase>().updateTask(
           inputData: inputData,
