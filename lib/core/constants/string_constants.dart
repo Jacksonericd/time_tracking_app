@@ -23,9 +23,11 @@ class StringConstants {
   static const String taskDescriptionRequired = 'Task description is required';
   static const String commentContentRequired = 'Comment is required';
   static const String selectPriority = 'Select priority';
+  static const String editTask = 'Edit Task';
   static const String beginTask = 'Begin Task';
   static const String completeTask = 'Complete Task';
   static const String addComment = 'Add a comment';
+  static const String updateComment = 'Update comment';
   static const String viewComments = 'View comments';
   static const String welcomeComma = 'Welcome,';
   static const String welcomeSummary =

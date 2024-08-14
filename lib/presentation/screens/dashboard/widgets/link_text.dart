@@ -22,7 +22,7 @@ class LinkText extends StatelessWidget {
                 decoration: TextDecoration.underline,
                 color: color ?? ColorConstants.greyColorC3,
                 decorationColor: color ?? ColorConstants.greyColorC3,
-                decorationThickness: 3,
+                decorationThickness: 1,
               )
           // ?.copyWith(color: ColorConstants.errorRed),
           ),

@@ -27,7 +27,7 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
   FutureOr<void> onLoading() async {
     try {
       if (!boolIsEditMode.value) {
-        emitLoadFailed();
+        emitLoaded();
         return;
       }
 

@@ -102,13 +102,13 @@ class AppLocalStorageService implements LocalStorageService {
   Future<void> updateTaskStartTime(
       {required String taskId, required String startTime}) async {
     final db = await database;
-
     await db.update(
       'task_timer',
       {
-        'task_id': taskId,
         'start_time': startTime,
       },
+      where: 'task_id = ?',
+      whereArgs: [taskId],
     );
   }
 
@@ -120,9 +120,10 @@ class AppLocalStorageService implements LocalStorageService {
     await db.update(
       'task_timer',
       {
-        'task_id': taskId,
         'end_time': endTime,
       },
+      where: 'task_id = ?',
+      whereArgs: [taskId],
     );
   }
 

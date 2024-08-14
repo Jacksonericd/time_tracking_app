@@ -6,23 +6,17 @@ import 'package:time_tracking_app/core/constants/image_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/enums/task_type.dart';
-import 'package:time_tracking_app/core/injector/injector.dart';
-import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
-import 'package:time_tracking_app/data/model/completed_items.dart';
-import 'package:time_tracking_app/data/model/task.dart';
-import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 
-import '../widgets/completed_tasks.dart';
 import '../widgets/scrollable_tasks.dart';
 import '../widgets/task_summary_card.dart';
 
 class DashboardView extends StatelessWidget {
-  DashboardView({super.key});
+  const DashboardView({super.key});
 
   static const projectId = '2337659677';
 
@@ -47,20 +41,9 @@ class DashboardView extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: StyledText.labelLarge(StringConstants.welcomeSummary));
 
-  final bloc = TaskBloc();
-
-  refreshBloc() {
-    bloc.add(GetTasksByProjectEvent(
-      projectId: projectId,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<TaskBloc>(context)
-        .add(GetTasksByProjectEvent(projectId: projectId));
-
-    // refreshBloc();
+    refreshBloc(context);
 
     return AppScaffold(
       floatingActionButton: FloatingActionButton(
@@ -83,6 +66,11 @@ class DashboardView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void refreshBloc(BuildContext context) {
+    BlocProvider.of<TaskBloc>(context)
+        .add(GetTasksByProjectEvent(projectId: projectId));
   }
 
   Widget displayData(TaskState state, BuildContext context) {
@@ -160,8 +148,7 @@ class DashboardView extends StatelessWidget {
       ScrollableTasks(
         taskType: TaskType.todo,
         tasks: todoTasks,
-        refreshBloc: refreshBloc,
-        taskBloc: bloc,
+        refreshBloc: () => refreshBloc(context),
       ),
       const SizedBox(
         height: 20,
@@ -169,20 +156,15 @@ class DashboardView extends StatelessWidget {
       ScrollableTasks(
         taskType: TaskType.ongoing,
         tasks: ongoingTasks,
-        refreshBloc: refreshBloc,
-        taskBloc: bloc,
+        refreshBloc: () => refreshBloc(context),
       ),
       const SizedBox(
         height: 20,
       ),
-      // CompletedTasks(
-      //   tasks: completedTasks,
-      // ),
       ScrollableTasks(
         taskType: TaskType.completed,
         tasks: completedTasks,
-        refreshBloc: refreshBloc,
-        taskBloc: bloc,
+        refreshBloc: () => refreshBloc(context),
       ),
       const SizedBox(
         height: 70,
@@ -227,153 +209,5 @@ class DashboardView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  displayTodoTasksDataList(List<Task>? tasks, BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    Widget dataWidget = const Text('No sections found');
-
-    if ((tasks ?? []).isNotEmpty) {
-      dataWidget = ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: tasks!.length,
-          itemBuilder: (context, index) {
-            final task = tasks[index];
-
-            return Container(
-              width: deviceWidth * 0.9,
-              height: 200,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Colors.yellow,
-              ),
-              child: Column(
-                children: [
-                  Text(task.content!),
-                  AppButton(
-                      buttonText: StringConstants.beginTask,
-                      onButtonClicked: () => _beginTask(
-                            taskId: task.id!,
-                          )),
-                  AppButton(
-                      buttonText: StringConstants.addComment,
-                      onButtonClicked: () => Navigator.of(context).pushNamed(
-                          RouteConstants.addCommentPath,
-                          arguments: {'task-id': task.id!})),
-                  AppButton(
-                      buttonText: StringConstants.viewComments,
-                      onButtonClicked: () => Navigator.of(context).pushNamed(
-                          RouteConstants.viewTaskCommentPath,
-                          arguments: {'task-id': task.id!})),
-                ],
-              ),
-            );
-          });
-    }
-
-    return dataWidget;
-  }
-
-  displayOngoingTasksDataList(List<Task>? tasks, BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    Widget dataWidget = const Text('No sections found');
-
-    if ((tasks ?? []).isNotEmpty) {
-      dataWidget = ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: tasks!.length,
-          itemBuilder: (context, index) {
-            final task = tasks[index];
-
-            return InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(RouteConstants.taskListPath, arguments: task.id);
-              },
-              child: Container(
-                width: deviceWidth * 0.9,
-                height: 200,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.yellow,
-                ),
-                child: Column(
-                  children: [
-                    Text(task.content!),
-                    AppButton(
-                        buttonText: StringConstants.completeTask,
-                        onButtonClicked: () =>
-                            _completeTask(taskId: task.id!, context: context)),
-                    AppButton(
-                      buttonText: StringConstants.edit,
-                      onButtonClicked: () => Navigator.of(context).pushNamed(
-                        RouteConstants.editTaskPath,
-                        arguments: {
-                          'task-id': task.id,
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          });
-    }
-
-    return dataWidget;
-  }
-
-  displayCompletedTasksDataList(
-      List<CompletedItem>? tasks, BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-    Widget dataWidget = const Text('No sections found');
-
-    if ((tasks ?? []).isNotEmpty) {
-      dataWidget = ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: tasks!.length,
-          itemBuilder: (context, index) {
-            final task = tasks[index];
-
-            return InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(RouteConstants.taskListPath, arguments: task.id);
-              },
-              child: Container(
-                width: deviceWidth * 0.9,
-                height: 200,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.yellow,
-                ),
-                child: Text(task.content!),
-              ),
-            );
-          });
-    }
-
-    return dataWidget;
-  }
-
-  _beginTask({required String taskId}) async {
-    try {
-      bloc.add(BeginTasksEvent(taskId: taskId));
-    } catch (e) {}
-  }
-
-  _completeTask({required String taskId, required BuildContext context}) async {
-    try {
-      await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
-
-      //To-do : find the timer differenec
-      // call update duration
-      // call complete task
-    } catch (e) {}
   }
 }

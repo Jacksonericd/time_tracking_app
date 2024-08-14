@@ -30,15 +30,16 @@ class TaskCard extends StatelessWidget {
     return Container(
       width: width,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: cardColor,
         boxShadow: const [
           BoxShadow(
             color: ColorConstants.greyColorC3,
-            spreadRadius: 0.5,
-            blurRadius: 5,
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset:  Offset(0, 2),
           ),
         ],
       ),

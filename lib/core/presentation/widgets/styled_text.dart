@@ -25,7 +25,7 @@ class StyledText extends StatelessWidget {
       return Theme.of(context).textTheme.displayMedium?.copyWith(
           color: isDarkMode
               ? ColorConstants.fontTitleLightColor
-              : ColorConstants.fontTitleDarkColor);
+              : ColorConstants.fontTitleLightColor);
     };
   }
 

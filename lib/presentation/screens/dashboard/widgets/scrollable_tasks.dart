@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
@@ -12,9 +10,10 @@ import 'package:time_tracking_app/core/presentation/widgets/show_popup.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 import 'package:time_tracking_app/data/model/task.dart';
+import 'package:time_tracking_app/data/model/task_start_time.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
-import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
+import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_comment.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/link_text.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_heading.dart';
@@ -25,14 +24,11 @@ class ScrollableTasks extends StatelessWidget {
     this.tasks,
     required this.taskType,
     required this.refreshBloc,
-    required this.taskBloc,
-    // required this.onBeginTask,
   });
 
   final List<Task>? tasks;
   final TaskType taskType;
   final VoidCallback refreshBloc;
-  final TaskBloc taskBloc;
 
   // final Function(String taskId) onBeginTask;
 
@@ -86,9 +82,7 @@ class ScrollableTasks extends StatelessWidget {
                     cardColor: cardColor,
                     dividerColor: dividerColor,
                     task: task,
-                    onAddCommentTap: () => Navigator.of(context).pushNamed(
-                        RouteConstants.addCommentPath,
-                        arguments: {'task-id': task.id!}),
+                    onAddCommentTap: () => _addCommentPopup(context, task.id!),
                     onViewCommentTap: () => Navigator.of(context).pushNamed(
                         RouteConstants.viewTaskCommentPath,
                         arguments: {'task-id': task.id!}),
@@ -180,13 +174,16 @@ class ScrollableTasks extends StatelessWidget {
                     children: [
                       LinkText(
                         linkDisplayText: StringConstants.addComment,
-                        onTap: () => Navigator.of(context).pushNamed(
-                            RouteConstants.addCommentPath,
-                            arguments: {'task-id': task.id!}),
+                        color: ColorConstants.errorRed,
+                        onTap: () => _addCommentPopup(context, task.id!),
+                        // onTap: () => Navigator.of(context).pushNamed(
+                        //     RouteConstants.addCommentPath,
+                        //     arguments: {'task-id': task.id!}),
                       ),
                       if ((task.commentCount ?? 0) > 0) ...{
                         LinkText(
                           linkDisplayText: 'View ${task.commentCount} comments',
+                          color: ColorConstants.errorRed,
                           onTap: () => Navigator.of(context).pushNamed(
                               RouteConstants.viewTaskCommentPath,
                               arguments: {'task-id': task.id!}),
@@ -196,67 +193,23 @@ class ScrollableTasks extends StatelessWidget {
                   ),
                   vSpacingFive,
                   vSpacingFive,
-                  MenuButton(
-                    onMenuTapped: () async {
-                      await showPopUp(
-                          title: StringConstants.popupTitle,
-                          subTitle: StringConstants.popupSubTitle,
-                          leftButtonText: StringConstants.cancel,
-                          rightButtonText: StringConstants.confirm,
-                          onPressLeft: Navigator.of(context).pop,
-                          onPressRight: () async {
-                            const projectId = '2337659677';
-
-                            if (context.mounted) {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              try {
-                                await Injector.resolve<LocalDataUseCase>()
-                                    .insertTaskTime(
-                                        taskId: task.id!,
-                                        startTime: DateTime.now().toString());
-
-                                if (context.mounted) {
-                                  BlocProvider.of<TaskBloc>(context).add(
-                                      GetTasksByProjectEvent(
-                                          projectId: projectId));
-                                }
-                              } catch (e) {
-                                if (context.mounted) {
-                                  showBottomMessage(context, message: '$e');
-                                }
-                              }
-                            }
-                          });
-                    },
-                    menuText: StringConstants.beginTask,
-                  ),
-                  vSpacingFive,
-                  MenuButton(
-                    onMenuTapped: () async {
-                      await showPopUp(
-                          title: StringConstants.popupTitle,
-                          subTitle: StringConstants.popupSubTitle,
-                          leftButtonText: StringConstants.cancel,
-                          rightButtonText: StringConstants.confirm,
-                          onPressLeft: Navigator.of(context).pop,
-                          onPressRight: () async {
-                            try {
-                              print('CompleteTasksEvent');
-                              taskBloc
-                                  .add(CompleteTasksEvent(taskId: task.id!));
-                              if (context.mounted) {
-                                Navigator.of(context).pushReplacementNamed(
-                                    RouteConstants.dashboardPath);
-                              }
-                              //
-                              refreshBloc();
-                            } catch (e) {}
-                          });
-                    },
-                    menuText: StringConstants.completeTask,
-                  ),
-                  vSpacingFive,
+                  if (taskType == TaskType.todo) ...{
+                    MenuButton(
+                      onMenuTapped: () async =>
+                          await _beginTaskPopup(context, task.id!),
+                      menuText: StringConstants.beginTask,
+                    ),
+                    vSpacingFive,
+                  },
+                  if (taskType == TaskType.ongoing) ...{
+                    MenuButton(
+                      onMenuTapped: () async {
+                        await _completeTask(context, task.id!);
+                      },
+                      menuText: StringConstants.completeTask,
+                    ),
+                    vSpacingFive,
+                  },
                   MenuButton(
                     onMenuTapped: () => Navigator.of(context).pushNamed(
                       RouteConstants.editTaskPath,
@@ -264,12 +217,121 @@ class ScrollableTasks extends StatelessWidget {
                         'task-id': task.id,
                       },
                     ),
-                    menuText: StringConstants.edit,
+                    menuText: StringConstants.editTask,
                   )
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _beginTaskPopup(
+    BuildContext context,
+    String taskId,
+  ) async {
+    await showPopUp(
+        title: StringConstants.popupTitle,
+        subTitle: StringConstants.popupSubTitle,
+        leftButtonText: StringConstants.cancel,
+        rightButtonText: StringConstants.confirm,
+        onPressLeft: Navigator.of(context).pop,
+        onPressRight: () async {
+          if (context.mounted) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            try {
+              await Injector.resolve<LocalDataUseCase>().insertTaskTime(
+                taskId: taskId,
+                startTime: DateTime.now().toString(),
+              );
+
+              refreshBloc();
+            } catch (e) {
+              if (context.mounted) {
+                showBottomMessage(context, message: '$e');
+              }
+            }
+          }
+        });
+  }
+
+  Future<void> _completeTask(BuildContext context, String taskId) async {
+    await showPopUp(
+        title: StringConstants.popupTitle,
+        subTitle: StringConstants.popupSubTitle,
+        leftButtonText: StringConstants.cancel,
+        rightButtonText: StringConstants.confirm,
+        onPressLeft: Navigator.of(context).pop,
+        onPressRight: () async {
+          if (context.mounted) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            try {
+              final localResponse = await Injector.resolve<LocalDataUseCase>()
+                  .getTaskTimerById(taskId);
+
+              print('startTime $localResponse');
+
+              final ongoingTasks = (localResponse as List)
+                  .map((task) => TasksStartTime.fromJson(task))
+                  .toList();
+
+              final startTime = DateTime.parse(ongoingTasks.last.startTime!);
+
+              print('startTime $startTime');
+
+              final durationInMinutes =
+                  DateTime.now().difference(startTime).inMinutes;
+
+              print('durationInMinutes $durationInMinutes');
+
+              final durationMap = {
+                'duration': durationInMinutes,
+                'duration_unit': 'minute'
+              };
+
+              await Injector.resolve<TaskUseCase>().updateTask(
+                taskId: taskId,
+                inputData: durationMap,
+              );
+
+              print('Task updated ');
+
+              await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
+                taskId: taskId,
+                endTime: DateTime.now().toString(),
+              );
+
+              print('Task completed');
+
+              if (context.mounted) {
+                refreshBloc();
+              }
+            } catch (e) {
+              if (context.mounted) {
+                showBottomMessage(context, message: '$e');
+              }
+            }
+          }
+        });
+  }
+
+  Future<void> _addCommentPopup(
+    BuildContext context,
+    String taskId,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title:
+            Center(child: StyledText.headlineSmall(StringConstants.addComment)),
+        content: AddEditComment(
+          taskId: taskId,
         ),
       ),
     );

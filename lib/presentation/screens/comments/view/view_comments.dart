@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
+import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/data/model/comment.dart';
 import 'package:time_tracking_app/presentation/bloc/comment/comment_bloc.dart';
+
+import 'add_edit_comment.dart';
 
 class ViewComments extends StatelessWidget {
   const ViewComments({
@@ -25,12 +27,6 @@ class ViewComments extends StatelessWidget {
         hideAppBar: false,
         appBar: AppBar(
           title: Text('Comments under task'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => Navigator.of(context).pushNamed(
-              RouteConstants.addCommentPath,
-              arguments: {'task-id': taskId}),
         ),
         scaffoldBody: BlocBuilder<CommentBloc, CommentState>(
           builder: (context, state) {
@@ -71,16 +67,39 @@ class ViewComments extends StatelessWidget {
                 Text(comment.content!),
                 AppButton(
                   buttonText: StringConstants.edit,
-                  onButtonClicked: () => Navigator.of(context).pushNamed(
-                    RouteConstants.editCommentPath,
-                    arguments: {
-                      'comment-id': comment.id,
-                    },
+                  onButtonClicked: () => _editCommentPopup(
+                    context,
+                    comment.id!,
                   ),
+                  // onButtonClicked: () => Navigator.of(context).pushNamed(
+                  //   RouteConstants.editCommentPath,
+                  //   arguments: {
+                  //     'comment-id': comment.id,
+                  //   },
+                  // ),
                 ),
               ],
             ),
           );
         });
+  }
+
+  Future<void> _editCommentPopup(
+    BuildContext context,
+    String commentId,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Center(
+            child: StyledText.headlineSmall(StringConstants.updateComment)),
+        content: AddEditComment(
+          isEditMode: true,
+          commentId: commentId,
+        ),
+      ),
+    );
   }
 }
