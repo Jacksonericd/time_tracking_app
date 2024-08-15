@@ -37,7 +37,7 @@ class AddEditTask extends StatelessWidget {
           hideAppBar: false,
           appBar: AppBar(
             backgroundColor: Theme.of(context).cardColor,
-            title: StyledText.titleLarge('${isEditMode ? 'Edit' : 'Add'} task'),
+            title: StyledText.titleMedium('${isEditMode ? 'Edit' : 'Add'} task'),
           ),
           scaffoldBody: FormBlocListener<AddEditTaskFormBloc, String, String>(
             onSubmitting: (context, state) {
