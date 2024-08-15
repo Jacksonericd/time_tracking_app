@@ -519,10 +519,12 @@ class DashboardView extends StatelessWidget {
                           ? StringConstants.empty
                           : 'Due date : ${task.due?.datetime}'),
                       vSpacingFive,
-                      Center(
-                          child: TimerClock(
-                        taskId: task.id!,
-                      )),
+                      if (taskType == TaskType.ongoing) ...{
+                        Center(
+                            child: TimerClock(
+                          taskId: task.id!,
+                        )),
+                      },
                       vSpacingFive,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

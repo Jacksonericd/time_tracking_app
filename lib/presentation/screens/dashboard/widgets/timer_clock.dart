@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
+import 'package:time_tracking_app/data/model/task_start_time.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 
 class TimerClock extends StatefulWidget {
@@ -19,6 +23,11 @@ class TimerClock extends StatefulWidget {
 }
 
 class TimerClockState extends State<TimerClock> {
+  Timer? _timer;
+  bool _isTimerOn = false;
+  String? _timerText;
+  DateTime? _taskTimerStartedAt;
+
   @override
   void initState() {
     getTaskStartTimeStored();
@@ -31,6 +40,16 @@ class TimerClockState extends State<TimerClock> {
           await Injector.resolve<LocalDataUseCase>().getTaskTimerById(
         widget.taskId,
       );
+
+      final ongoingTasks = (localResponse as List)
+          .map((task) => TasksStartTime.fromJson(task))
+          .toList();
+
+      _taskTimerStartedAt = DateTime.parse(ongoingTasks.last.startTime!);
+
+      _startBackgroundTimerHandler();
+
+      _startTimer();
     } catch (e) {}
   }
 
@@ -51,10 +70,78 @@ class TimerClockState extends State<TimerClock> {
               const SizedBox(
                 height: 20,
               ),
-              StyledText.headlineLarge('00:00:00'),
+              if (_timerText != null) ...{
+                StyledText.headlineLarge(_timerText!)
+              },
               StyledText.titleMedium(StringConstants.timeElapsed)
             ],
           ),
         ));
+  }
+
+  void _endTimerIfActive() {
+    if (_isTimerActive()) {
+      _timer?.cancel();
+    }
+  }
+
+  bool _isTimerActive() {
+    if (_timer?.isActive ?? false) {
+      return true;
+    }
+
+    return false;
+  }
+
+  void _startBackgroundTimerHandler() {
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (message == AppLifecycleState.paused.toString()) {
+        _clearTimerText();
+
+        _endTimerIfActive();
+      }
+
+      if (message == AppLifecycleState.resumed.toString()) {}
+
+      return Future(() => null);
+    });
+  }
+
+  _clearTimerText() {
+    _isTimerOn = false;
+
+    _timerText = null;
+
+    setState(() {});
+  }
+
+  Future<void> _startTimer() async {
+    if (_taskTimerStartedAt == null) {
+      return;
+    }
+
+    _endTimerIfActive();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      final durationInSeconds =
+          DateTime.now().difference(_taskTimerStartedAt!).inSeconds;
+
+      _timerText = intToTimeLeft(durationInSeconds);
+      setState(() {});
+    });
+  }
+
+  String intToTimeLeft(int value) {
+    int h, m, s;
+
+    h = value ~/ 3600;
+
+    m = ((value - h * 3600)) ~/ 60;
+
+    s = value - (h * 3600) - (m * 60);
+
+    String result = "$h:$m:$s";
+
+    return result;
   }
 }
