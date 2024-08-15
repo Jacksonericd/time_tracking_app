@@ -31,14 +31,13 @@ import 'package:time_tracking_app/presentation/screens/comments/view/view_commen
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
 
 import '../widgets/link_text.dart';
-import '../widgets/scrollable_tasks.dart';
 import '../widgets/task_summary_card.dart';
 import '../widgets/timer_clock.dart';
 
 class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
-  static const projectId = '2337659677';
+  static const projectId = String.fromEnvironment('project_id');
 
   List<BoardListModel> _listData = [];
 
@@ -817,7 +816,7 @@ class DashboardView extends StatelessWidget {
 
     if (fromTaskType == TaskType.ongoing) {
       if (toTaskType == TaskType.todo) {
-        /// Todo  : update start time
+        _reopenTaskPopup(taskId: taskId);
       }
       if (toTaskType == TaskType.completed) {
         _completeTask(taskId: taskId);

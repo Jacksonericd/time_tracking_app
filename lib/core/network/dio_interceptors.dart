@@ -2,12 +2,11 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 class DioInterceptor extends Interceptor {
+  final token = const String.fromEnvironment('bearer_token');
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers.addAll({
-      // "Content-Type": "application/json",
-      "Authorization": "Bearer fe9fa4967f25fe964654a624ace5dcf01fd8b4c0"
-    });
+    options.headers.addAll({"Authorization": "Bearer $token"});
 
     return super.onRequest(options, handler);
   }
