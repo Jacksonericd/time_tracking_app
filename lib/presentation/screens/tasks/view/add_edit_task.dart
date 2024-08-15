@@ -22,18 +22,8 @@ class AddEditTask extends StatelessWidget {
   final bool isEditMode;
   final String? taskId;
 
-  OutlineInputBorder errorBorder() => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: ColorConstants.errorRed),
-      );
-
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder renderBorder() => OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Theme.of(context).focusColor),
-        );
-
     return BlocProvider(
       create: (context) => AddEditTaskFormBloc(),
       child: Builder(builder: (context) {
@@ -97,27 +87,8 @@ class AddEditTask extends StatelessWidget {
                         maxLines: 5,
                         inputType: TextInputType.multiline,
                       ),
-                      DateTimeFieldBlocBuilder(
-                        dateTimeFieldBloc: formBloc.dueDateTime,
-                        format: DateFormat('dd-MM-yyyy  hh:mm a '),
-                        canSelectTime: true,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
-                        decoration: InputDecoration(
-                          labelText: StringConstants.dueDateTime,
-                          filled: true,
-                          isDense: true,
-                          disabledBorder: renderBorder(),
-                          border: renderBorder(),
-                          focusedBorder: renderBorder(),
-                          enabledBorder: renderBorder(),
-                          errorBorder: errorBorder(),
-                          labelStyle: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(color: Theme.of(context).hintColor),
-                        ),
+                      const SizedBox(
+                        height: 8,
                       ),
                       FormBlocSelectList(
                         selectFieldBloc: formBloc.selectPriority,
