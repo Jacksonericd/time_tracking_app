@@ -34,6 +34,7 @@ import '../widgets/link_text.dart';
 import '../widgets/task_summary_card.dart';
 import '../widgets/timer_clock.dart';
 
+//ignore: must_be_immutable
 class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
