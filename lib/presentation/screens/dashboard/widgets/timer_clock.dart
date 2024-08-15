@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
+import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/data/model/task_start_time.dart';
@@ -14,9 +15,11 @@ class TimerClock extends StatefulWidget {
   const TimerClock({
     super.key,
     required this.taskId,
+    required this.taskType,
   });
 
   final String taskId;
+  final TaskType taskType;
 
   @override
   State<StatefulWidget> createState() => TimerClockState();
@@ -24,7 +27,6 @@ class TimerClock extends StatefulWidget {
 
 class TimerClockState extends State<TimerClock> {
   Timer? _timer;
-  bool _isTimerOn = false;
   String? _timerText;
   DateTime? _taskTimerStartedAt;
 
@@ -36,6 +38,10 @@ class TimerClockState extends State<TimerClock> {
 
   Future<void> getTaskStartTimeStored() async {
     try {
+      if (widget.taskType == TaskType.todo) {
+        return;
+      }
+
       final localResponse =
           await Injector.resolve<LocalDataUseCase>().getTaskTimerById(
         widget.taskId,
@@ -46,6 +52,21 @@ class TimerClockState extends State<TimerClock> {
           .toList();
 
       _taskTimerStartedAt = DateTime.parse(ongoingTasks.last.startTime!);
+
+      if (widget.taskType == TaskType.completed) {
+        final _taskTimerEndedAt = DateTime.parse(ongoingTasks.last.endTime!);
+
+        final durationInSeconds =
+            _taskTimerEndedAt.difference(_taskTimerStartedAt!).inSeconds;
+
+        _timerText = intToTimeLeft(durationInSeconds);
+
+        setState(() {
+
+        });
+
+        return;
+      }
 
       _startBackgroundTimerHandler();
 
@@ -66,6 +87,7 @@ class TimerClockState extends State<TimerClock> {
           width: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
                 height: 20,
@@ -73,7 +95,16 @@ class TimerClockState extends State<TimerClock> {
               if (_timerText != null) ...{
                 StyledText.headlineLarge(_timerText!)
               },
-              StyledText.titleMedium(StringConstants.timeElapsed)
+              if (widget.taskType == TaskType.todo) ...{
+                StyledText.labelSmall(
+                    StringConstants.timerClockBeginTimerMessage),
+              } ,
+              if (widget.taskType == TaskType.ongoing) ...{
+                StyledText.titleSmall(StringConstants.timeElapsed)
+              },
+              if (widget.taskType == TaskType.completed) ...{
+                StyledText.titleSmall(StringConstants.timeSpent)
+              },
             ],
           ),
         ));
@@ -108,8 +139,6 @@ class TimerClockState extends State<TimerClock> {
   }
 
   _clearTimerText() {
-    _isTimerOn = false;
-
     _timerText = null;
 
     setState(() {});

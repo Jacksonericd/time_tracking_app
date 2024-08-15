@@ -359,12 +359,13 @@ class DashboardView extends StatelessWidget {
                       StyledText.titleMedium(
                           'Description : ${task.description}'),
                       vSpacingFive,
-                      if (taskType == TaskType.ongoing) ...{
-                        Center(
-                            child: TimerClock(
-                          taskId: task.id!,
-                        )),
-                      },
+                      vSpacingFive,
+                      Center(
+                          child: TimerClock(
+                        taskId: task.id!,
+                        taskType: taskType,
+                      )),
+                      vSpacingFive,
                       vSpacingFive,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -391,6 +392,7 @@ class DashboardView extends StatelessWidget {
                           },
                         ],
                       ),
+                      vSpacingFive,
                       vSpacingFive,
                       vSpacingFive,
                       if (taskType == TaskType.todo) ...{

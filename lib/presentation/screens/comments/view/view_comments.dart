@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
@@ -52,15 +53,37 @@ class ViewComments extends StatelessWidget {
         itemBuilder: (context, index) {
           final comment = comments[index];
 
+          final postedOn = DateFormat("dd-MM-yyyy HH:mm:ss a")
+              .format(DateTime.parse(comment.postedAt!.toString()).toUtc());
+
           return Container(
             width: deviceWidth * 0.9,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: ColorConstants.greyColorC3,
+                  spreadRadius: 0.5,
+                  blurRadius: 2,
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(comment.content!),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StyledText.titleSmall(comment.content!),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    StyledText.labelSmall('Posted on : $postedOn'),
+                  ],
+                ),
                 Row(
                   children: [
                     WidgetTap(
