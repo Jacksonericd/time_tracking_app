@@ -43,4 +43,5 @@ class StringConstants {
   static const String popupSubTitle = 'Are you sure to proceed?';
   static const String cancel = 'Cancel';
   static const String confirm = 'Confirm';
+  static const String timeElapsed = 'Time elapsed';
 }

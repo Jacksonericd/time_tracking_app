@@ -21,6 +21,16 @@ class CustomBlocValidators {
     return null;
   }
 
+  static String? requiredPriority(dynamic value) {
+    if (value == null ||
+        value == false ||
+        ((value is Iterable || value is String || value is Map) &&
+            value.length == 0)) {
+      return StringConstants.selectPriority;
+    }
+    return null;
+  }
+
   static String? requiredCommentContent(dynamic value) {
     if (value == null ||
         value == false ||

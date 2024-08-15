@@ -17,6 +17,8 @@ dependencies:
   flutter_form_bloc: ^0.31.0
   flutter_offline: ^3.0.1
   sqflite: ^2.3.3+1
+  flutter_boardview: ^0.2.1
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
