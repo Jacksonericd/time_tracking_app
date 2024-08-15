@@ -25,10 +25,19 @@ class TaskCard extends StatelessWidget {
   final VoidCallback onAddCommentTap;
   final VoidCallback onViewCommentTap;
 
+  static const priorityMap = {
+    1: 'Low',
+    2: 'Normal',
+    3: 'High',
+    4: 'Critical',
+  };
+
+  Widget get vSPacingFive => const SizedBox(height: 5);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
+      // width: width,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
@@ -39,7 +48,7 @@ class TaskCard extends StatelessWidget {
             color: ColorConstants.greyColorC3,
             spreadRadius: 1,
             blurRadius: 4,
-            offset:  Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -47,14 +56,15 @@ class TaskCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          vSPacingFive,
           StyledText.titleMedium(task.content!),
-          StyledText.labelSmall(task.due?.datetime == null
-              ? StringConstants.empty
-              : 'Due date : ${task.due?.datetime}'),
+          vSPacingFive,
+          StyledText.labelSmall('Priority : ${priorityMap[task.priority]}'),
           Divider(
             color: dividerColor,
             height: 1,
           ),
+          vSPacingFive,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -71,6 +81,7 @@ class TaskCard extends StatelessWidget {
               },
             ],
           ),
+          vSPacingFive,
         ],
       ),
     );

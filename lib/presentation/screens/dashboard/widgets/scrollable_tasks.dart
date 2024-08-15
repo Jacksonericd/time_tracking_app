@@ -171,11 +171,6 @@ class ScrollableTasks extends StatelessWidget {
                   vSpacingFive,
                   StyledText.titleMedium('Description : ${task.description}'),
                   vSpacingFive,
-                  StyledText.labelSmall(task.due?.datetime == null
-                      ? StringConstants.empty
-                      : 'Due date : ${task.due?.datetime}'),
-                  vSpacingFive,
-                  vSpacingFive,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
