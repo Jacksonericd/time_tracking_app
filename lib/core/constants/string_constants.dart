@@ -44,4 +44,6 @@ class StringConstants {
   static const String cancel = 'Cancel';
   static const String confirm = 'Confirm';
   static const String timeElapsed = 'Time elapsed';
+  static const String timeSpent = 'Time spent';
+  static const String timerClockBeginTimerMessage = 'Begin task to start the timer';
 }
