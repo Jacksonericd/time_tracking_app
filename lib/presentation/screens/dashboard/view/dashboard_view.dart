@@ -95,144 +95,6 @@ class DashboardView extends StatelessWidget {
         .add(GetTasksByProjectEvent(projectId: projectId));
   }
 
-  // Widget displayData(TaskState state, BuildContext context) {
-  //   final deviceWidth = MediaQuery.of(context).size.width;
-  //   final todoTasks = state.taskTodoList;
-  //   final ongoingTasks = state.taskOngoingList;
-  //   final completedTasks = state.taskCompList;
-  //   // final completedTasks = state.taskCompletedList;
-  //
-  //   final topContent = [
-  //     topSpacing,
-  //     Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         introWidget,
-  //         appLogo,
-  //       ],
-  //     ),
-  //     const SizedBox(
-  //       height: 5,
-  //     ),
-  //     introSummaryWidget,
-  //     const SizedBox(
-  //       height: 5,
-  //     ),
-  //     const SizedBox(
-  //       height: 20,
-  //     ),
-  //     Container(
-  //       width: deviceWidth,
-  //       alignment: Alignment.centerLeft,
-  //       child: StyledText.titleLarge(StringConstants.taskSummary),
-  //     ),
-  //     const SizedBox(
-  //       height: 5,
-  //     ),
-  //     Row(
-  //       children: [
-  //         Expanded(
-  //             flex: 1,
-  //             child: TaskSummaryCard(
-  //               headingText: StringConstants.todo,
-  //               valueText: '${todoTasks?.length}',
-  //               taskType: TaskType.todo,
-  //             )),
-  //         const SizedBox(
-  //           width: 5,
-  //         ),
-  //         Expanded(
-  //             flex: 1,
-  //             child: TaskSummaryCard(
-  //               headingText: StringConstants.ongoing,
-  //               valueText: '${ongoingTasks?.length}',
-  //               taskType: TaskType.ongoing,
-  //             )),
-  //         const SizedBox(
-  //           width: 5,
-  //         ),
-  //         Expanded(
-  //             flex: 1,
-  //             child: TaskSummaryCard(
-  //               headingText: StringConstants.completed,
-  //               valueText: '${completedTasks?.length}',
-  //               taskType: TaskType.completed,
-  //             )),
-  //       ],
-  //     ),
-  //     const SizedBox(
-  //       height: 10,
-  //     ),
-  //   ];
-  //
-  //   final bottomContent = [
-  //     ScrollableTasks(
-  //       taskType: TaskType.todo,
-  //       tasks: todoTasks,
-  //       refreshBloc: () => refreshBloc(context),
-  //     ),
-  //     const SizedBox(
-  //       height: 20,
-  //     ),
-  //     ScrollableTasks(
-  //       taskType: TaskType.ongoing,
-  //       tasks: ongoingTasks,
-  //       refreshBloc: () => refreshBloc(context),
-  //     ),
-  //     const SizedBox(
-  //       height: 20,
-  //     ),
-  //     ScrollableTasks(
-  //       taskType: TaskType.completed,
-  //       tasks: completedTasks,
-  //       refreshBloc: () => refreshBloc(context),
-  //     ),
-  //     const SizedBox(
-  //       height: 70,
-  //     ),
-  //   ];
-  //
-  //   return Container(
-  //     color: Theme.of(context).primaryColor,
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.start,
-  //       children: [
-  //         Container(
-  //           color: Theme.of(context).primaryColor,
-  //           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-  //           child: Column(
-  //             children: topContent,
-  //           ),
-  //         ),
-  //         const SizedBox(
-  //           height: 10,
-  //         ),
-  //         Expanded(
-  //           child: ClipRRect(
-  //             borderRadius: const BorderRadius.only(
-  //               topRight: Radius.circular(30),
-  //               topLeft: Radius.circular(30),
-  //             ),
-  //             child: Container(
-  //               color: Theme.of(context).primaryColorLight,
-  //               padding: const EdgeInsets.symmetric(
-  //                 vertical: 10,
-  //                 horizontal: 24,
-  //               ),
-  //               child: SingleChildScrollView(
-  //                 child: Column(
-  //                   children: bottomContent,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget displayBoardData(TaskState state, BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final todoTasks = state.taskTodoList;
@@ -320,12 +182,6 @@ class DashboardView extends StatelessWidget {
           taskType: TaskType.completed),
     ];
 
-    // void _handleDropList(int? listIndex, int? oldListIndex) {
-    //   var list = _listData[oldListIndex!];
-    //   _listData.removeAt(oldListIndex);
-    //   _listData.insert(listIndex!, list);
-    // }
-
     List<BoardList> lists = [];
 
     for (int i = 0; i < _listData.length; i++) {
@@ -392,17 +248,18 @@ class DashboardView extends StatelessWidget {
         onTapItem:
             (int? listIndex, int? itemIndex, BoardItemState? state) async {},
         item: WidgetTap(
-            onWidgetTap: () => openBottomSheetForTaskDetails(task, taskType),
-            widget: TaskCard(
-              width: 100,
-              cardColor: ColorConstants.colorWhite,
-              dividerColor: ColorConstants.colorWhite.withOpacity(0.10),
-              task: task,
-              onAddCommentTap: () => _addCommentPopup(taskId: task.id!),
-              onViewCommentTap: () => _openBottomSheetForViewComments(
-                taskId: task.id!,
-              ),
-            )));
+          onWidgetTap: () => openBottomSheetForTaskDetails(task, taskType),
+          widget: TaskCard(
+            width: 100,
+            cardColor: ColorConstants.colorWhite,
+            dividerColor: ColorConstants.colorWhite.withOpacity(0.10),
+            task: task,
+            onAddCommentTap: () => _addCommentPopup(taskId: task.id!),
+            onViewCommentTap: () => _openBottomSheetForViewComments(
+              taskId: task.id!,
+            ),
+          ),
+        ));
   }
 
   void _handleDropList(int? listIndex, int? oldListIndex) {
@@ -423,7 +280,12 @@ class DashboardView extends StatelessWidget {
       headerBackgroundColor:
           Theme.of(appNavigatorKey.currentContext!).cardColor,
       onDropList: _handleDropList,
-      header: [StyledText.bodyLarge(list.name)],
+      header: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: StyledText.bodyLarge(list.name),
+        )
+      ],
       items: items,
     );
   }
@@ -534,7 +396,8 @@ class DashboardView extends StatelessWidget {
                       if (taskType == TaskType.ongoing) ...{
                         MenuButton(
                           onMenuTapped: () async {
-                            await _completeTask(ctx: context, taskId: task.id!);
+                            await _completeTaskPopup(
+                                ctx: context, taskId: task.id!);
                           },
                           menuText: StringConstants.completeTask,
                         ),
@@ -606,7 +469,7 @@ class DashboardView extends StatelessWidget {
         });
   }
 
-  Future<void> _completeTask({
+  Future<void> _completeTaskPopup({
     BuildContext? ctx,
     required String taskId,
   }) async {
@@ -810,7 +673,7 @@ class DashboardView extends StatelessWidget {
       }
       if (toTaskType == TaskType.completed) {
         /// Todo  : check start time
-        _completeTask(taskId: taskId);
+        _completeTaskPopup(taskId: taskId);
       }
       return;
     }
@@ -820,7 +683,7 @@ class DashboardView extends StatelessWidget {
         _reopenTaskPopup(taskId: taskId);
       }
       if (toTaskType == TaskType.completed) {
-        _completeTask(taskId: taskId);
+        _completeTaskPopup(taskId: taskId);
       }
       return;
     }
