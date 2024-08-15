@@ -236,14 +236,24 @@ class DashboardView extends StatelessWidget {
             (int? listIndex, int? itemIndex, BoardItemState? state) {},
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
             int? oldItemIndex, BoardItemState? state) {
-          var item = _listData[oldListIndex!].items[oldItemIndex!];
-          _listData[oldListIndex].items.removeAt(oldItemIndex);
-          _listData[listIndex!].items.insert(itemIndex!, item);
+          showPopUp(
+              title: StringConstants.popupTitle,
+              subTitle: StringConstants.popupSubTitle,
+              leftButtonText: StringConstants.cancel,
+              rightButtonText: StringConstants.confirm,
+              onPressLeft: Navigator.of(appNavigatorKey.currentContext!).pop,
+              onPressRight: () async {
+                var item = _listData[oldListIndex!].items[oldItemIndex!];
+                _listData[oldListIndex].items.removeAt(oldItemIndex);
+                _listData[listIndex!].items.insert(itemIndex!, item);
 
-          final fromTaskType = _listData[oldListIndex].taskType;
-          final toTaskType = _listData[listIndex].taskType;
+                final fromTaskType = _listData[oldListIndex].taskType;
+                final toTaskType = _listData[listIndex].taskType;
 
-          _manageDropTask(item.id!, fromTaskType, toTaskType);
+                await _manageDropTask(item.id!, fromTaskType, toTaskType);
+
+                Navigator.of(appNavigatorKey.currentContext!).pop();
+              });
         },
         onTapItem:
             (int? listIndex, int? itemIndex, BoardItemState? state) async {},
@@ -386,7 +396,7 @@ class DashboardView extends StatelessWidget {
                       if (taskType == TaskType.todo) ...{
                         MenuButton(
                           onMenuTapped: () async => await _beginTaskPopup(
-                            ctx: context,
+                            context: context,
                             taskId: task.id!,
                           ),
                           menuText: StringConstants.beginTask,
@@ -397,7 +407,7 @@ class DashboardView extends StatelessWidget {
                         MenuButton(
                           onMenuTapped: () async {
                             await _completeTaskPopup(
-                                ctx: context, taskId: task.id!);
+                                context: context, taskId: task.id!);
                           },
                           menuText: StringConstants.completeTask,
                         ),
@@ -417,7 +427,7 @@ class DashboardView extends StatelessWidget {
                         MenuButton(
                           onMenuTapped: () async {
                             await _reopenTaskPopup(
-                              ctx: context,
+                              context: context,
                               taskId: task.id!,
                             );
                           },
@@ -436,11 +446,9 @@ class DashboardView extends StatelessWidget {
   }
 
   Future<void> _beginTaskPopup({
-    BuildContext? ctx,
+    required BuildContext context,
     required String taskId,
   }) async {
-    final context = ctx ?? appNavigatorKey.currentContext!;
-
     await showPopUp(
         title: StringConstants.popupTitle,
         subTitle: StringConstants.popupSubTitle,
@@ -449,100 +457,38 @@ class DashboardView extends StatelessWidget {
         onPressLeft: Navigator.of(context).pop,
         onPressRight: () async {
           Navigator.of(context).pop();
-          if (ctx != null) {
-            Navigator.of(context).pop();
-          }
-          try {
-            await Injector.resolve<LocalDataUseCase>().insertTaskTime(
-              taskId: taskId,
-              startTime: DateTime.now().toString(),
-            );
+          Navigator.of(context).pop();
 
-            if (context.mounted) {
-              refreshBloc(context);
-            }
-          } catch (e) {
-            if (context.mounted) {
-              showBottomMessage(context, message: '$e');
-            }
-          }
+          await performBeginTask(taskId: taskId);
         });
+  }
+
+  Future<void> performBeginTask({
+    BuildContext? ctx,
+    required String taskId,
+  }) async {
+    final context = ctx ?? appNavigatorKey.currentContext!;
+
+    try {
+      await Injector.resolve<LocalDataUseCase>().insertTaskTime(
+        taskId: taskId,
+        startTime: DateTime.now().toString(),
+      );
+
+      if (context.mounted) {
+        refreshBloc(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showBottomMessage(context, message: '$e');
+      }
+    }
   }
 
   Future<void> _completeTaskPopup({
-    BuildContext? ctx,
+    required BuildContext context,
     required String taskId,
   }) async {
-    final context = ctx ?? appNavigatorKey.currentContext!;
-
-    await showPopUp(
-        title: StringConstants.popupTitle,
-        subTitle: StringConstants.popupSubTitle,
-        leftButtonText: StringConstants.cancel,
-        rightButtonText: StringConstants.confirm,
-        onPressLeft: Navigator.of(context).pop,
-        onPressRight: () async {
-          if (context.mounted) {
-            Navigator.of(context).pop();
-            if (ctx != null) {
-              Navigator.of(context).pop();
-            }
-            try {
-              final localResponse = await Injector.resolve<LocalDataUseCase>()
-                  .getTaskTimerById(taskId);
-
-              print('startTime $localResponse');
-
-              final ongoingTasks = (localResponse as List)
-                  .map((task) => TasksStartTime.fromJson(task))
-                  .toList();
-
-              final startTime = DateTime.parse(ongoingTasks.last.startTime!);
-
-              print('startTime $startTime');
-
-              final durationInMinutes =
-                  DateTime.now().difference(startTime).inMinutes;
-
-              print('durationInMinutes $durationInMinutes');
-
-              final durationMap = {
-                'duration': durationInMinutes,
-                'duration_unit': 'minute'
-              };
-
-              await Injector.resolve<TaskUseCase>().updateTask(
-                taskId: taskId,
-                inputData: durationMap,
-              );
-
-              print('Task updated ');
-
-              await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
-                taskId: taskId,
-                endTime: DateTime.now().toString(),
-              );
-
-              print('Task completed');
-
-              if (context.mounted) {
-                refreshBloc(context);
-              }
-            } catch (e) {
-              if (context.mounted) {
-                showBottomMessage(context, message: '$e');
-              }
-            }
-          }
-        });
-  }
-
-  Future<void> _reopenTaskPopup({
-    BuildContext? ctx,
-    required String taskId,
-  }) async {
-    final context = ctx ?? appNavigatorKey.currentContext!;
-
     await showPopUp(
         title: StringConstants.popupTitle,
         subTitle: StringConstants.popupSubTitle,
@@ -551,20 +497,88 @@ class DashboardView extends StatelessWidget {
         onPressLeft: Navigator.of(context).pop,
         onPressRight: () async {
           Navigator.of(context).pop();
-          if (ctx != null) {
-            Navigator.of(context).pop();
-          }
-          try {
-            await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
-            if (context.mounted) {
-              refreshBloc(context);
-            }
-          } catch (e) {
-            if (context.mounted) {
-              showBottomMessage(context, message: '$e');
-            }
-          }
+          Navigator.of(context).pop();
+          await performCompleteTask(taskId: taskId);
         });
+  }
+
+  Future<void> performCompleteTask({
+    BuildContext? ctx,
+    required String taskId,
+  }) async {
+    final context = ctx ?? appNavigatorKey.currentContext!;
+
+    try {
+      final localResponse =
+          await Injector.resolve<LocalDataUseCase>().getTaskTimerById(taskId);
+
+      final ongoingTasks = (localResponse as List)
+          .map((task) => TasksStartTime.fromJson(task))
+          .toList();
+
+      final startTime = DateTime.parse(ongoingTasks.last.startTime!);
+
+      final durationInMinutes = DateTime.now().difference(startTime).inMinutes;
+
+      final durationMap = {
+        'duration': durationInMinutes,
+        'duration_unit': 'minute'
+      };
+
+      await Injector.resolve<TaskUseCase>().updateTask(
+        taskId: taskId,
+        inputData: durationMap,
+      );
+
+      await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
+        taskId: taskId,
+        endTime: DateTime.now().toString(),
+      );
+
+      if (context.mounted) {
+        refreshBloc(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showBottomMessage(context, message: '$e');
+      }
+    }
+  }
+
+  Future<void> _reopenTaskPopup({
+    required BuildContext context,
+    required String taskId,
+  }) async {
+    await showPopUp(
+        title: StringConstants.popupTitle,
+        subTitle: StringConstants.popupSubTitle,
+        leftButtonText: StringConstants.cancel,
+        rightButtonText: StringConstants.confirm,
+        onPressLeft: Navigator.of(context).pop,
+        onPressRight: () async {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+
+          await performReopenTask(taskId: taskId);
+        });
+  }
+
+  Future<void> performReopenTask({
+    BuildContext? ctx,
+    required String taskId,
+  }) async {
+    final context = ctx ?? appNavigatorKey.currentContext!;
+
+    try {
+      await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
+      if (context.mounted) {
+        refreshBloc(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showBottomMessage(context, message: '$e');
+      }
+    }
   }
 
   Future<void> _addCommentPopup({
@@ -587,7 +601,8 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  _openBottomSheetForViewComments({BuildContext? ctx, required String taskId}) {
+  void _openBottomSheetForViewComments(
+      {BuildContext? ctx, required String taskId}) {
     final context = ctx ?? appNavigatorKey.currentContext!;
 
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -638,7 +653,8 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  _deleteCommentPopup(BuildContext context, String commentId) async {
+  Future<void> _deleteCommentPopup(
+      BuildContext context, String commentId) async {
     await showPopUp(
         title: StringConstants.popupTitle,
         subTitle: StringConstants.popupSubTitle,
@@ -665,35 +681,38 @@ class DashboardView extends StatelessWidget {
         });
   }
 
-  void _manageDropTask(
-      String taskId, TaskType fromTaskType, TaskType toTaskType) {
+  Future<void> _manageDropTask(
+      String taskId, TaskType fromTaskType, TaskType toTaskType) async {
     if (fromTaskType == TaskType.todo) {
       if (toTaskType == TaskType.ongoing) {
-        _beginTaskPopup(taskId: taskId);
+        await performBeginTask(taskId: taskId);
       }
       if (toTaskType == TaskType.completed) {
         /// Todo  : check start time
-        _completeTaskPopup(taskId: taskId);
+        await performBeginTask(taskId: taskId);
+        await performCompleteTask(taskId: taskId);
       }
       return;
     }
 
     if (fromTaskType == TaskType.ongoing) {
       if (toTaskType == TaskType.todo) {
-        _reopenTaskPopup(taskId: taskId);
+        await performReopenTask(taskId: taskId);
       }
       if (toTaskType == TaskType.completed) {
-        _completeTaskPopup(taskId: taskId);
+        await performCompleteTask(taskId: taskId);
       }
       return;
     }
 
     if (fromTaskType == TaskType.completed) {
       if (toTaskType == TaskType.todo) {
-        _reopenTaskPopup(taskId: taskId);
+        await performReopenTask(taskId: taskId);
       }
       if (toTaskType == TaskType.ongoing) {
         /// Todo  : clear end time, update start time
+        await performReopenTask(taskId: taskId);
+        await performBeginTask(taskId: taskId);
       }
       return;
     }
