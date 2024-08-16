@@ -92,7 +92,12 @@ class TimerClockState extends State<TimerClock> {
                 height: 20,
               ),
               if (_timerText != null) ...{
-                StyledText.headlineLarge(_timerText!)
+                Text(
+                  _timerText!,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: ColorConstants.colorBlack,
+                      ),
+                )
               },
               if (widget.taskType == TaskType.todo) ...{
                 Padding(
