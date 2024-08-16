@@ -15,27 +15,3 @@ class FilerTasksEvent extends TaskEvent {
 
   FilerTasksEvent({required this.allTasks});
 }
-
-class BeginTasksEvent extends TaskEvent {
-  final String taskId;
-
-  BeginTasksEvent({
-    required this.taskId,
-  });
-}
-
-class CompleteTasksEvent extends TaskEvent {
-  final String taskId;
-
-  CompleteTasksEvent({
-    required this.taskId,
-  });
-}
-
-class ReopenTasksEvent extends TaskEvent {
-  final String taskId;
-
-  ReopenTasksEvent({
-    required this.taskId,
-  });
-}

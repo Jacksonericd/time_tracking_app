@@ -280,7 +280,7 @@ class DashboardView extends StatelessWidget {
       header: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: StyledText.bodyLarge(list.name),
+          child: StyledText.bodyLarge(list.name, FontWeight.w800),
         )
       ],
       items: items,
