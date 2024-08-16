@@ -5,8 +5,11 @@ abstract class LocalDataAbstract {
 
   Future<dynamic> getAllTaskTimer();
 
-  Future<void> insertTaskTime(
-      {required String taskId, required String startTime});
+  Future<void> insertTaskTime({
+    required String taskId,
+    required String startTime,
+    String? endTime,
+  });
 
   Future<void> updateTaskStartTime(
       {required String taskId, required String startTime});

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:time_tracking_app/core/services/local_storage/local_storage_service.dart';
@@ -15,8 +16,6 @@ class AppLocalStorageService implements LocalStorageService {
       await initDatabase();
       return _database!;
     } catch (e) {
-      print('${e.runtimeType} $e');
-
       if (e.runtimeType.toString() == 'LateError') {
         await initDatabase();
         return _database!;
@@ -38,17 +37,10 @@ class AppLocalStorageService implements LocalStorageService {
       onCreate: _createDatabase,
     );
 
-    print('initDatabase completed');
+    log('initDatabase completed');
   }
 
   Future<void> _createDatabase(Database db, int version) async {
-    // await db.execute('''
-    //     CREATE TABLE task_list (
-    //       id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //       task_details TEXT NOT NULL,
-    //     )
-    //   ''');
-
     await db.execute('''
         CREATE TABLE task_timer (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,6 +78,7 @@ class AppLocalStorageService implements LocalStorageService {
   Future<void> insertTaskTime({
     required String taskId,
     required String startTime,
+    String? endTime,
   }) async {
     final db = await database;
 
@@ -94,6 +87,7 @@ class AppLocalStorageService implements LocalStorageService {
       {
         'task_id': taskId,
         'start_time': startTime,
+        'end_time': endTime,
       },
     );
   }

@@ -477,17 +477,31 @@ class DashboardView extends StatelessWidget {
     final context = ctx ?? appNavigatorKey.currentContext!;
 
     try {
-      final localResponse =
-          await Injector.resolve<LocalDataUseCase>().getTaskTimerById(taskId);
-
-      final ongoingTasks = (localResponse as List)
-          .map((task) => TasksStartTime.fromJson(task))
-          .toList();
-
-      final startTime = DateTime.parse(ongoingTasks.last.startTime!);
-
       await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
         taskId: taskId,
+        endTime: DateTime.now().toString(),
+      );
+
+      if (context.mounted) {
+        refreshTasksFromBloc(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showBottomMessage(context, message: '$e');
+      }
+    }
+  }
+
+  Future<void> performDirectCompleteTask({
+    BuildContext? ctx,
+    required String taskId,
+  }) async {
+    final context = ctx ?? appNavigatorKey.currentContext!;
+
+    try {
+      await Injector.resolve<LocalDataUseCase>().insertTaskTime(
+        taskId: taskId,
+        startTime: DateTime.now().toString(),
         endTime: DateTime.now().toString(),
       );
 
@@ -509,6 +523,31 @@ class DashboardView extends StatelessWidget {
 
     try {
       await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
+
+      if (context.mounted) {
+        refreshTasksFromBloc(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showBottomMessage(context, message: '$e');
+      }
+    }
+  }
+
+  Future<void> performRestartTask({
+    BuildContext? ctx,
+    required String taskId,
+  }) async {
+    final context = ctx ?? appNavigatorKey.currentContext!;
+
+    try {
+      await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
+
+      await Injector.resolve<LocalDataUseCase>().insertTaskTime(
+        taskId: taskId,
+        startTime: DateTime.now().toString(),
+      );
+
       if (context.mounted) {
         refreshTasksFromBloc(context);
       }
@@ -632,9 +671,7 @@ class DashboardView extends StatelessWidget {
         await performBeginTask(taskId: taskId);
       }
       if (toTaskType == TaskType.completed) {
-        /// Todo  : check start time
-        await performBeginTask(taskId: taskId);
-        await performCompleteTask(taskId: taskId);
+        await performDirectCompleteTask(taskId: taskId);
       }
       return;
     }
@@ -654,9 +691,7 @@ class DashboardView extends StatelessWidget {
         await performReopenTask(taskId: taskId);
       }
       if (toTaskType == TaskType.ongoing) {
-        /// Todo  : clear end time, update start time
-        await performReopenTask(taskId: taskId);
-        await performBeginTask(taskId: taskId);
+        await performRestartTask(taskId: taskId);
       }
       return;
     }
