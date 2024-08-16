@@ -11,7 +11,6 @@ import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/enums/task_type.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
-import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 import 'package:time_tracking_app/core/presentation/widgets/asset_image.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/menu_button.dart';
@@ -21,10 +20,8 @@ import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 import 'package:time_tracking_app/data/model/board_model.dart';
 import 'package:time_tracking_app/data/model/task.dart';
-import 'package:time_tracking_app/data/model/task_start_time.dart';
 import 'package:time_tracking_app/domain/usecases/comment_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
-import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
 import 'package:time_tracking_app/presentation/bloc/task_cubit/task_cubit.dart';
 import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_comment.dart';
@@ -38,8 +35,6 @@ import 'timer_clock.dart';
 //ignore: must_be_immutable
 class DashboardView extends StatelessWidget {
   DashboardView({super.key});
-
-  static const projectId = String.fromEnvironment('project_id');
 
   List<Task> allTasks = [];
 
@@ -209,7 +204,6 @@ class DashboardView extends StatelessWidget {
               child: Container(
                   color: Theme.of(context).primaryColorLight,
                   padding: const EdgeInsets.symmetric(
-                    vertical: 10,
                     horizontal: 24,
                   ),
                   child: BoardView(
@@ -273,13 +267,15 @@ class DashboardView extends StatelessWidget {
     }
 
     return BoardList(
-      backgroundColor: Theme.of(appNavigatorKey.currentContext!)
-          .primaryColor
-          .withOpacity(0.1),
+      // backgroundColor: Theme.of(appNavigatorKey.currentContext!)
+      //     .primaryColor
+      //     .withOpacity(0.1),
+      backgroundColor:
+          Theme.of(appNavigatorKey.currentContext!).scaffoldBackgroundColor,
       draggable: true,
-      headerBackgroundColor: Theme.of(appNavigatorKey.currentContext!)
-          .primaryColor
-          .withOpacity(0.6),
+      headerBackgroundColor:
+          Theme.of(appNavigatorKey.currentContext!).primaryColor,
+      // .withOpacity(0.6),
       onDropList: _handleDropList,
       header: [
         Padding(
@@ -390,10 +386,6 @@ class DashboardView extends StatelessWidget {
                       vSpacingFive,
                       if (taskType == TaskType.todo) ...{
                         MenuButton(
-                          // onMenuTapped: () async => await _beginTaskPopup(
-                          //   context: context,
-                          //   taskId: task.id!,
-                          // ),
                           onMenuTapped: () async {
                             Navigator.of(context).pop();
 
