@@ -62,7 +62,6 @@ class MenuViewState extends State<MenuView> {
             menuItemIcon: Icons.add_box_rounded,
           ),
           vSpacingTen,
-          vSpacingTen,
           MenuItem(
             menuItemText: StringConstants.darkMode,
             onMenuItemClicked: () {},
