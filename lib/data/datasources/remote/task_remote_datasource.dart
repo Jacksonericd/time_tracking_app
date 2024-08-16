@@ -82,12 +82,9 @@ class TaskRemoteDataSource {
       ]
     };
 
-    print(jsonEncode(body));
-
     dioClient.options.headers.addAll({
       "Content-Type": "application/x-www-form-urlencoded",
     });
-
 
     final resp = await dioClient.post(url, data: body);
 
