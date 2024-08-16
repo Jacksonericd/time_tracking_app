@@ -22,10 +22,59 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   void _init(TaskEvent event, Emitter<TaskState> emit) async {
     emit(TasksLoadingState());
 
+    if (event is FilerTasksEvent) {
+      final tasks = event.allTasks;
+
+      try {
+        dynamic localResponse =
+            await Injector.resolve<LocalDataUseCase>().getAllTaskTimer();
+
+        final allLocalTasks = (localResponse as List)
+            .map((task) => TasksStartTime.fromJson(task))
+            .toList();
+
+        final ongoingTaskIds = allLocalTasks.map((item) {
+          if (item.endTime == null) {
+            return item.taskId;
+          }
+        }).toList();
+
+        ongoingTaskIds.removeWhere((item) => item == null);
+
+        final completedTaskIds = allLocalTasks.map((item) {
+          if (item.endTime != null) {
+            return item.taskId;
+          }
+        }).toList();
+
+        completedTaskIds.removeWhere((item) => item == null);
+
+        final toDoListFiltered = tasks
+            .where((item) =>
+                !ongoingTaskIds.contains(item.id!) &&
+                !completedTaskIds.contains(item.id!))
+            .toList();
+
+        final onGoingListFiltered =
+            tasks.where((item) => ongoingTaskIds.contains(item.id!)).toList();
+
+        final completedListFiltered =
+            tasks.where((item) => completedTaskIds.contains(item.id!)).toList();
+
+        emit(TasksLoadedState(
+          taskTodoList: toDoListFiltered,
+          taskOngoingList: onGoingListFiltered,
+          taskCompList: completedListFiltered,
+        ));
+      } catch (e) {
+        emit(TasksErrorState(error: '$e'));
+      }
+    }
+
     if (event is GetTasksByProjectEvent) {
       try {
         dynamic response =
-            await Injector.resolve<TaskUseCase>().getTasksByProjectAndSection(
+            await Injector.resolve<TaskUseCase>().getTasksByProjectId(
           projectId: event.projectId,
         );
 

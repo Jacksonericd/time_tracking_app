@@ -26,6 +26,7 @@ import 'package:time_tracking_app/domain/usecases/comment_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/local_data_usecase.dart';
 import 'package:time_tracking_app/domain/usecases/task_usecase.dart';
 import 'package:time_tracking_app/presentation/bloc/task/task_bloc.dart';
+import 'package:time_tracking_app/presentation/bloc/task_cubit/task_cubit.dart';
 import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_comment.dart';
 import 'package:time_tracking_app/presentation/screens/comments/view/view_comments.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
@@ -39,6 +40,8 @@ class DashboardView extends StatelessWidget {
   DashboardView({super.key});
 
   static const projectId = String.fromEnvironment('project_id');
+
+  List<Task> allTasks = [];
 
   List<BoardListModel> _listData = [];
 
@@ -65,6 +68,8 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    allTasks = context.read<TaskCubit>().getListData();
+
     refreshBloc(context);
 
     return AppScaffold(
@@ -91,8 +96,7 @@ class DashboardView extends StatelessWidget {
   }
 
   void refreshBloc(BuildContext context) {
-    BlocProvider.of<TaskBloc>(context)
-        .add(GetTasksByProjectEvent(projectId: projectId));
+    BlocProvider.of<TaskBloc>(context).add(FilerTasksEvent(allTasks: allTasks));
   }
 
   Widget displayBoardData(TaskState state, BuildContext context) {
@@ -235,25 +239,15 @@ class DashboardView extends StatelessWidget {
         onStartDragItem:
             (int? listIndex, int? itemIndex, BoardItemState? state) {},
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
-            int? oldItemIndex, BoardItemState? state) {
-          showPopUp(
-              title: StringConstants.popupTitle,
-              subTitle: StringConstants.popupSubTitle,
-              leftButtonText: StringConstants.cancel,
-              rightButtonText: StringConstants.confirm,
-              onPressLeft: Navigator.of(appNavigatorKey.currentContext!).pop,
-              onPressRight: () async {
-                var item = _listData[oldListIndex!].items[oldItemIndex!];
-                _listData[oldListIndex].items.removeAt(oldItemIndex);
-                _listData[listIndex!].items.insert(itemIndex!, item);
+            int? oldItemIndex, BoardItemState? state) async {
+          var item = _listData[oldListIndex!].items[oldItemIndex!];
+          _listData[oldListIndex].items.removeAt(oldItemIndex);
+          _listData[listIndex!].items.insert(itemIndex!, item);
 
-                final fromTaskType = _listData[oldListIndex].taskType;
-                final toTaskType = _listData[listIndex].taskType;
+          final fromTaskType = _listData[oldListIndex].taskType;
+          final toTaskType = _listData[listIndex].taskType;
 
-                await _manageDropTask(item.id!, fromTaskType, toTaskType);
-
-                Navigator.of(appNavigatorKey.currentContext!).pop();
-              });
+          await _manageDropTask(item.id!, fromTaskType, toTaskType);
         },
         onTapItem:
             (int? listIndex, int? itemIndex, BoardItemState? state) async {},

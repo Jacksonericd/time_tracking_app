@@ -9,6 +9,7 @@ import 'package:time_tracking_app/core/presentation/widgets/loading_dialog.dart'
 import 'package:time_tracking_app/core/presentation/widgets/show_bottom_message.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/presentation/bloc/form_bloc/add_edit_comment_form_bloc.dart';
+import 'package:time_tracking_app/presentation/bloc/task_cubit/task_cubit.dart';
 
 class AddEditComment extends StatelessWidget {
   const AddEditComment({
@@ -48,7 +49,7 @@ class AddEditComment extends StatelessWidget {
           onSubmissionFailed: (context, state) {
             LoadingDialog.hide(context);
           },
-          onSuccess: (context, state) {
+          onSuccess: (context, state) async {
             LoadingDialog.hide(context);
 
             showBottomMessage(
@@ -57,7 +58,11 @@ class AddEditComment extends StatelessWidget {
               success: true,
             );
 
-            Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
+            await context.read<TaskCubit>().setCubitDataFromApi();
+
+            if(context.mounted) {
+              Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
+            }
           },
           onFailure: (context, state) {
             LoadingDialog.hide(context);

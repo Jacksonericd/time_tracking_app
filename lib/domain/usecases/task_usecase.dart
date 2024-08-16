@@ -5,11 +5,11 @@ class TaskUseCase {
 
   TaskUseCase(this.taskAbstract);
 
-  Future<dynamic> getTasksByProjectAndSection({
+  Future<dynamic> getTasksByProjectId({
     required String projectId,
     String? sectionId,
   }) =>
-      taskAbstract.getTasksByProjectAndSection(
+      taskAbstract.getTasksByProjectId(
         projectId: projectId,
         sectionId: sectionId,
       );

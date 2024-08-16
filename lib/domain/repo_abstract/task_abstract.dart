@@ -1,5 +1,5 @@
 abstract class TaskAbstract {
-  Future<dynamic> getTasksByProjectAndSection({
+  Future<dynamic> getTasksByProjectId({
     required String projectId,
     String? sectionId,
   });

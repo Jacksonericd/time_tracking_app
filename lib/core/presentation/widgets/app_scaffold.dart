@@ -11,6 +11,7 @@ class AppScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.scaffoldBackgroundColor,
+    this.bottomNavigationBar,
   });
 
   final Widget scaffoldBody;
@@ -20,6 +21,7 @@ class AppScaffold extends StatelessWidget {
   final FloatingActionButton? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Color? scaffoldBackgroundColor;
+  final Widget? bottomNavigationBar;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class AppScaffold extends StatelessWidget {
           FloatingActionButtonLocation.centerDocked,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: scaffoldBody,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }
