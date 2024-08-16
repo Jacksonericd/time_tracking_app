@@ -31,9 +31,9 @@ import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_co
 import 'package:time_tracking_app/presentation/screens/comments/view/view_comments.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/widgets/task_card.dart';
 
-import '../widgets/link_text.dart';
-import '../widgets/task_summary_card.dart';
-import '../widgets/timer_clock.dart';
+import 'link_text.dart';
+import 'task_summary_card.dart';
+import 'timer_clock.dart';
 
 //ignore: must_be_immutable
 class DashboardView extends StatelessWidget {
@@ -72,26 +72,17 @@ class DashboardView extends StatelessWidget {
 
     refreshTasksFromBloc(context);
 
-    return AppScaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.add),
-        onPressed: () =>
-            Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      scaffoldBody: BlocBuilder<TaskBloc, TaskState>(
-        builder: (context, state) {
-          return BlocStateToWidget(
-            message: state.message ?? '',
-            blocStates: state.blocStates,
-            child: displayBoardData(
-              state,
-              context,
-            ),
-          );
-        },
-      ),
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        return BlocStateToWidget(
+          message: state.message ?? '',
+          blocStates: state.blocStates,
+          child: displayBoardData(
+            state,
+            context,
+          ),
+        );
+      },
     );
   }
 

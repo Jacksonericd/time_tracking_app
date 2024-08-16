@@ -3,7 +3,8 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/presentation/screens/comments/view/add_edit_comment.dart';
 import 'package:time_tracking_app/presentation/screens/dashboard/view/dashboard_tab_view.dart';
-import 'package:time_tracking_app/presentation/screens/dashboard/view/dashboard_view.dart';
+import 'package:time_tracking_app/presentation/screens/dashboard/widgets/dashboard_view.dart';
+import 'package:time_tracking_app/presentation/screens/general_instructions/view/general_instructions_view.dart';
 import 'package:time_tracking_app/presentation/screens/offline/view/offline_view.dart';
 import 'package:time_tracking_app/presentation/screens/splash_screen/view/splash_view.dart';
 import 'package:time_tracking_app/presentation/screens/tasks/view/add_edit_task.dart';
@@ -35,7 +36,6 @@ class AppRoutes {
         return const SplashView();
       case RouteConstants.dashboardPath:
         return const DashboardTabView();
-        return DashboardView();
       case RouteConstants.taskListPath:
         return TaskList(
           sectionId: args.toString(),
@@ -59,7 +59,8 @@ class AppRoutes {
           isEditMode: true,
           commentId: props['comment-id'],
         );
-
+      case RouteConstants.generalInstructions:
+        return const GeneralInstructionsView();
       default:
         return const SplashView();
     }

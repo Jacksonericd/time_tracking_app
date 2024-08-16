@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracking_app/core/constants/route_constants.dart';
+import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/presentation/widgets/app_scaffold.dart';
 
-import 'dashboard_view.dart';
+import '../widgets/dashboard_view.dart';
+import '../menu/widgets/menu_view.dart';
 
 class DashboardTabView extends StatefulWidget {
   const DashboardTabView({super.key});
@@ -22,16 +25,26 @@ class _DashboardTabViewState extends State<DashboardTabView> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      scaffoldBody: _selectedIndex == 0 ? DashboardView() : DashboardView(),
+      scaffoldBody: _selectedIndex == 0 ? DashboardView() : const MenuView(),
+      floatingActionButton: _selectedIndex == 0  ? FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(Icons.add),
+        onPressed: () =>
+            Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
+      ) : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        backgroundColor: Theme.of(context).primaryColor,
+        selectedItemColor: Theme.of(context).primaryColorLight,
+        unselectedItemColor: Theme.of(context).dividerColor,
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: StringConstants.home,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.menu),
+            label: StringConstants.menu,
           ),
         ],
         currentIndex: _selectedIndex,
