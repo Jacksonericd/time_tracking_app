@@ -46,9 +46,9 @@ This app is built using the flutter version 3.22.2
 
 # File size : 
     approximately - 22MB
-    
+
 # Video recording :
-   https://drive.google.com/file/d/14w8qjpM7m25KzzPMTp423JY9yw7pL_JY/view?usp=sharing
+    [Watch the video](https://drive.google.com/file/d/14w8qjpM7m25KzzPMTp423JY9yw7pL_JY/view?usp=sharing)
 
 # Few screenshots : 
 <img width="328" alt="Screenshot 2024-08-16 at 7 06 54 PM" src="https://github.com/user-attachments/assets/c97097ee-a78b-4b88-abd5-b5b035a3a32e">
