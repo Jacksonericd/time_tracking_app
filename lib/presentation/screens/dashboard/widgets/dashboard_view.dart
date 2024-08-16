@@ -300,7 +300,6 @@ class DashboardView extends StatelessWidget {
     TaskType taskType,
   ) {
     final context = appNavigatorKey.currentContext!;
-    final deviceHeight = MediaQuery.of(context).size.height;
 
     showModalBottomSheet(
       context: context,
@@ -382,10 +381,16 @@ class DashboardView extends StatelessWidget {
                       vSpacingFive,
                       if (taskType == TaskType.todo) ...{
                         MenuButton(
-                          onMenuTapped: () async => await _beginTaskPopup(
-                            context: context,
-                            taskId: task.id!,
-                          ),
+                          // onMenuTapped: () async => await _beginTaskPopup(
+                          //   context: context,
+                          //   taskId: task.id!,
+                          // ),
+                          onMenuTapped: () async {
+                            Navigator.of(context).pop();
+
+                            await _manageDropTask(
+                                task.id!, TaskType.todo, TaskType.ongoing);
+                          },
                           menuText: StringConstants.beginTask,
                         ),
                         vSpacingFive,
@@ -393,8 +398,10 @@ class DashboardView extends StatelessWidget {
                       if (taskType == TaskType.ongoing) ...{
                         MenuButton(
                           onMenuTapped: () async {
-                            await _completeTaskPopup(
-                                context: context, taskId: task.id!);
+                            Navigator.of(context).pop();
+
+                            await _manageDropTask(
+                                task.id!, TaskType.ongoing, TaskType.completed);
                           },
                           menuText: StringConstants.completeTask,
                         ),
@@ -413,10 +420,10 @@ class DashboardView extends StatelessWidget {
                         vSpacingFive,
                         MenuButton(
                           onMenuTapped: () async {
-                            await _reopenTaskPopup(
-                              context: context,
-                              taskId: task.id!,
-                            );
+                            Navigator.of(context).pop();
+
+                            await _manageDropTask(
+                                task.id!, TaskType.completed, TaskType.todo);
                           },
                           menuText: StringConstants.reopenTask,
                         ),
@@ -430,24 +437,6 @@ class DashboardView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _beginTaskPopup({
-    required BuildContext context,
-    required String taskId,
-  }) async {
-    await showPopUp(
-        title: StringConstants.popupTitle,
-        subTitle: StringConstants.popupSubTitle,
-        leftButtonText: StringConstants.cancel,
-        rightButtonText: StringConstants.confirm,
-        onPressLeft: Navigator.of(context).pop,
-        onPressRight: () async {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-
-          await performBeginTask(taskId: taskId);
-        });
   }
 
   Future<void> performBeginTask({
@@ -470,23 +459,6 @@ class DashboardView extends StatelessWidget {
         showBottomMessage(context, message: '$e');
       }
     }
-  }
-
-  Future<void> _completeTaskPopup({
-    required BuildContext context,
-    required String taskId,
-  }) async {
-    await showPopUp(
-        title: StringConstants.popupTitle,
-        subTitle: StringConstants.popupSubTitle,
-        leftButtonText: StringConstants.cancel,
-        rightButtonText: StringConstants.confirm,
-        onPressLeft: Navigator.of(context).pop,
-        onPressRight: () async {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-          await performCompleteTask(taskId: taskId);
-        });
   }
 
   Future<void> performCompleteTask({
@@ -530,24 +502,6 @@ class DashboardView extends StatelessWidget {
         showBottomMessage(context, message: '$e');
       }
     }
-  }
-
-  Future<void> _reopenTaskPopup({
-    required BuildContext context,
-    required String taskId,
-  }) async {
-    await showPopUp(
-        title: StringConstants.popupTitle,
-        subTitle: StringConstants.popupSubTitle,
-        leftButtonText: StringConstants.cancel,
-        rightButtonText: StringConstants.confirm,
-        onPressLeft: Navigator.of(context).pop,
-        onPressRight: () async {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-
-          await performReopenTask(taskId: taskId);
-        });
   }
 
   Future<void> performReopenTask({
@@ -658,7 +612,11 @@ class DashboardView extends StatelessWidget {
                 commentId: commentId,
               );
 
-              refreshTasksFromBloc(context);
+              if (context.mounted) {
+                await context.read<TaskCubit>().setCubitDataFromApi();
+
+                refreshTasksFromBloc(context);
+              }
             } catch (e) {
               if (context.mounted) {
                 showBottomMessage(context, message: '$e');

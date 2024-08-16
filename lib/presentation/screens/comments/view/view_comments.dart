@@ -61,7 +61,7 @@ class ViewComments extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             margin: const EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(15.0),
               boxShadow: const [
                 BoxShadow(
