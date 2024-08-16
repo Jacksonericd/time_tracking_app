@@ -9,12 +9,15 @@ import 'package:time_tracking_app/presentation/theme/app_theme.dart';
 import 'core/config/app_routes.dart';
 import 'core/config/navigator_key.dart';
 import 'core/constants/string_constants.dart';
-import 'core/injector/injector.dart';
 import 'core/injector/injector_config.dart';
-import 'core/services/shared_preference_service/preference_service.dart';
+import 'core/utils/shared_prefernces_utils.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   InjectorConfig.setup();
+
+  await PreferenceUtils.init();
 
   runApp(const TimeTrackingApp());
 }
@@ -22,46 +25,36 @@ void main() {
 class TimeTrackingApp extends StatelessWidget {
   const TimeTrackingApp({super.key});
 
-  Future<ThemeMode> _getThemeModeStored() async {
-    final mode =
-        await Injector.resolve<PreferenceService>().getString('theme-mode');
-
-    return mode != null ? mode as ThemeMode : ThemeMode.system;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getThemeModeStored(),
-      builder: (context, snapshot) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => TaskBloc()),
-            BlocProvider(
-                create: (context) => TaskCubit()..setCubitDataFromApi()),
-            BlocProvider(
-                create: (context) => ThemeCubit()
-                  ..setThemeMode(snapshot.data ?? ThemeMode.system))
-          ],
-          child: BlocBuilder<TaskCubit, TaskCubitState>(
-            builder: (context, state) {
-              return BlocBuilder<ThemeCubit, ThemeState>(
-                builder: (context, state) {
-                  return MaterialApp(
-                    title: StringConstants.appName,
-                    initialRoute: RouteConstants.splashPath,
-                    onGenerateRoute: AppRoutes().generateRoute,
-                    themeMode: ThemeMode.light,
-                    darkTheme: CustomThemeData.darkTheme,
-                    theme: CustomThemeData.lightTheme,
-                    navigatorKey: appNavigatorKey,
-                  );
-                },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TaskBloc()),
+        BlocProvider(create: (context) => TaskCubit()..setCubitDataFromApi()),
+        BlocProvider(create: (context) => ThemeCubit())
+      ],
+      child: BlocBuilder<TaskCubit, TaskCubitState>(
+        builder: (context, state) {
+          return BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, themeState) {
+              final currentTheme = themeState as ThemeLoadedState;
+
+              return MaterialApp(
+                title: StringConstants.appName,
+                initialRoute: RouteConstants.splashPath,
+                onGenerateRoute: AppRoutes().generateRoute,
+                themeMode: currentTheme.themeMode == StringConstants.light
+                    ? ThemeMode.light
+                    : ThemeMode.dark,
+                darkTheme: CustomThemeData.darkTheme,
+                theme: CustomThemeData.lightTheme,
+                navigatorKey: appNavigatorKey,
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
+    ;
   }
 }

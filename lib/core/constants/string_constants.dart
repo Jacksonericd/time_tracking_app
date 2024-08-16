@@ -52,7 +52,12 @@ class StringConstants {
       'Begin task to start the timer';
   static const String generalInstructions = 'General Instructions';
   static const String changeThemMode = 'Change Theme';
+  static const String darkMode = 'Dark Mode';
   static const String addNewTask = 'Add new task';
+  static const String dark = 'dark';
+  static const String light = 'light';
+  static const String system = 'system';
+
   static const List<Map> generalInstructionAll = [
     {
       'heading': 'Task and Comments',

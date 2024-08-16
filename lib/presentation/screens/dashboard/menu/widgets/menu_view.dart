@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:time_tracking_app/core/constants/color_constants.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/constants/route_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
-import 'package:time_tracking_app/core/presentation/widgets/menu_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
+import 'package:time_tracking_app/presentation/bloc/theme/theme_cubit.dart';
 
 import 'menu_item_button.dart';
 
-class MenuView extends StatelessWidget {
+class MenuView extends StatefulWidget {
   const MenuView({super.key});
 
+  @override
+  State<StatefulWidget> createState() => MenuViewState();
+}
+
+class MenuViewState extends State<MenuView> {
   Widget get vSpacing50 => const SizedBox(
         height: 50,
       );
@@ -23,6 +28,8 @@ class MenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentThemeMode = context.read<ThemeCubit>().getCurrentThemeMode();
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Column(
@@ -42,16 +49,9 @@ class MenuView extends StatelessWidget {
           vSpacingTen,
           MenuItem(
             menuItemText: StringConstants.generalInstructions,
-            onMenuItemClicked: () =>
-                Navigator.of(context).pushNamed(RouteConstants.generalInstructions),
+            onMenuItemClicked: () => Navigator.of(context)
+                .pushNamed(RouteConstants.generalInstructions),
             menuItemIcon: Icons.info,
-          ),
-          vSpacingTen,
-          vSpacingTen,
-          MenuItem(
-            menuItemText: StringConstants.changeThemMode,
-            onMenuItemClicked: () {},
-            menuItemIcon: Icons.dark_mode_rounded,
           ),
           vSpacingTen,
           vSpacingTen,
@@ -60,6 +60,22 @@ class MenuView extends StatelessWidget {
             onMenuItemClicked: () =>
                 Navigator.of(context).pushNamed(RouteConstants.addTaskPath),
             menuItemIcon: Icons.add_box_rounded,
+          ),
+          vSpacingTen,
+          vSpacingTen,
+          MenuItem(
+            menuItemText: StringConstants.darkMode,
+            onMenuItemClicked: () {},
+            menuItemIcon: Icons.dark_mode_rounded,
+            rightSideWidget: Switch(
+              value: currentThemeMode == StringConstants.dark,
+              onChanged: (bool value) {
+                context.read<ThemeCubit>().setThemeMode(
+                    value ? StringConstants.dark : StringConstants.light);
+
+                setState(() {});
+              },
+            ),
           ),
           vSpacingTen,
           vSpacingTen,

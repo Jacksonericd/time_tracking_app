@@ -2,7 +2,6 @@ import 'package:kiwi/kiwi.dart';
 import 'package:time_tracking_app/core/network/dio_client.dart';
 import 'package:time_tracking_app/core/services/local_storage/app_local_storage_service.dart';
 import 'package:time_tracking_app/core/services/local_storage/local_storage_service.dart';
-import 'package:time_tracking_app/core/services/shared_preference_service/app_preferences_service.dart';
 import 'package:time_tracking_app/data/datasources/local/app_local_datasource.dart';
 import 'package:time_tracking_app/data/datasources/remote/comment_remote_datasource.dart';
 import 'package:time_tracking_app/data/datasources/remote/task_remote_datasource.dart';
@@ -57,7 +56,6 @@ abstract class InjectorConfig {
 
   // ============ SERVICES ============
   @Register.singleton(LocalStorageService, from: AppLocalStorageService)
-  @Register.singleton(AppPreferencesService, from: AppPreferencesService)
   void _configureServices();
 
   // ============ NETWORK ============

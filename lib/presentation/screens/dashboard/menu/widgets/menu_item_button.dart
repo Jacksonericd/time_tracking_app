@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:time_tracking_app/core/constants/color_constants.dart';
-import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
 
 class MenuItem extends StatelessWidget {
@@ -9,17 +7,16 @@ class MenuItem extends StatelessWidget {
     required this.menuItemText,
     required this.onMenuItemClicked,
     required this.menuItemIcon,
+    this.rightSideWidget,
   });
 
   final String menuItemText;
   final IconData menuItemIcon;
   final VoidCallback onMenuItemClicked;
+  final Widget? rightSideWidget;
 
   @override
   Widget build(BuildContext context) {
-    final brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-
     return WidgetTap(
         widget: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -41,10 +38,11 @@ class MenuItem extends StatelessWidget {
                   )
                 ],
               ),
-              const Icon(
-                Icons.keyboard_arrow_right_rounded,
-                size: 25,
-              )
+              rightSideWidget ??
+                  const Icon(
+                    Icons.keyboard_arrow_right_rounded,
+                    size: 25,
+                  )
             ],
           ),
         ),
