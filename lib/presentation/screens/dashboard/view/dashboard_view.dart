@@ -70,7 +70,7 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     allTasks = context.read<TaskCubit>().getListData();
 
-    refreshBloc(context);
+    refreshTasksFromBloc(context);
 
     return AppScaffold(
       floatingActionButton: FloatingActionButton(
@@ -95,7 +95,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  void refreshBloc(BuildContext context) {
+  void refreshTasksFromBloc(BuildContext context) {
     BlocProvider.of<TaskBloc>(context).add(FilerTasksEvent(allTasks: allTasks));
   }
 
@@ -472,7 +472,7 @@ class DashboardView extends StatelessWidget {
       );
 
       if (context.mounted) {
-        refreshBloc(context);
+        refreshTasksFromBloc(context);
       }
     } catch (e) {
       if (context.mounted) {
@@ -532,7 +532,7 @@ class DashboardView extends StatelessWidget {
       );
 
       if (context.mounted) {
-        refreshBloc(context);
+        refreshTasksFromBloc(context);
       }
     } catch (e) {
       if (context.mounted) {
@@ -568,7 +568,7 @@ class DashboardView extends StatelessWidget {
     try {
       await Injector.resolve<LocalDataUseCase>().deleteTaskTime(taskId);
       if (context.mounted) {
-        refreshBloc(context);
+        refreshTasksFromBloc(context);
       }
     } catch (e) {
       if (context.mounted) {
@@ -667,7 +667,7 @@ class DashboardView extends StatelessWidget {
                 commentId: commentId,
               );
 
-              refreshBloc(context);
+              refreshTasksFromBloc(context);
             } catch (e) {
               if (context.mounted) {
                 showBottomMessage(context, message: '$e');
