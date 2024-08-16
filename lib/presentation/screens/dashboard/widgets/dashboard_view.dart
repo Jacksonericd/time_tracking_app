@@ -86,8 +86,10 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  void refreshTasksFromBloc(BuildContext context) {
-    BlocProvider.of<TaskBloc>(context).add(FilerTasksEvent(allTasks: allTasks));
+  Future<void> refreshTasksFromBloc(BuildContext context) async {
+    BlocProvider.of<TaskBloc>(context).add(FilerTasksEvent(
+      allTasks: allTasks,
+    ));
   }
 
   Widget displayBoardData(TaskState state, BuildContext context) {
@@ -603,7 +605,8 @@ class DashboardView extends StatelessWidget {
               if (context.mounted) {
                 await context.read<TaskCubit>().setCubitDataFromApi();
 
-                refreshTasksFromBloc(context);
+                Navigator.of(context)
+                    .popAndPushNamed(RouteConstants.dashboardPath);
               }
             } catch (e) {
               if (context.mounted) {
