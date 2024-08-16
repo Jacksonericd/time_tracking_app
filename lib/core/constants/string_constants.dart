@@ -74,5 +74,10 @@ class StringConstants {
       'detail':
           "The 'Completed' section displays the time spent on each task. The user needs to tap on the task card to view it. Moving a task back to 'Ongoing' restarts the timer, and the previously recorded time will be lost. Moving a task back to 'To Do' also clears the recorded time spent on the task."
     },
+    {
+      'heading': 'Local Data Persistence:',
+      'detail':
+          "You will lose all data, including tasks moved from 'To Do' to other sections and the timer details for all tasks."
+    },
   ];
 }
