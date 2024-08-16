@@ -25,8 +25,9 @@ class TaskSummaryCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: Theme.of(context).primaryColorLight),
+        borderRadius: BorderRadius.circular(10.0),
+        color: Theme.of(context).colorScheme.primaryContainer,
+      ),
       child: Column(
         children: [
           const SizedBox(

@@ -202,7 +202,7 @@ class DashboardView extends StatelessWidget {
                 topLeft: Radius.circular(30),
               ),
               child: Container(
-                  color: Theme.of(context).primaryColorLight,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                   ),
@@ -241,8 +241,6 @@ class DashboardView extends StatelessWidget {
         item: WidgetTap(
           onWidgetTap: () => openBottomSheetForTaskDetails(task, taskType),
           widget: TaskCard(
-            width: 100,
-            cardColor: ColorConstants.colorWhite,
             dividerColor: ColorConstants.colorWhite.withOpacity(0.10),
             task: task,
             onAddCommentTap: () => _addCommentPopup(taskId: task.id!),
@@ -267,11 +265,8 @@ class DashboardView extends StatelessWidget {
     }
 
     return BoardList(
-      // backgroundColor: Theme.of(appNavigatorKey.currentContext!)
-      //     .primaryColor
-      //     .withOpacity(0.1),
       backgroundColor:
-          Theme.of(appNavigatorKey.currentContext!).scaffoldBackgroundColor,
+          Theme.of(appNavigatorKey.currentContext!).colorScheme.tertiary,
       draggable: true,
       headerBackgroundColor:
           Theme.of(appNavigatorKey.currentContext!).primaryColor,
@@ -314,7 +309,7 @@ class DashboardView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).cardColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12.0),
               topRight: Radius.circular(12.0),
@@ -585,7 +580,7 @@ class DashboardView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColorLight,
+            color: Theme.of(context).cardColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12.0),
               topRight: Radius.circular(12.0),

@@ -17,6 +17,9 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
     return WidgetTap(
         widget: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -27,18 +30,19 @@ class MenuItem extends StatelessWidget {
                 children: [
                   Icon(
                     menuItemIcon,
-                    color: ColorConstants.buttonGradient,
                     size: 25,
                   ),
                   const SizedBox(
                     width: 10,
                   ),
-                  StyledText.titleMedium(menuItemText),
+                  Text(
+                    menuItemText,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  )
                 ],
               ),
               const Icon(
                 Icons.keyboard_arrow_right_rounded,
-                color: ColorConstants.buttonGradient,
                 size: 25,
               )
             ],

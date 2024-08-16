@@ -10,16 +10,12 @@ import 'link_text.dart';
 class TaskCard extends StatelessWidget {
   const TaskCard({
     super.key,
-    required this.width,
-    required this.cardColor,
     required this.dividerColor,
     required this.task,
     required this.onAddCommentTap,
     required this.onViewCommentTap,
   });
 
-  final double width;
-  final Color cardColor;
   final Color dividerColor;
   final Task task;
   final VoidCallback onAddCommentTap;
@@ -37,12 +33,11 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: width,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: cardColor,
+        color: Theme.of(context).primaryColorLight,
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).shadowColor,
@@ -57,7 +52,7 @@ class TaskCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           vSPacingFive,
-          StyledText.titleMedium(task.content!),
+          Text(task.content!, style:  Theme.of(context).textTheme.titleMedium),
           vSPacingFive,
           StyledText.labelSmall('Priority : ${priorityMap[task.priority]}'),
           Divider(

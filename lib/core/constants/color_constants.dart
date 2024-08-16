@@ -4,9 +4,10 @@ class ColorConstants {
   static const Color primaryColor = Color(0XFF262525);
   static const Color secondaryColor = Color(0XFFf2eded);
   static const Color lightScaffoldBackgroundColor = Color(0XFFF3EbF7);
-  static const Color darkScaffoldBackgroundColor = Color(0XFF2C292E);
+  static const Color darkScaffoldBackgroundColor = Color(0XFF736565);
   static const Color cardLightColor = Color(0XFFD9CCE0);
-  static const Color cardDarkColor = Color(0XFF4D4652);
+  static const Color cardDarkColor = Color(0XFFf2eded);
+  static const Color darkPrimaryContainerColor = Color(0XFFecebfa);
   static const Color colorWhite = Color(0XFFFFFFFF);
   static const Color colorBlack = Color(0XFF000000);
   static const Color hintColorLight = Color(0XFFb4b3b5);
