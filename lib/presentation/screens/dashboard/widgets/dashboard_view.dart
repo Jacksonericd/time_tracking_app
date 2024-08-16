@@ -477,18 +477,6 @@ class DashboardView extends StatelessWidget {
 
       final startTime = DateTime.parse(ongoingTasks.last.startTime!);
 
-      final durationInMinutes = DateTime.now().difference(startTime).inMinutes;
-
-      // final durationMap = {
-      //   'duration': durationInMinutes,
-      //   'duration_unit': 'minute'
-      // };
-      //
-      // await Injector.resolve<TaskUseCase>().updateTask(
-      //   taskId: taskId,
-      //   inputData: durationMap,
-      // );
-
       await Injector.resolve<LocalDataUseCase>().updateTaskEndTime(
         taskId: taskId,
         endTime: DateTime.now().toString(),
