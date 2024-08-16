@@ -29,10 +29,12 @@ This app is built using the flutter version 3.22.2
    dart run build_runner build --delete-conflicting-outputs 
    ```
 4. **Add the config.json file to the lib directory and specify the necessary values as follows.**:
+     ```bash
    {
      "project_id" : "Your value here",
      "bearer_token" : "Your value here"
    }
+   ```~~~~
 5. **Run the project **:
    ```bash
    flutter run --dart-define-from-file="lib/config.json"
