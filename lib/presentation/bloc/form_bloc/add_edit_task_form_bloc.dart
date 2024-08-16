@@ -29,9 +29,9 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
     MultiData(id: '2', description: 'Normal'),
     MultiData(id: '3', description: 'High'),
     MultiData(id: '4', description: 'Critical'),
-  ],
-    validators: [CustomBlocValidators.requiredPriority]
-  );
+  ], validators: [
+    CustomBlocValidators.requiredPriority
+  ]);
   final dueDateTime = InputFieldBloc<DateTime?, Object>(initialValue: null);
   final tfDurationInMinutes = TextFieldBloc();
   final boolIsEditMode = BooleanFieldBloc(initialValue: false);
@@ -129,8 +129,6 @@ class AddEditTaskFormBloc extends FormBloc<String, String> {
           'due': dueDateParams,
         });
       }
-
-      print( jsonEncode(inputData) );
 
       if (boolIsEditMode.value) {
         await Injector.resolve<TaskUseCase>().updateTask(

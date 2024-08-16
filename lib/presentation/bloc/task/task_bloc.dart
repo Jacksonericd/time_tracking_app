@@ -87,8 +87,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
             .map((task) => TasksStartTime.fromJson(task))
             .toList();
 
-        print('allLocalTasks : ${allLocalTasks.length}');
-
         final ongoingTaskIds = allLocalTasks.map((item) {
           if (item.endTime == null) {
             return item.taskId;
@@ -96,7 +94,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         }).toList();
 
         ongoingTaskIds.removeWhere((item) => item == null);
-        print('ongoingTaskIds : ${ongoingTaskIds.length}');
 
         final completedTaskIds = allLocalTasks.map((item) {
           if (item.endTime != null) {
@@ -105,7 +102,6 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         }).toList();
 
         completedTaskIds.removeWhere((item) => item == null);
-        print('completedTaskIds : ${completedTaskIds.length}');
 
         final toDoListFiltered = tasks
             .where((item) =>

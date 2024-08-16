@@ -53,7 +53,6 @@ class AddEditCommentFormBloc extends FormBloc<String, String> {
 
   @override
   FutureOr<void> onSubmitting() async {
-    print('onSubmitting');
     try {
       final Map inputData = {
         'content': tfCommentContent.value,

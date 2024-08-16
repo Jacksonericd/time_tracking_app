@@ -28,16 +28,12 @@ class TaskCubit extends Cubit<TaskCubitState> {
 
   Future<void> setCubitDataFromApi() async {
     try {
-      print('setCubitDataFromApi');
-
       const projectId = String.fromEnvironment('project_id');
 
       dynamic response =
           await Injector.resolve<TaskUseCase>().getTasksByProjectId(
         projectId: projectId,
       );
-
-      print(response);
 
       final tasks =
           (response as List).map((task) => Task.fromJson(task)).toList();
