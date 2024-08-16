@@ -40,8 +40,10 @@ class _$InjectorConfig extends InjectorConfig {
   @override
   void _configureServices() {
     final KiwiContainer container = KiwiContainer();
-    container.registerSingleton<LocalStorageService>(
-        (c) => AppLocalStorageService());
+    container
+      ..registerSingleton<LocalStorageService>((c) => AppLocalStorageService())
+      ..registerSingleton<AppPreferencesService>(
+          (c) => AppPreferencesService());
   }
 
   @override
