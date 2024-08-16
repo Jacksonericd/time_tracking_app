@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
-import 'package:time_tracking_app/core/presentation/widgets/app_button.dart';
 import 'package:time_tracking_app/core/presentation/widgets/bloc_state_widget.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/core/presentation/widgets/widget_tap.dart';
@@ -61,11 +60,11 @@ class ViewComments extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             margin: const EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).primaryColorLight,
               borderRadius: BorderRadius.circular(15.0),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: ColorConstants.greyColorC3,
+                  color: Theme.of(context).shadowColor,
                   spreadRadius: 0.5,
                   blurRadius: 2,
                 ),
@@ -77,7 +76,7 @@ class ViewComments extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    StyledText.titleSmall(comment.content!),
+                    Text(comment.content!, style: Theme.of(context).textTheme.titleSmall),
                     const SizedBox(
                       height: 5,
                     ),

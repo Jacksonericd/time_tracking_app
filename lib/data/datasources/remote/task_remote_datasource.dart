@@ -8,7 +8,7 @@ import 'package:time_tracking_app/core/network/dio_client.dart';
 class TaskRemoteDataSource {
   final dioClient = Injector.resolve<DioClient>().dioNetwork;
 
-  Future getTasksByProjectAndSection(
+  Future getTasksByProjectId(
       {required String projectId, String? sectionId}) async {
     // final url = '${ApiConstants.tasksUrl}?$projectId&section_id=$sectionId';
     final url = '${ApiConstants.tasksUrl}?$projectId';

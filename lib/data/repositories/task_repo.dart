@@ -7,11 +7,11 @@ class TaskRepo extends TaskAbstract {
   TaskRepo(this.taskRemoteDataSource);
 
   @override
-  Future getTasksByProjectAndSection({
+  Future getTasksByProjectId({
     required String projectId,
     String? sectionId,
   }) async =>
-      taskRemoteDataSource.getTasksByProjectAndSection(
+      taskRemoteDataSource.getTasksByProjectId(
         projectId: projectId,
         sectionId: sectionId,
       );

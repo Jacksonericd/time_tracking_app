@@ -7,14 +7,21 @@ abstract class LocalStorageService {
 
   Future<dynamic> getAllTaskWithEndTimeNull();
 
-  Future<void> insertTaskTime(
-      {required String taskId, required String startTime});
+  Future<void> insertTaskTime({
+    required String taskId,
+    required String startTime,
+    String? endTime,
+  });
 
-  Future<void> updateTaskStartTime(
-      {required String taskId, required String startTime});
+  Future<void> updateTaskStartTime({
+    required String taskId,
+    required String startTime,
+  });
 
-  Future<void> updateTaskEndTime(
-      {required String taskId, required String endTime});
+  Future<void> updateTaskEndTime({
+    required String taskId,
+    required String endTime,
+  });
 
   Future<void> deleteTaskTime(String taskId);
 }

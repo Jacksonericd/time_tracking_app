@@ -12,7 +12,7 @@ class WidgetTap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onWidgetTap,
       child: widget,
     );

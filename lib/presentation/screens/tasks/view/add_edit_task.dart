@@ -11,6 +11,7 @@ import 'package:time_tracking_app/core/presentation/widgets/loading_dialog.dart'
 import 'package:time_tracking_app/core/presentation/widgets/show_bottom_message.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/presentation/bloc/form_bloc/add_edit_task_form_bloc.dart';
+import 'package:time_tracking_app/presentation/bloc/task_cubit/task_cubit.dart';
 
 class AddEditTask extends StatelessWidget {
   const AddEditTask({
@@ -36,8 +37,9 @@ class AddEditTask extends StatelessWidget {
         return AppScaffold(
           hideAppBar: false,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).cardColor,
-            title: StyledText.titleMedium('${isEditMode ? 'Edit' : 'Add'} task'),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title:
+                StyledText.titleMedium('${isEditMode ? 'Edit' : 'Add'} task'),
           ),
           scaffoldBody: FormBlocListener<AddEditTaskFormBloc, String, String>(
             onSubmitting: (context, state) {
@@ -49,7 +51,7 @@ class AddEditTask extends StatelessWidget {
             onSubmissionFailed: (context, state) {
               LoadingDialog.hide(context);
             },
-            onSuccess: (context, state) {
+            onSuccess: (context, state) async {
               LoadingDialog.hide(context);
 
               showBottomMessage(
@@ -58,7 +60,11 @@ class AddEditTask extends StatelessWidget {
                 success: true,
               );
 
-              Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
+              await context.read<TaskCubit>().setCubitDataFromApi();
+
+              if (context.mounted) {
+                Navigator.of(context).pushNamed(RouteConstants.dashboardPath);
+              }
             },
             onFailure: (context, state) {
               LoadingDialog.hide(context);

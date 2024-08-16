@@ -10,26 +10,8 @@ class GetTasksByProjectEvent extends TaskEvent {
   });
 }
 
-class BeginTasksEvent extends TaskEvent {
-  final String taskId;
+class FilerTasksEvent extends TaskEvent {
+  final List<Task> allTasks;
 
-  BeginTasksEvent({
-    required this.taskId,
-  });
-}
-
-class CompleteTasksEvent extends TaskEvent {
-  final String taskId;
-
-  CompleteTasksEvent({
-    required this.taskId,
-  });
-}
-
-class ReopenTasksEvent extends TaskEvent {
-  final String taskId;
-
-  ReopenTasksEvent({
-    required this.taskId,
-  });
+  FilerTasksEvent({required this.allTasks});
 }

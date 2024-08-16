@@ -29,9 +29,16 @@ class LocalDataRepo extends LocalDataAbstract {
   Future getAllTaskTimer() => appLocalDatasource.getAllTaskTimer();
 
   @override
-  Future<void> insertTaskTime(
-          {required String taskId, required String startTime}) =>
-      appLocalDatasource.insertTaskTime(taskId: taskId, startTime: startTime);
+  Future<void> insertTaskTime({
+    required String taskId,
+    required String startTime,
+    String? endTime,
+  }) =>
+      appLocalDatasource.insertTaskTime(
+        taskId: taskId,
+        startTime: startTime,
+        endTime: endTime,
+      );
 
   @override
   Future<void> updateTaskStartTime(

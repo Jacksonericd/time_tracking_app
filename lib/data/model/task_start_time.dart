@@ -6,10 +6,10 @@ class TasksStartTime {
 
   TasksStartTime({this.id, this.taskId, this.startTime, this.endTime});
 
-  TasksStartTime.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    taskId = json['task_id'];
-    startTime = json['start_time'];
-    endTime = json['end_time'];
-  }
+  factory TasksStartTime.fromJson(Map<String, dynamic> json) => TasksStartTime(
+        id: json['id'],
+        taskId: json['task_id'],
+        startTime: json['start_time'],
+        endTime: json['end_time'],
+      );
 }

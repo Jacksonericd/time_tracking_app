@@ -7,4 +7,5 @@ class RouteConstants {
   static const addCommentPath = 'add_comment';
   static const editCommentPath = 'edit_comment';
   static const viewTaskCommentPath = 'view_task_comment';
+  static const generalInstructions = 'general_instructions';
 }

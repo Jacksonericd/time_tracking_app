@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:time_tracking_app/core/constants/color_constants.dart';
 import 'package:time_tracking_app/core/constants/string_constants.dart';
 import 'package:time_tracking_app/core/enums/task_type.dart';
+import 'package:time_tracking_app/core/extentions/toTwoDigits.dart';
 import 'package:time_tracking_app/core/injector/injector.dart';
 import 'package:time_tracking_app/core/presentation/widgets/styled_text.dart';
 import 'package:time_tracking_app/data/model/task_start_time.dart';
@@ -61,9 +62,7 @@ class TimerClockState extends State<TimerClock> {
 
         _timerText = intToTimeLeft(durationInSeconds);
 
-        setState(() {
-
-        });
+        setState(() {});
 
         return;
       }
@@ -96,9 +95,9 @@ class TimerClockState extends State<TimerClock> {
                 StyledText.headlineLarge(_timerText!)
               },
               if (widget.taskType == TaskType.todo) ...{
-                StyledText.labelSmall(
+                StyledText.titleSmall(
                     StringConstants.timerClockBeginTimerMessage),
-              } ,
+              },
               if (widget.taskType == TaskType.ongoing) ...{
                 StyledText.titleSmall(StringConstants.timeElapsed)
               },
@@ -164,12 +163,11 @@ class TimerClockState extends State<TimerClock> {
     int h, m, s;
 
     h = value ~/ 3600;
-
     m = ((value - h * 3600)) ~/ 60;
-
     s = value - (h * 3600) - (m * 60);
 
-    String result = "$h:$m:$s";
+    String result =
+        "${h.toString().toTwoDigits()}:${m.toString().toTwoDigits()}:${s.toString().toTwoDigits()}";
 
     return result;
   }

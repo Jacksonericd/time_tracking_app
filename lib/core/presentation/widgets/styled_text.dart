@@ -44,9 +44,12 @@ class StyledText extends StatelessWidget {
     };
   }
 
-  StyledText.bodyLarge(this.text, {super.key}) {
+  StyledText.bodyLarge(this.text, FontWeight? fontWeight, {super.key}) {
     getStyle = (context) {
-      return Theme.of(context).textTheme.bodyLarge;
+      return Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(fontWeight: fontWeight);
     };
   }
 
@@ -119,7 +122,7 @@ class StyledText extends StatelessWidget {
       return Theme.of(context).textTheme.titleSmall?.copyWith(
           color: isDarkMode
               ? ColorConstants.fontTitleLightColor
-              : ColorConstants.darkGrey);  // changed
+              : ColorConstants.darkGrey); // changed
     };
   }
 

@@ -34,9 +34,9 @@ class MenuButton extends StatelessWidget {
                 ColorConstants.buttonGradient.withOpacity(0.5),
                 ColorConstants.buttonGradient,
               ]),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: ColorConstants.greyColorC3,
+              color: Theme.of(context).shadowColor,
               spreadRadius: 0.5,
               blurRadius: 2,
             ),
