@@ -1,16 +1,7 @@
 # time_tracking_app
 
-A new Flutter project.
+This Flutter application offers a robust Kanban board for task management, enabling users to create, edit, and move tasks across different columns such as "To Do," "In Progress," and "Completed." It also integrates a timer feature that allows users to track the time spent on each task. Additionally, the app maintains a history of completed tasks and provides a commenting feature for each task to facilitate collaboration or personal notes.
 
-## Getting Started
+Task management within the app is powered by the Todoist API, while local data storage is efficiently managed using Sqflite. The application is developed with a clean architecture approach, ensuring maintainability and scalability, and leverages the BLoC (Business Logic Component) state management technique to manage the app's state efficiently.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
