@@ -34,7 +34,7 @@ This app is built using the flutter version 3.22.2
      "project_id" : "Your value here",
      "bearer_token" : "Your value here"
    }
-   ```
+   ```~~~~
 5. **Run the project **:
    ```bash
    flutter run --dart-define-from-file="lib/config.json"

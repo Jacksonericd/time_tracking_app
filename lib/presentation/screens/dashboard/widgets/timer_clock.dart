@@ -95,8 +95,11 @@ class TimerClockState extends State<TimerClock> {
                 StyledText.headlineLarge(_timerText!)
               },
               if (widget.taskType == TaskType.todo) ...{
-                StyledText.titleSmall(
-                    StringConstants.timerClockBeginTimerMessage),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: StyledText.titleSmall(
+                      StringConstants.timerClockBeginTimerMessage),
+                ),
               },
               if (widget.taskType == TaskType.ongoing) ...{
                 StyledText.titleSmall(StringConstants.timeElapsed)
