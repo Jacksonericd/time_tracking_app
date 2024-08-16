@@ -43,12 +43,12 @@ class TaskCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: cardColor,
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: ColorConstants.greyColorC3,
+            color: Theme.of(context).shadowColor,
             spreadRadius: 1,
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),

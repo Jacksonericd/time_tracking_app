@@ -273,14 +273,20 @@ class DashboardView extends StatelessWidget {
     }
 
     return BoardList(
+      backgroundColor: Theme.of(appNavigatorKey.currentContext!)
+          .primaryColor
+          .withOpacity(0.1),
       draggable: true,
-      headerBackgroundColor:
-          Theme.of(appNavigatorKey.currentContext!).cardColor,
+      headerBackgroundColor: Theme.of(appNavigatorKey.currentContext!)
+          .primaryColor
+          .withOpacity(0.6),
       onDropList: _handleDropList,
       header: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: StyledText.bodyLarge(list.name, FontWeight.w800),
+          child: StyledText.titleLarge(
+            list.name,
+          ),
         )
       ],
       items: items,
@@ -326,8 +332,9 @@ class DashboardView extends StatelessWidget {
                   height: 5,
                   width: 60,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: ColorConstants.greyColorC3),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).shadowColor,
+                  ),
                 ),
                 vSpacingFive,
                 vSpacingFive,
@@ -560,8 +567,9 @@ class DashboardView extends StatelessWidget {
                 height: 5,
                 width: 60,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: ColorConstants.greyColorC3),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).shadowColor,
+                ),
               ),
               vSpacingFive,
               vSpacingFive,

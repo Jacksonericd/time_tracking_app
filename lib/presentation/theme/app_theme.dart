@@ -17,6 +17,7 @@ class CustomThemeData {
     indicatorColor: ColorConstants.lighterGrey,
     canvasColor: ColorConstants.buttonBackgroundColor,
     highlightColor: ColorConstants.successGreen,
+    shadowColor: ColorConstants.greyColorC3,
     colorScheme: const ColorScheme.light(
       primary: ColorConstants.primaryColor,
       secondary: ColorConstants.secondaryColor,
@@ -29,13 +30,14 @@ class CustomThemeData {
 
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     primaryColorDark: ColorConstants.colorWhite,
-    primaryColorLight: ColorConstants.lighterGrey,
+    primaryColorLight: ColorConstants.greyColorC3,
     scaffoldBackgroundColor: ColorConstants.darkScaffoldBackgroundColor,
     cardColor: ColorConstants.cardDarkColor,
     hintColor: ColorConstants.hintColorDark,
     focusColor: ColorConstants.focusColorDark,
     dividerColor: ColorConstants.lighterGrey,
     disabledColor: ColorConstants.transparent,
+    shadowColor: ColorConstants.greyColorC3,
     unselectedWidgetColor: Colors.grey,
     colorScheme: const ColorScheme.dark(
       primary: ColorConstants.primaryColor,

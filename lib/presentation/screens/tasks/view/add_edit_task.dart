@@ -37,7 +37,7 @@ class AddEditTask extends StatelessWidget {
         return AppScaffold(
           hideAppBar: false,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title:
                 StyledText.titleMedium('${isEditMode ? 'Edit' : 'Add'} task'),
           ),

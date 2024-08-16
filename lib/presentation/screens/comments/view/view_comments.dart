@@ -63,9 +63,9 @@ class ViewComments extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(15.0),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: ColorConstants.greyColorC3,
+                  color: Theme.of(context).shadowColor,
                   spreadRadius: 0.5,
                   blurRadius: 2,
                 ),

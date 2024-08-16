@@ -20,8 +20,8 @@ class LinkText extends StatelessWidget {
       widget: Text(linkDisplayText,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 decoration: TextDecoration.underline,
-                color: color ?? ColorConstants.greyColorC3,
-                decorationColor: color ?? ColorConstants.greyColorC3,
+                color: color ?? Theme.of(context).shadowColor,
+                decorationColor: color ?? Theme.of(context).shadowColor,
                 decorationThickness: 1,
               )
           // ?.copyWith(color: ColorConstants.errorRed),
