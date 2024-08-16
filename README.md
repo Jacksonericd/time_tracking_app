@@ -23,16 +23,12 @@ This app is built using the flutter version 3.22.2
 2. **Install Dependencies**:
    ```bash
    flutter pub get
-   ```
-2. **Install Dependencies**:
-   ```bash
-   flutter pub get
-   ```   
-3. **Run the following command for automating the process of generating boilerplate code**:
+   ``` 
+3. **Run the following command to automate the process of generating boilerplate code.**:
    ```bash
    dart run build_runner build --delete-conflicting-outputs 
    ```
-4. **add config.json file into the lib directory, and specify the necessary values as following**:
+4. **Add the config.json file to the lib directory and specify the necessary values as follows.**:
    {
      "project_id" : "Your value here",
      "bearer_token" : "Your value here"
@@ -41,8 +37,7 @@ This app is built using the flutter version 3.22.2
    ```bash
    flutter run --dart-define-from-file="lib/config.json"
    ```
-
-    **Run the following command to generate the release build **:
+6. **Run the following command to generate the release build **:
        ```bash
          flutter build apk --release --dart-define-from-file="lib/config.json"
        ```
