@@ -35,7 +35,7 @@ This app is built using the flutter version 3.22.2
      "bearer_token" : "Your value here"
    }
    ```
-5. **Run the project **:
+5. Run the project :
    ```bash
    flutter run --dart-define-from-file="lib/config.json"
    ```
