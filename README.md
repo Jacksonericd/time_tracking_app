@@ -39,7 +39,7 @@ This app is built using the flutter version 3.22.2
    ```bash
    flutter run --dart-define-from-file="lib/config.json"
    ```
-6. **Run the following command to generate the release build **:
+6. Run the following command to generate the release build :
        ```bash
          flutter build apk --release --dart-define-from-file="lib/config.json"
        ```
